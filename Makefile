@@ -6,7 +6,7 @@
 #    By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/09 10:45:12 by jkauppi           #+#    #+#              #
-#    Updated: 2021/07/09 12:38:29 by jkauppi          ###   ########.fr        #
+#    Updated: 2021/07/09 19:20:21 by jkauppi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,11 +49,13 @@ C_FLAGS			=	-g -Wall -Wextra -Werror $(INCLUDES)
 LD_FLAGS		=	-std=gnu17 -L$(LIB) $(LIB_FILES)
 
 ifeq ($(OS), Darwin)
-	D_ATTRIBUTES	=	
-	INCLUDES		+=	
+	D_ATTRIBUTES	=	-D DARWIN
+	INCLUDES		+=	-I $(HOME)/.brew/Cellar/openssl@1.1/1.1.1k/include
+	LD_FLAGS		+=	-L$(HOME)/.brew/Cellar/openssl@1.1/1.1.1k/lib
 else
-	D_ATTRIBUTES	=
+	D_ATTRIBUTES	=	
 endif
+
 LD_FLAGS			+=	$(D_ATTRIBUTES)
 
 # Colours for printouts

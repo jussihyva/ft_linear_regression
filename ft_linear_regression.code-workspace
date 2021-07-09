@@ -4,4 +4,9 @@
 			"path": "."
 		}
 	],
+	"settings": {
+		"files.associations": {
+			"libft_addons.h": "c"
+		}
+	},
 }
