@@ -6,14 +6,15 @@
 #    By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/09 10:45:12 by jkauppi           #+#    #+#              #
-#    Updated: 2021/07/09 11:11:38 by jkauppi          ###   ########.fr        #
+#    Updated: 2021/07/09 12:38:29 by jkauppi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Input parameters
 
-include		system.mk
-include		input_params.mk
+include		mk_system.mk
+include		mk_input_params.mk
+include		mk_source_files.mk
 
 # Application specific parameters
 NAME			=	ft_linear_regression
@@ -31,13 +32,6 @@ FOLDERS			=	$(LIB) $(BIN) $(DATA) $(OBJ) $(SRC) $(INCLUDE) $(TEST)
 INCLUDES		=	-I $(INCLUDE) -I $(LIB)
 
 # C (Source code) and H (Header) files
-SRC_C_FILES		=	
-SRC_H_FILES		=	ft_linear_regression.h
-LOCAL_LIBS		=	
-GLOBAL_LIBS		=	
-ifneq ($(OS), Darwin)
-	GLOBAL_LIBS	+=	
-endif
 LOCAL_LIB_FILES	=	$(addprefix $(LIB)/, $(LOCAL_LIBS))
 LIB_FILES		=	$(addprefix -l , $(patsubst lib%.a, %, $(LOCAL_LIBS)))
 LIB_FILES		+=	$(addprefix -l , $(patsubst lib%.a, %, $(GLOBAL_LIBS)))
