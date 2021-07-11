@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 11:14:46 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/11 17:12:24 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/11 18:31:20 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	main(int argc, char **argv)
 {
 	t_arg_parser_data		*arg_parser_data;
 	char					*options;
-	t_data_set				*data_set;
+	t_list					**data_record_lst;
 	t_loging_data			*loging_data;
 
 	options = ft_strdup("f:h");
@@ -76,10 +76,10 @@ int	main(int argc, char **argv)
 	arg_parser_data->fn_usage = print_usage;
 	arg_parser_data->input_params = NULL;
 	ft_arg_parser(arg_parser_data, argc, argv, options);
-	loging_data = set_loging_parameters(LOG_INFO);
-	data_set = read_dataset_file(
+	loging_data = set_loging_parameters(LOG_TRACE);
+	data_record_lst = read_dataset_file(
 			((t_input_params *)arg_parser_data->input_params)->dataset_file);
-	ft_memdel((void **)&data_set);
+	ft_memdel((void **)&data_record_lst);
 	release_input_params((t_input_params **)&arg_parser_data->input_params);
 	release_loging_parameters(&loging_data);
 	ft_memdel((void **)&arg_parser_data);

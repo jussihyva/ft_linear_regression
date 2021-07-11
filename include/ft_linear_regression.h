@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/11 16:58:51 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/11 18:16:33 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,16 @@ typedef struct s_input_params
 	char	*dataset_file;
 }				t_input_params;
 
-typedef struct s_data_set
+typedef struct s_data_record
 {
-	char	*km;
+	int		km;
 	int		price;
-}				t_data_set;
+}				t_data_record;
 
 void		*initialize_cmd_args(int argc, char **argv);
 void		save_cmd_argument(void *input_params, char opt, char *next_arg);
 void		print_usage(void);
-t_data_set	*read_dataset_file(char *dataset_file);
+t_list		**read_dataset_file(char *dataset_file);
 void		release_input_params(t_input_params **input_params);
 
 #endif

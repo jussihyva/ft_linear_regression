@@ -6,7 +6,12 @@
 	],
 	"settings": {
 		"files.associations": {
-			"libft_addons.h": "c"
+			"libft_addons.h": "c",
+			"ft_linear_regression.h": "c",
+			"*.tcc": "cpp",
+			"cerrno": "cpp",
+			"thread": "cpp",
+			"functional": "c"
 		}
 	},
 }
