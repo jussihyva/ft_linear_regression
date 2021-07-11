@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 12:52:29 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/11 19:17:53 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/11 19:23:46 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	read_error(char *error_string, int line_counter)
 
 static t_data_record	*read_data_line(char *line)
 {
-	static int		line_counter = 0;
+	static int		line_counter = 1;
 	char			*endptr;
 	t_data_record	*data_record;
 

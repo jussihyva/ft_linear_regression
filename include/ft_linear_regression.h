@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/11 19:15:06 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/11 19:21:32 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ typedef struct s_file_params
 {
 	int		fd;
 	int		ret;
-	char	line;
+	char	*line;
 }				t_file_params;
 
 typedef struct s_loging_data
