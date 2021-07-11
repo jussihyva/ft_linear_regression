@@ -11,7 +11,8 @@
 			"*.tcc": "cpp",
 			"cerrno": "cpp",
 			"thread": "cpp",
-			"functional": "c"
+			"functional": "c",
+			"libft.h": "c"
 		}
 	},
 }

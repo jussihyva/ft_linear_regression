@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 12:52:29 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/11 18:35:37 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/11 19:10:46 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ static t_data_record	*read_data_line(char *line)
 	t_data_record	*data_record;
 
 	line_counter++;
+	ft_printf("LINE %d: %s\n", line_counter, line);
 	data_record = (t_data_record *)ft_memalloc(sizeof(*data_record));
 	data_record->km = ft_strtoi(line, &endptr, 10);
 	if (errno == EINVAL && *endptr == ',')
@@ -72,11 +73,28 @@ t_list	**read_dataset_file(char *dataset_file)
 	{
 		data_record = read_data_line(line);
 		save_data_record_to_lst(data_record_lst, data_record);
-		ft_printf("LINE: %s\n", line);
 		ft_strdel((char **)&line);
 		ret = ft_get_next_line(fd, &line);
 	}
 	ft_strdel((char **)&line);
 	close(fd);
 	return (data_record_lst);
+}
+
+static void	release_data_record(void *content, size_t size)
+{
+	t_data_record	**data_record;
+
+	(void)size;
+	data_record = content;
+	ft_memdel((void **)data_record);
+	ft_memdel((void **)&content);
+	return ;
+}
+
+void	release_data_record_lst(t_list **data_record_lst)
+{
+	ft_lstdel(data_record_lst, release_data_record);
+	ft_memdel((void **)&data_record_lst);
+	return ;
 }

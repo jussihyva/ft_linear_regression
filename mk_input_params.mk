@@ -1,17 +1,17 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    input_params.mk                                    :+:      :+:    :+:    #
+#    mk_input_params.mk                                 :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/09 10:50:47 by jkauppi           #+#    #+#              #
-#    Updated: 2021/07/09 10:51:56 by jkauppi          ###   ########.fr        #
+#    Updated: 2021/07/11 18:46:43 by jkauppi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 ifdef F
-	DATA_FILE			=	-F $(F)
+	DATA_FILE			=	-f $(F)
 else
-	DATA_FILE			=	
+	DATA_FILE			=	-f data/data.csv
 endif

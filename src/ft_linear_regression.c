@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 11:14:46 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/11 18:31:20 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/11 19:05:14 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,9 @@ int	main(int argc, char **argv)
 	loging_data = set_loging_parameters(LOG_TRACE);
 	data_record_lst = read_dataset_file(
 			((t_input_params *)arg_parser_data->input_params)->dataset_file);
-	ft_memdel((void **)&data_record_lst);
 	release_input_params((t_input_params **)&arg_parser_data->input_params);
 	release_loging_parameters(&loging_data);
+	release_data_record_lst(data_record_lst);
 	ft_memdel((void **)&arg_parser_data);
 	ft_memdel((void **)&options);
 	return (0);
