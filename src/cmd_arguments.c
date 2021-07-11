@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 12:56:02 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/09 20:08:22 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/11 17:06:43 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,19 +38,23 @@ void	*initialize_cmd_args(int argc, char **argv)
 	input_params = (t_input_params *)ft_memalloc(sizeof(*input_params));
 	input_params->argc = argc;
 	input_params->argv = argv;
-	// cmd_args->fractal = ft_strdup("j");
 	return ((void *)input_params);
 }
 
 void	save_cmd_argument(void *input_params, char opt, char *next_arg)
 {
-	(void)input_params;
 	(void)next_arg;
 	if (opt == 'f')
 	{
-		;
+		((t_input_params *)input_params)->dataset_file = next_arg;
 	}
 	else if (opt == 'h')
 		print_usage();
+	return ;
+}
+
+void	release_input_params(t_input_params **input_params)
+{
+	ft_memdel((void **)input_params);
 	return ;
 }

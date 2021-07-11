@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 17:42:28 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/09 20:12:00 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/11 15:49:34 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void	split_cmd_argument(
 	while (*(++(arg)))
 	{
 		opt_ptr = ft_strchr(options, *arg);
-		if (*opt_ptr)
+		if (opt_ptr)
 		{
 			if (*(opt_ptr + 1) == ':')
 			{
