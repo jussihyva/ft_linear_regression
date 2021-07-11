@@ -5,134 +5,92 @@
 #                                                     +:+ +:+         +:+      #
 #    By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2021/07/09 10:45:12 by jkauppi           #+#    #+#              #
-#    Updated: 2021/07/09 19:20:21 by jkauppi          ###   ########.fr        #
+#    Created: 2020/06/20 10:35:04 by ubuntu            #+#    #+#              #
+#    Updated: 2021/07/11 23:10:15 by jkauppi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# Input parameters
+PROJECT_FOLDERS		=	Docker linear_regression
+CUR_DIR				=	$(abspath .)
 
-include		mk_system.mk
-include		mk_input_params.mk
-include		mk_source_files.mk
+define DOCKER_NOT_INSTALLED_ERROR
 
-# Application specific parameters
-NAME			=	ft_linear_regression
-NAMES			=	$(NAME)
+	Docker is not installed:
 
-# Folders
-LIB				=	lib
-BIN				=	.
-DATA			=	data
-OBJ				=	obj
-SRC				=	src
-INCLUDE			=	include
-TEST			=	test
-FOLDERS			=	$(LIB) $(BIN) $(DATA) $(OBJ) $(SRC) $(INCLUDE) $(TEST)
-INCLUDES		=	-I $(INCLUDE) -I $(LIB)
+		1. For Hive MAC's:	Download alexandregv/42toolbox (github) and run init_docker.sh
+		2. For std linux env:	sudo apt-get install docker"
 
-# C (Source code) and H (Header) files
-LOCAL_LIB_FILES	=	$(addprefix $(LIB)/, $(LOCAL_LIBS))
-LIB_FILES		=	$(addprefix -l , $(patsubst lib%.a, %, $(LOCAL_LIBS)))
-LIB_FILES		+=	$(addprefix -l , $(patsubst lib%.a, %, $(GLOBAL_LIBS)))
+		
+endef
 
-# Path folders for H, C, O and APP files
-H_FILES			=	$(addprefix $(INCLUDE)/, $(SRC_H_FILES))
-C_FILES			=	$(addprefix $(SRC)/, $(SRC_C_FILES))
-O_FILES			=	$(addprefix $(OBJ)/, $(patsubst %.c, %.o, $(SRC_C_FILES)))
-APP_FILES		=	$(addprefix $(BIN)/, $(NAMES))
-APP_C_FILES		=	$(addprefix $(SRC)/, $(patsubst %, %.c, $(NAMES)))
+define OPENSSL_ERROR
 
-# Compiler and linking parameters
-CC				=	clang
-C_FLAGS			=	-g -Wall -Wextra -Werror $(INCLUDES)
-LD_FLAGS		=	-std=gnu17 -L$(LIB) $(LIB_FILES)
+	OPENSSL is not installed:
 
-ifeq ($(OS), Darwin)
-	D_ATTRIBUTES	=	-D DARWIN
-	INCLUDES		+=	-I $(HOME)/.brew/Cellar/openssl@1.1/1.1.1k/include
-	LD_FLAGS		+=	-L$(HOME)/.brew/Cellar/openssl@1.1/1.1.1k/lib
-else
-	D_ATTRIBUTES	=	
-endif
+		1. For Hive MAC's:	brew install openssl
 
-LD_FLAGS			+=	$(D_ATTRIBUTES)
-
-# Colours for printouts
-RED				=	\033[0;31m
-GREEN			=	\033[0;32m
-YELLOW			=	\033[0;33m
-END				=	\033[0m
+		
+endef
 
 .PHONY: all
-all: $(FOLDERS) $(H_FILES) $(APP_C_FILES) $(C_FILES) libraries $(APP_FILES)
-	@echo "$(GREEN)Done!$(END)"
+all:
+	@echo "1. Installation"	
+	@echo "  make build"
+	@echo ""
+	@echo "2. Run N-Puzzle solver"
+	@echo "  make run"
+	@echo ""
+	@echo "3. Help"	
+	@echo "  $(CUR_DIR)/linear_regression/bin/n_puzzle -h"
+	@echo ""
 
-$(APP_FILES): $(BIN)/%: $(SRC)/%.c $(H_FILES) $(O_FILES) Makefile
-	$(CC) -o $@ $< $(O_FILES) $(LD_FLAGS) $(C_FLAGS)
+.PHONY: help
+help: all
+	@echo "DONE"
 
-$(O_FILES): $(OBJ)/%.o: $(SRC)/%.c $(H_FILES) Makefile $(LOCAL_LIB_FILES)
-	$(CC) -c -o $@ $< $(C_FLAGS) $(D_ATTRIBUTES)
-
-$(FOLDERS):
-	mkdir $@
-
-$(APP_C_FILES):
-	touch $@
-
-$(C_FILES):
-	touch $@
-
-$(H_FILES):
-	touch $@
-
-.PHONY: libraries
-libraries:
-	@make -C ${LIB}
-
-.PHONY: libraries_re
-libraries_re:
-	@make -C ${LIB} re
-
-.PHONY: libraries_norm
-libraries_norm:
-	-@make -C ${LIB} norm
+.PHONY: build
+build: check_openssl check_docker folders
+	@echo "DONE"
 
 .PHONY: run
-run: all
-ifeq ($(OS), Darwin)
-	$(CUR_DIR)/$(BIN)/$(NAME) $(DATA_FILE)
-else
-	valgrind -s --tool=memcheck --leak-check=full --show-leak-kinds=all \
-	$(CUR_DIR)/$(BIN)/$(NAME) $(DATA_FILE)
-endif
+run: build
+	make -C n-puzzle run
 
-.PHONY: run_leaks
-run_leaks: all
-ifeq ($(OS), Darwin)
-	leaks $(NAME)
-else
-	valgrind -s --tool=memcheck --leak-check=full --show-leak-kinds=all \
-	$(CUR_DIR)/$(BIN)/$(NAME) $(DATA_FILE)
-endif
+.PHONY: folders
+folders:
+	for folder in $(PROJECT_FOLDERS) ; do \
+	    make -C $$folder ; \
+	done
 
 .PHONY: clean
 clean:
-	@make -C ${LIB} clean
-	rm -f $(O_FILES)
+	for folder in $(PROJECT_FOLDERS) ; do \
+	    make -C $$folder clean ; \
+	done
 
 .PHONY: fclean
-fclean: clean
-	@make -C ${LIB} fclean
-	rm -f $(BIN)/$(NAME)
+fclean:
+	for folder in $(PROJECT_FOLDERS) ; do \
+		make -C $$folder fclean ; \
+	done
 
 .PHONY: re
-re: fclean all
+re: all
+	for folder in $(PROJECT_FOLDERS) ; do \
+	    make -C $$folder re ; \
+	done
 
 .PHONY: norm
-norm: libraries_norm
-ifeq ($(OS), Darwin)
-	norminette-beta $(SRC)/* $(INCLUDE)/*
-else
-	norminette $(SRC)/* $(INCLUDE)/*
+norm:
+	for folder in $(PROJECT_FOLDERS) ; do \
+	    make -C $$folder norm ; \
+	done
+
+.PHONY: check_docker
+check_docker:
+ifeq (, $(shell docker-compose -h))
+	$(error $(DOCKER_NOT_INSTALLED_ERROR))
 endif
+
+.PHONY: check_openssl
+check_openssl:

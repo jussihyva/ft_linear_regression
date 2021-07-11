@@ -1,1 +1,6 @@
 *.dSYM
+influxdb-selfsigned.crt
+influxdb-selfsigned.key
+chronograf-storage
+grafana-storage
+influxdb-storage
