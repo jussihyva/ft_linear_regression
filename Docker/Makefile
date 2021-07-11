@@ -18,9 +18,6 @@ build: $(SELF_SIGNED_CRT) grafana-storage
 start: build
 	$(DOCKER_COMPOSE) up -d
 
-login:
-	docker exec -it n_puzzle bash
-
 login_influxdb:
 	docker exec -it influxdb bash
 	# influx  -ssl -unsafeSsl
@@ -30,13 +27,11 @@ login_grafana:
 	docker exec -it grafana bash
 
 stop:
-	-docker kill n_puzzle
 	-docker kill chronograf
 	-docker kill grafana
 	-docker kill influxdb
 
 remove: stop
-	-docker rm n_puzzle
 	-docker rm chronograf
 	-docker rm grafana
 	-docker rm influxdb
