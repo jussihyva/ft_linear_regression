@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/11 18:54:59 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/11 19:15:06 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,13 @@
 # include "libft.h"
 # include "ft_printf.h"
 # include "libft_addons.h"
+
+typedef struct s_file_params
+{
+	int		fd;
+	int		ret;
+	char	line;
+}				t_file_params;
 
 typedef struct s_loging_data
 {
