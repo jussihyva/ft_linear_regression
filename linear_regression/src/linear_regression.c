@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 13:34:18 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/13 15:38:31 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/13 17:21:08 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	linear_regression_add_data_record(
 	return ;
 }
 
-static void	create_vecror_of_observed_values_price(
+static void	create_vector_of_observed_values_price(
 										t_lin_reg_data *linear_regression_data)
 {
 	int				i;
@@ -41,10 +41,37 @@ static void	create_vecror_of_observed_values_price(
 	i = linear_regression_data->num_of_records;
 	while (elem)
 	{
-		i--;
 		data_record = *(t_data_record **)elem->content;
+		i--;
 		linear_regression_data->vec_observed_values_price[i]
 			= data_record->price;
+		elem = elem->next;
+	}
+	FT_LOG_INFO("Value of CNT is %d", i);
+	return ;
+}
+
+static void	create_vector_of_input_variables(
+										t_lin_reg_data *linear_regression_data)
+{
+	int				i;
+	t_list			*elem;
+	t_data_record	*data_record;
+
+	linear_regression_data->input_variables
+		= (int *)ft_memalloc(sizeof(*linear_regression_data
+				->input_variables)
+			* linear_regression_data->num_of_records * 2);
+	elem = *linear_regression_data->data_record_lst;
+	i = linear_regression_data->num_of_records * 2;
+	while (elem)
+	{
+		data_record = *(t_data_record **)elem->content;
+		i--;
+		linear_regression_data->input_variables[i]
+			= data_record->km;
+		i--;
+		linear_regression_data->input_variables[i] = 1;
 		elem = elem->next;
 	}
 	FT_LOG_INFO("Value of CNT is %d", i);
@@ -66,7 +93,8 @@ void	perform_linear_regression_data(t_lin_reg_data *linear_regression_data)
 {
 	ft_printf("   KM AVG: %.2f\n", linear_regression_data->sum_km / (double)linear_regression_data->num_of_records);
 	ft_printf("PRICE AVG: %.2f\n", linear_regression_data->sum_price / (double)linear_regression_data->num_of_records);
-	create_vecror_of_observed_values_price(linear_regression_data);
+	create_vector_of_input_variables(linear_regression_data);
+	create_vector_of_observed_values_price(linear_regression_data);
 	return ;
 }
 

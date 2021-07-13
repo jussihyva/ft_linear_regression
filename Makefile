@@ -6,7 +6,7 @@
 #    By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/20 10:35:04 by ubuntu            #+#    #+#              #
-#    Updated: 2021/07/11 23:10:15 by jkauppi          ###   ########.fr        #
+#    Updated: 2021/07/13 16:29:54 by jkauppi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,7 @@ all:
 	@echo "  make run"
 	@echo ""
 	@echo "3. Help"	
-	@echo "  $(CUR_DIR)/linear_regression/bin/n_puzzle -h"
+	@echo "  $(CUR_DIR)/linear_regression/ft_linear_regression -h"
 	@echo ""
 
 .PHONY: help

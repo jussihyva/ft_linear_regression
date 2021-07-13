@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/13 14:33:03 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/13 17:00:24 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ typedef struct s_lin_reg_data
 	int			sum_km;
 	int			sum_price;
 	int			*vec_observed_values_price;
+	double		*error_variable;
+	int			*input_variables;
 }				t_lin_reg_data;
 
 void			*initialize_cmd_args(int argc, char **argv);
