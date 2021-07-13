@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_login_event_1.c                                 :+:      :+:    :+:   */
+/*   ft_event_logging_1.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 10:22:34 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/04/01 12:55:13 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/13 10:30:08 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 
 static t_loging_params		*g_loging_params;
 
-void	ft_log_set_params(const char **level_strings,
-													const char **level_colors)
+void	ft_log_set_params(const char **level_strings, const char **level_colors)
 {
 	g_loging_params = (t_loging_params *)ft_memalloc(sizeof(*g_loging_params));
 	g_loging_params->level_strings = level_strings;

@@ -1,30 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_matrix_x_vector_double.c                        :+:      :+:    :+:   */
+/*   ft_event_logging_release.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/09 19:31:54 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/03/23 08:14:52 by jkauppi          ###   ########.fr       */
+/*   Created: 2021/07/13 10:32:15 by jkauppi           #+#    #+#             */
+/*   Updated: 2021/07/13 10:33:05 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft_addons.h"
 
-void		ft_matrix_vector_double(t_matrix_size matrix_size,
-							double **matrix, double *vector, double *new_vector)
+void	ft_event_logging_release(t_event_logging_data **event_logging_data)
 {
-	size_t			i;
-	size_t			j;
+	int		i;
 
 	i = -1;
-	while (++i < matrix_size.rows)
-	{
-		new_vector[i] = 0;
-		j = -1;
-		while (++j < matrix_size.columns)
-			new_vector[i] += matrix[i][j] * vector[j];
-	}
+	while (++i < 6)
+		ft_memdel((void **)&(*event_logging_data)->level_colors[i]);
+	ft_memdel((void **)&(*event_logging_data)->level_colors);
+	i = -1;
+	while (++i < 6)
+		ft_memdel((void **)&(*event_logging_data)->level_strings[i]);
+	ft_memdel((void **)&(*event_logging_data)->level_strings);
+	ft_memdel((void **)event_logging_data);
+	ft_release_loging_params();
 	return ;
 }

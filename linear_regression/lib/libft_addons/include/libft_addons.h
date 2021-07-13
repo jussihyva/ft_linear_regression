@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 14:53:13 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/09 20:01:03 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/13 10:49:28 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,12 @@ typedef enum e_loging_level
 	LOG_ERROR = 4,
 	LOG_FATAL = 5
 }				t_loging_level;
+
+typedef struct s_event_logging_data
+{
+	const char	**level_strings;
+	const char	**level_colors;
+}				t_event_logging_data;
 
 # if DARWIN
 typedef struct s_timeval
@@ -173,6 +179,9 @@ void				set_g_loging_params_2(t_loging_params *loging_params);
 void				set_g_loging_params_3(t_loging_params *loging_params);
 void				set_g_loging_params_4(t_loging_params *loging_params);
 void				set_g_loging_params_5(t_loging_params *loging_params);
+t_event_logging_data	*ft_event_logging_init(t_loging_level event_type);
+void				ft_event_logging_release(
+						t_event_logging_data **event_logging_data);
 double				ft_radian(double angle_degree);
 int					ft_max_int(int nbr1, int nbr2);
 int					ft_min_int(int nbr1, int nbr2);

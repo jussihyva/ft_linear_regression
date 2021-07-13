@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 12:56:02 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/11 17:06:43 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/13 11:49:01 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,23 @@ void	*initialize_cmd_args(int argc, char **argv)
 
 void	save_cmd_argument(void *input_params, char opt, char *next_arg)
 {
-	(void)next_arg;
+	t_input_params		*params;
+	char				*endptr;
+
+	params = (t_input_params *)input_params;
 	if (opt == 'f')
+		params->dataset_file = next_arg;
+	else if (opt == 'L')
 	{
-		((t_input_params *)input_params)->dataset_file = next_arg;
+		params->event_logging_level
+			= (t_loging_level)ft_strtoi(next_arg, &endptr, 10);
+		if (params->event_logging_level >= 6 || params->event_logging_level < 0
+			|| *endptr != '\0' || errno != 0)
+		{
+			ft_printf("Value of cmd line attribute -L (%d) is not valid\n",
+				params->event_logging_level);
+			exit(42);
+		}
 	}
 	else if (opt == 'h')
 		print_usage();

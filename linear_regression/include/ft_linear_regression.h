@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/11 19:21:32 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/13 10:38:47 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,12 @@ typedef struct s_file_params
 	char	*line;
 }				t_file_params;
 
-typedef struct s_loging_data
-{
-	const char	**level_strings;
-	const char	**level_colors;
-}				t_loging_data;
-
 typedef struct s_input_params
 {
-	int		argc;
-	char	**argv;
-	char	*dataset_file;
+	int				argc;
+	char			**argv;
+	char			*dataset_file;
+	t_loging_level	event_logging_level;
 }				t_input_params;
 
 typedef struct s_data_record
