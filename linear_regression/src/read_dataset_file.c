@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 12:52:29 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/11 19:23:46 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/13 13:48:24 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,15 +45,17 @@ static t_data_record	*read_data_line(char *line)
 	return (data_record);
 }
 
-t_list	**read_dataset_file(char *dataset_file)
+t_lin_reg_data	*read_dataset_file(char *dataset_file)
 {
-	t_file_params	file_params;
-	t_data_record	*data_record;
-	t_list			**data_record_lst;
-	t_list			*elem;
+	t_lin_reg_data		*linear_regression_data;
+	t_file_params		file_params;
+	t_data_record		*data_record;
 
 	file_params.fd = ft_open_fd(dataset_file);
-	data_record_lst = (t_list **)ft_memalloc(sizeof(*data_record_lst));
+	linear_regression_data = (t_lin_reg_data *)ft_memalloc(
+			sizeof(*linear_regression_data));
+	linear_regression_data->data_record_lst = (t_list **)ft_memalloc(
+			sizeof(*linear_regression_data->data_record_lst));
 	file_params.line = NULL;
 	file_params.ret = ft_get_next_line(file_params.fd, &file_params.line);
 	ft_strdel((char **)&file_params.line);
@@ -61,30 +63,11 @@ t_list	**read_dataset_file(char *dataset_file)
 	while (file_params.ret)
 	{
 		data_record = read_data_line(file_params.line);
-		elem = ft_lstnew(&data_record, sizeof(data_record));
-		ft_lstadd(data_record_lst, elem);
+		linear_regression_add_data_record(linear_regression_data, data_record);
 		ft_strdel((char **)&file_params.line);
 		file_params.ret = ft_get_next_line(file_params.fd, &file_params.line);
 	}
 	ft_strdel((char **)&file_params.line);
 	close(file_params.fd);
-	return (data_record_lst);
-}
-
-static void	release_data_record(void *content, size_t size)
-{
-	t_data_record	**data_record;
-
-	(void)size;
-	data_record = content;
-	ft_memdel((void **)data_record);
-	ft_memdel((void **)&content);
-	return ;
-}
-
-void	release_data_record_lst(t_list **data_record_lst)
-{
-	ft_lstdel(data_record_lst, release_data_record);
-	ft_memdel((void **)&data_record_lst);
-	return ;
+	return (linear_regression_data);
 }

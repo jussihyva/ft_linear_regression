@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/13 10:38:47 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/13 14:33:03 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,28 @@ typedef struct s_data_record
 	int		price;
 }				t_data_record;
 
-void		*initialize_cmd_args(int argc, char **argv);
-void		save_cmd_argument(void *input_params, char opt, char *next_arg);
-void		print_usage(void);
-t_list		**read_dataset_file(char *dataset_file);
-void		release_input_params(t_input_params **input_params);
-void		release_data_record_lst(t_list **data_record_lst);
+typedef struct s_lin_reg_data
+{
+	t_list		**data_record_lst;
+	int			num_of_records;
+	int			sum_km;
+	int			sum_price;
+	int			*vec_observed_values_price;
+}				t_lin_reg_data;
+
+void			*initialize_cmd_args(int argc, char **argv);
+void			save_cmd_argument(void *input_params, char opt,
+					char *next_arg);
+void			print_usage(void);
+t_lin_reg_data	*read_dataset_file(char *dataset_file);
+void			release_input_params(t_input_params **input_params);
+void			release_data_record_lst(t_list **data_record_lst);
+void			linear_regression_data_release(
+					t_lin_reg_data **linear_regression_data);
+void			linear_regression_add_data_record(
+					t_lin_reg_data *linear_regression_data,
+					t_data_record *data_record);
+void			perform_linear_regression_data(
+					t_lin_reg_data *linear_regression_data);
 
 #endif

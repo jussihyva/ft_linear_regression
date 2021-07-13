@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 17:42:28 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/11 15:49:34 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/13 15:29:13 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,27 @@ static void	param_error(const char *error_string, const char s)
 	return ;
 }
 
+static char	*pre_analyse_argument(char *options, char arg, int *argc,
+																char ***argv)
+{
+	char					*opt_ptr;
+
+	opt_ptr = ft_strchr(options, arg);
+	if (opt_ptr)
+	{
+		if (*(opt_ptr + 1) == ':')
+		{
+			if (*argc < 2)
+				param_error("Missing argument for parameter: -%c", arg);
+			(*argc)--;
+			(*argv)++;
+		}
+	}
+	else
+		param_error("Unknown parameter: -%c", arg);
+	return (opt_ptr);
+}
+
 static void	split_cmd_argument(
 							t_arg_parser_data *arg_parser_data,
 							int *argc,
@@ -28,31 +49,19 @@ static void	split_cmd_argument(
 {
 	t_save_cmd_argument		fn_save_cmd_argument;
 	char					*arg;
-	char					*opt_ptr;
 	void					*input_params;
+	char					*opt_ptr;
 
 	input_params = arg_parser_data->input_params;
 	fn_save_cmd_argument = arg_parser_data->fn_save_cmd_argument;
 	arg = **argv;
-	while (*(++(arg)))
+	arg++;
+	opt_ptr = arg;
+	while (*arg && *opt_ptr != ':')
 	{
-		opt_ptr = ft_strchr(options, *arg);
-		if (opt_ptr)
-		{
-			if (*(opt_ptr + 1) == ':')
-			{
-				if (*argc < 2)
-					param_error("Missing argument for parameter: -%c", *arg);
-				(*argc)--;
-				(*argv)++;
-				fn_save_cmd_argument(input_params, *arg, **argv);
-				break ;
-			}
-			else
-				fn_save_cmd_argument(input_params, *arg, NULL);
-		}
-		else
-			param_error("Unknown parameter: -%c", *arg);
+		opt_ptr = pre_analyse_argument(options, *arg, argc, argv);
+		fn_save_cmd_argument(input_params, *arg, **argv);
+		arg++;
 	}
 }
 
