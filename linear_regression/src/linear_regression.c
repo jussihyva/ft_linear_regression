@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 13:34:18 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/13 17:21:08 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/14 14:02:44 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,19 @@ static void	create_vector_of_observed_values_price(
 			* linear_regression_data->num_of_records);
 	elem = *linear_regression_data->data_record_lst;
 	i = linear_regression_data->num_of_records;
+	ft_printf("PRICE: ");
 	while (elem)
 	{
 		data_record = *(t_data_record **)elem->content;
 		i--;
 		linear_regression_data->vec_observed_values_price[i]
 			= data_record->price;
+		ft_printf(" %d", data_record->price);
+		if (i)
+			ft_printf(",");
 		elem = elem->next;
 	}
+	ft_printf("\n");
 	FT_LOG_INFO("Value of CNT is %d", i);
 	return ;
 }
@@ -64,6 +69,7 @@ static void	create_vector_of_input_variables(
 			* linear_regression_data->num_of_records * 2);
 	elem = *linear_regression_data->data_record_lst;
 	i = linear_regression_data->num_of_records * 2;
+	ft_printf("KM: ");
 	while (elem)
 	{
 		data_record = *(t_data_record **)elem->content;
@@ -72,8 +78,12 @@ static void	create_vector_of_input_variables(
 			= data_record->km;
 		i--;
 		linear_regression_data->input_variables[i] = 1;
+		ft_printf(" %d", data_record->km);
+		if (i)
+			ft_printf(",");
 		elem = elem->next;
 	}
+	ft_printf("\n");
 	FT_LOG_INFO("Value of CNT is %d", i);
 	return ;
 }
