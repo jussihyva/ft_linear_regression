@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/15 12:52:15 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/15 14:18:47 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,19 @@ typedef struct s_variable
 typedef struct s_measured_variables
 {
 	t_variable		price;
-	t_variable		km;
 }				t_measured_variables;
+
+typedef struct s_input_variables
+{
+	t_variable		km;
+}				t_input_variables;
 
 typedef struct s_lin_reg_data
 {
 	t_list					**data_record_lst;
 	int						num_of_records;
+	t_input_variables		input_variables;
 	t_measured_variables	measured_variables;
-	double					*error_variable;
-	int						*input_variables;
 }				t_lin_reg_data;
 
 void			*initialize_cmd_args(int argc, char **argv);

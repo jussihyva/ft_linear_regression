@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 13:34:18 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/15 13:04:56 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/15 15:05:03 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,9 @@ static void	save_int_variable(t_variable *variable, int i, int new_value)
 static void	initalize_int_variable(t_variable *variable, int num_of_records)
 {
 	variable->values = (int *)ft_memalloc(sizeof(int) * num_of_records);
+	variable->normalized_values
+		= (double *)ft_memalloc(sizeof(*variable->normalized_values)
+			* num_of_records);
 	variable->min_max_value.min_value = (int *)ft_memalloc(sizeof(int));
 	*(int *)variable->min_max_value.min_value = INT_MAX;
 	variable->min_max_value.max_value = (int *)ft_memalloc(sizeof(int));
@@ -81,23 +84,57 @@ static void	create_vector_of_input_variables(
 	t_data_record		*data_record;
 	t_variable			*km;
 
-	km = &linear_regression_data->measured_variables.km;
-	initalize_int_variable(km, linear_regression_data->num_of_records * 2);
+	km = &linear_regression_data->input_variables.km;
+	initalize_int_variable(km, linear_regression_data->num_of_records);
 	elem = *linear_regression_data->data_record_lst;
-	i = linear_regression_data->num_of_records * 2;
+	i = linear_regression_data->num_of_records;
 	ft_printf("KM: ");
 	while (elem)
 	{
 		data_record = *(t_data_record **)elem->content;
 		i--;
 		save_int_variable(km, i, data_record->km);
-		i--;
-		((int *)km->values)[i] = 1;
 		ft_printf(" %d", data_record->km);
 		if (i)
 			ft_printf(",");
 		elem = elem->next;
 	}
+	ft_printf("\n");
+	return ;
+}
+
+void	normalize_variable(t_variable *variable, int num_of_records)
+{
+	int			i;
+	double		value_range;
+
+	value_range = (double)(*(int *)variable->min_max_value.max_value
+		- *(int *)variable->min_max_value.min_value);
+	i = -1;
+	while (++i < num_of_records)
+	{
+		variable->normalized_values[i] = (((int *)variable->values)[i]
+				- *(int *)variable->min_max_value.min_value) / value_range;
+		if (i)
+			ft_printf(",");
+		ft_printf(" %.2f", variable->normalized_values[i]);
+	}
+	return ;
+}
+
+void	normalize_variables(t_input_variables *input_variables,
+									t_measured_variables *measured_variables,
+															int num_of_records)
+{
+	t_variable		*variable;
+
+	ft_printf("KM (normalized): ");
+	variable = &input_variables->km;
+	normalize_variable(variable, num_of_records);
+	ft_printf("\n");
+	ft_printf("PRIZE (normalized): ");
+	variable = &measured_variables->price;
+	normalize_variable(variable, num_of_records);
 	ft_printf("\n");
 	return ;
 }
@@ -119,8 +156,11 @@ void	perform_linear_regression_data(t_lin_reg_data *linear_regression_data)
 
 	create_vector_of_input_variables(linear_regression_data);
 	create_vector_of_observed_values_price(linear_regression_data);
+	normalize_variables(&linear_regression_data->input_variables,
+		&linear_regression_data->measured_variables,
+		linear_regression_data->num_of_records);
 	min_max_value
-		= &linear_regression_data->measured_variables.km.min_max_value;
+		= &linear_regression_data->input_variables.km.min_max_value;
 	ft_printf("   KM MIN=%d MAX=%d\n", *(int *)min_max_value->min_value,
 		*(int *)min_max_value->max_value);
 	min_max_value
