@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/13 17:00:24 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/15 12:52:15 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,34 @@ typedef struct s_data_record
 	int		price;
 }				t_data_record;
 
+typedef struct s_min_max_value
+{
+	void	*min_value;
+	void	*max_value;
+}				t_min_max_value;
+
+typedef struct s_variable
+{
+	char				*name;
+	void				*values;
+	t_min_max_value		min_max_value;
+	double				*normalized_values;
+	double				*standardized_values;
+}				t_variable;
+
+typedef struct s_measured_variables
+{
+	t_variable		price;
+	t_variable		km;
+}				t_measured_variables;
+
 typedef struct s_lin_reg_data
 {
-	t_list		**data_record_lst;
-	int			num_of_records;
-	int			sum_km;
-	int			sum_price;
-	int			*vec_observed_values_price;
-	double		*error_variable;
-	int			*input_variables;
+	t_list					**data_record_lst;
+	int						num_of_records;
+	t_measured_variables	measured_variables;
+	double					*error_variable;
+	int						*input_variables;
 }				t_lin_reg_data;
 
 void			*initialize_cmd_args(int argc, char **argv);
