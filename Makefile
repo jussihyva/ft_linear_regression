@@ -6,7 +6,7 @@
 #    By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/20 10:35:04 by ubuntu            #+#    #+#              #
-#    Updated: 2021/07/13 16:29:54 by jkauppi          ###   ########.fr        #
+#    Updated: 2021/07/19 16:57:52 by jkauppi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,7 +49,7 @@ help: all
 	@echo "DONE"
 
 .PHONY: build
-build: check_openssl check_docker folders
+build: check_openssl check_docker check_jupyter folders
 	@echo "DONE"
 
 .PHONY: run
@@ -94,3 +94,15 @@ endif
 
 .PHONY: check_openssl
 check_openssl:
+
+.PHONY: check_jupyter
+check_jupyter:
+ifeq (, $(shell which jupyter | egrep jupyter))
+	pip3 install notebook
+endif
+ifeq (, $(shell pip3 list | egrep "^numpy "))
+	pip3 install numpy
+endif
+ifeq (, $(shell pip3 list | egrep "^matplotlib "))
+	pip3 install matplotlib
+endif

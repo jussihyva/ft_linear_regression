@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 13:34:18 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/15 15:05:03 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/19 18:28:20 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ static void	create_vector_of_observed_values_price(
 	price = &linear_regression_data->measured_variables.price;
 	initalize_int_variable(price, linear_regression_data->num_of_records);
 	elem = *linear_regression_data->data_record_lst;
+	price->size = linear_regression_data->num_of_records;
 	i = linear_regression_data->num_of_records;
 	ft_printf("PRICE: ");
 	while (elem)
@@ -87,6 +88,7 @@ static void	create_vector_of_input_variables(
 	km = &linear_regression_data->input_variables.km;
 	initalize_int_variable(km, linear_regression_data->num_of_records);
 	elem = *linear_regression_data->data_record_lst;
+	km->size = linear_regression_data->num_of_records;
 	i = linear_regression_data->num_of_records;
 	ft_printf("KM: ");
 	while (elem)
@@ -153,20 +155,27 @@ static void	release_data_record(void *content, size_t size)
 void	perform_linear_regression_data(t_lin_reg_data *linear_regression_data)
 {
 	t_min_max_value		*min_max_value;
+	double				*theta;
+	double				**matrix;
+	t_variable			*km;
+	t_matrix_size 		matrix_size;
 
+	km = &linear_regression_data->input_variables.km;
 	create_vector_of_input_variables(linear_regression_data);
 	create_vector_of_observed_values_price(linear_regression_data);
 	normalize_variables(&linear_regression_data->input_variables,
 		&linear_regression_data->measured_variables,
 		linear_regression_data->num_of_records);
-	min_max_value
-		= &linear_regression_data->input_variables.km.min_max_value;
+	min_max_value = &km->min_max_value;
 	ft_printf("   KM MIN=%d MAX=%d\n", *(int *)min_max_value->min_value,
 		*(int *)min_max_value->max_value);
 	min_max_value
 		= &linear_regression_data->measured_variables.price.min_max_value;
 	ft_printf("PRICE MIN=%d MAX=%d\n", *(int *)min_max_value->min_value,
 		*(int *)min_max_value->max_value);
+	theta = theta_initialize();
+	matrix = matrix_initialize(km, &matrix_size);
+	calculate_error(theta, matrix, &matrix_size);
 	return ;
 }
 

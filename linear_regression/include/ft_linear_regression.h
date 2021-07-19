@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/15 14:18:47 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/19 18:21:21 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_min_max_value
 typedef struct s_variable
 {
 	char				*name;
+	size_t				size;
 	void				*values;
 	t_min_max_value		min_max_value;
 	double				*normalized_values;
@@ -84,5 +85,9 @@ void			linear_regression_add_data_record(
 					t_data_record *data_record);
 void			perform_linear_regression_data(
 					t_lin_reg_data *linear_regression_data);
+double			*theta_initialize(void);
+double			**matrix_initialize(t_variable *km, t_matrix_size *matrix_size);
+void			calculate_error(double *theta, double **matrix,
+					t_matrix_size *matrix_size);
 
 #endif
