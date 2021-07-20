@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/20 11:16:30 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/20 12:22:00 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/20 12:57:11 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void	normalize_variable(t_variable *variable, size_t num_of_records)
 			ft_printf(",");
 		ft_printf(" %.2f", variable->normalized_values[i]);
 	}
+	ft_printf("\n");
 	return ;
 }
 
