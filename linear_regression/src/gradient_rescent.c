@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 18:02:04 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/19 18:29:17 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/20 12:48:10 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,5 +56,6 @@ void	calculate_error(double *theta, double **matrix,
 		printf("%.3f ", error[i]);
 	}
 	printf("\n");
+	ft_memdel((void **)&error);
 	return ;
 }
