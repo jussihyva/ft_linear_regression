@@ -1,35 +1,3 @@
-// {
-// 	// Use IntelliSense to learn about possible attributes.
-// 	// Hover to view descriptions of existing attributes.
-// 	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-// 	"version": "0.2.0",
-// 	"configurations": [
-// 		{
-// 			"name": "(lldb) Launch",
-// 			"type": "cppdbg",
-// 			"request": "launch",
-// 			"program": "${workspaceFolder}/linear_regression/ft_linear_regression",
-// 			"args": ["-f", "${workspaceFolder}/data/data.csv"],
-// 			// "args": [],
-// 			"stopAtEntry": false,
-// 			"cwd": "${workspaceFolder}/linear_regression",
-// 			"environment": [],
-// 			"externalConsole": false,
-// 			// "MIMode": "lldb",
-// 			"MIMode": "gdb",
-// 			"setupCommands":
-// 			[
-// 				{
-// 					// "text": "settings set target.input-path ${workspaceFolder}/n-puzzle/data/3_3_05.map"
-// 					"description": "Enable pretty-printing for gdb",
-// 					"text": "-enable-pretty-printing",
-// 					"ignoreFailures": true
-// 				}
-// 			]
-// 		}
-// 	]
-// }
-
 {
 	// Use IntelliSense to learn about possible attributes.
 	// Hover to view descriptions of existing attributes.
@@ -42,17 +10,49 @@
 			"request": "launch",
 			"program": "${workspaceFolder}/linear_regression/ft_linear_regression",
 			"args": ["-f", "${workspaceFolder}/linear_regression/data/data.csv"],
+			// "args": [],
 			"stopAtEntry": false,
-			"cwd": "${workspaceFolder}",
+			"cwd": "${workspaceFolder}/linear_regression",
 			"environment": [],
 			"externalConsole": false,
-			"MIMode": "lldb",
-			// "setupCommands":
-			// [
-			// 	{
-			// 		"text": "settings set target.input-path ${workspaceFolder}/n-puzzle/data/3_3_01.map"
-			// 	}
-			// ]
+			// "MIMode": "lldb",
+			"MIMode": "gdb",
+			"setupCommands":
+			[
+				{
+					// "text": "settings set target.input-path ${workspaceFolder}/n-puzzle/data/3_3_05.map"
+					"description": "Enable pretty-printing for gdb",
+					"text": "-enable-pretty-printing",
+					"ignoreFailures": true
+				}
+			]
 		}
 	]
 }
+
+// {
+// 	// Use IntelliSense to learn about possible attributes.
+// 	// Hover to view descriptions of existing attributes.
+// 	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+// 	"version": "0.2.0",
+// 	"configurations": [
+// 		{
+// 			"name": "(lldb) Launch",
+// 			"type": "cppdbg",
+// 			"request": "launch",
+// 			"program": "${workspaceFolder}/linear_regression/ft_linear_regression",
+// 			"args": ["-f", "${workspaceFolder}/linear_regression/data/data.csv"],
+// 			"stopAtEntry": false,
+// 			"cwd": "${workspaceFolder}",
+// 			"environment": [],
+// 			"externalConsole": false,
+// 			"MIMode": "lldb",
+// 			// "setupCommands":
+// 			// [
+// 			// 	{
+// 			// 		"text": "settings set target.input-path ${workspaceFolder}/n-puzzle/data/3_3_01.map"
+// 			// 	}
+// 			// ]
+// 		}
+// 	]
+// }

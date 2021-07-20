@@ -6,7 +6,7 @@
 #    By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/08/21 11:50:38 by jkauppi           #+#    #+#              #
-#    Updated: 2021/07/13 10:31:14 by jkauppi          ###   ########.fr        #
+#    Updated: 2021/07/20 10:52:30 by jkauppi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,7 +49,7 @@ SRC_C_FILES		=	ft_radian.c ft_max_int.c ft_min_int.c \
 					ft_bt_instert.c ft_bt_print.c ft_bt_find.c ft_bt_remove.c \
 					ft_prio_enqueue.c ft_prio_dequeue.c ft_print_memory.c \
 					ft_open_fd.c ft_arg_parser.c
-SRC_H_FILES		=	libft_addons.h
+SRC_H_FILES		=	libft_addons.h libft_addons_against_norm.h
 
 # Path folders for H, C, O and APP files
 H_FILES			=	$(addprefix $(INCLUDE)/, $(SRC_H_FILES))

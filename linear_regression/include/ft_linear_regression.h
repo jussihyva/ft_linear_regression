@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/19 18:21:21 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/20 12:19:09 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ typedef struct s_input_variables
 typedef struct s_lin_reg_data
 {
 	t_list					**data_record_lst;
-	int						num_of_records;
+	size_t					num_of_records;
 	t_input_variables		input_variables;
 	t_measured_variables	measured_variables;
 }				t_lin_reg_data;
@@ -84,6 +84,10 @@ void			linear_regression_add_data_record(
 					t_lin_reg_data *linear_regression_data,
 					t_data_record *data_record);
 void			perform_linear_regression_data(
+					t_lin_reg_data *linear_regression_data);
+void			pre_process_input_variables(
+					t_lin_reg_data *linear_regression_data);
+void			pre_process_observed_values(
 					t_lin_reg_data *linear_regression_data);
 double			*theta_initialize(void);
 double			**matrix_initialize(t_variable *km, t_matrix_size *matrix_size);

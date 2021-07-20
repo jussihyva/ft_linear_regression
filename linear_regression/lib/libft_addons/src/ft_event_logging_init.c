@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 10:05:53 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/13 10:22:52 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/20 09:40:13 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,9 @@ t_event_logging_data	*ft_event_logging_init(t_loging_level event_type)
 	ft_log_set_params(event_logging_data->level_strings,
 		event_logging_data->level_colors);
 	ft_log_set_level(event_type);
-	// ft_log_add_callback(influxdb_plugin, (void *)statistics, LOG_INFO);
 	return (event_logging_data);
 }
+
+/**
+// ft_log_add_callback(influxdb_plugin, (void *)statistics, LOG_INFO);
+**/

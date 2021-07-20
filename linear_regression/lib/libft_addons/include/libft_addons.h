@@ -6,12 +6,13 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 14:53:13 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/19 18:15:12 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/20 10:57:57 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_ADDONS_H
 # define LIBFT_ADDONS_H
+# include "libft_addons_against_norm.h"
 # include "libft.h"
 # include "ft_printf.h"
 # include <math.h>
@@ -139,11 +140,11 @@ typedef struct s_bt_node
 	t_bt_elem			bt_elem[MAX_NUM_OF_B_TREE_ELEMS];
 }				t_bt_node;
 
-typedef void(*t_save_cmd_argument)(void *cmd_args, char opt, char *next_arg);
+typedef void	(*t_save_cmd_argument)(void*, char, char*);
 
-typedef void*(*t_initialize_cmd_args)(int argc, char **argv);
+typedef void*	(*t_initialize_cmd_args)(int argc, char **argv);
 
-typedef void(*t_usage)(void);
+typedef void	(*t_usage)(void);
 
 typedef struct s_arg_parser_data
 {
@@ -153,95 +154,87 @@ typedef struct s_arg_parser_data
 	void					*input_params;
 }				t_arg_parser_data;
 
-void				ft_log_trace(const char *file, const int line,
-						const char *fmt, ...);
-void				ft_log_debug(const char *file, const int line,
-						const char *fmt, ...);
-void				ft_log_info(const char *file, const int line,
-						const char *fmt, ...);
-void				ft_log_warn(const char *file, const int line,
-						const char *fmt, ...);
-void				ft_log_error(const char *file, const int line,
-						const char *fmt, ...);
-void				ft_log_fatal(const char *file, const int line,
-						const char *fmt, ...);
-void				ft_log_set_lock(t_loging_lock_function fn, void *udata);
-void				ft_log_set_level(int level);
+void					ft_log_trace(const char *file, const int line,
+							const char *fmt, ...);
+void					ft_log_debug(const char *file, const int line,
+							const char *fmt, ...);
+void					ft_log_info(const char *file, const int line,
+							const char *fmt, ...);
+void					ft_log_warn(const char *file, const int line,
+							const char *fmt, ...);
+void					ft_log_error(const char *file, const int line,
+							const char *fmt, ...);
+void					ft_log_fatal(const char *file, const int line,
+							const char *fmt, ...);
+void					ft_log_set_lock(t_loging_lock_function fn, void *udata);
+void					ft_log_set_level(int level);
 /*
 ** void			log_set_quiet(int enable);
 */
-int					ft_log_add_fd(int *fd, int level);
-void				ft_loging_event(int level, const char *file, int line,
-						const char *fmt, ...);
-void				ft_log_set_params(const char **level_strings,
-						const char **level_colors);
-void				set_g_loging_params_2(t_loging_params *loging_params);
-void				set_g_loging_params_3(t_loging_params *loging_params);
-void				set_g_loging_params_4(t_loging_params *loging_params);
-void				set_g_loging_params_5(t_loging_params *loging_params);
+int						ft_log_add_fd(int *fd, int level);
+void					ft_log_set_params(const char **level_strings,
+							const char **level_colors);
+void					set_g_loging_params_2(t_loging_params *loging_params);
+void					set_g_loging_params_3(t_loging_params *loging_params);
+void					set_g_loging_params_4(t_loging_params *loging_params);
+void					set_g_loging_params_5(t_loging_params *loging_params);
 t_event_logging_data	*ft_event_logging_init(t_loging_level event_type);
-void				ft_event_logging_release(
-						t_event_logging_data **event_logging_data);
-double				ft_radian(double angle_degree);
-int					ft_max_int(int nbr1, int nbr2);
-int					ft_min_int(int nbr1, int nbr2);
-double				ft_max_double(double nbr1, double nbr2);
-double				ft_min_double(double nbr1, double nbr2);
-double				ft_mod_double(double dividend, double divisor);
-int					ft_mod_int(int dividend, int divisor);
-void				ft_matrix_x_vector_double(t_matrix_size *matrix_size,
-						double **matrix, double *vector, double *new_vector);
-int					ft_isdigit_base(int c, int base);
-int					ft_strtoi(const char *str, char **endptr, int base);
-void				stdout_callback(t_log_event *event);
-void				unlock(void);
-void				lock(void);
-void				file_callback(t_log_event *event);
-void				execute_login_extensions(t_log_event *event,
-						const char *fmt, ...);
-int					ft_log_add_callback(t_loging_function fn,
-						void *additional_event_data, int level);
-void				ft_release_loging_params(void);
-void				ft_openssl_init(void);
-SSL_CTX				*ft_openssl_init_ctx(const SSL_METHOD	*tls_method,
-						char *pem_cert_file, char *pem_private_key_file);
-SSL_CTX				*ft_openssl_init_client(char *pem_cert_file,
-						char *pem_private_key_file, int *socket_fd);
-t_tls_connection	*ft_openssl_connect(char *hostname, char *port,
-						int socket_fd, SSL_CTX *ctx);
-void				ft_openssl_rel_conn(t_tls_connection **connection);
-void				ft_stack_push(t_list **stack, void *data);
-void				*ft_stack_pop(t_list **stack);
-void				ft_enqueue(t_queue *queue, void *data);
-void				*ft_dequeue(t_queue *queue);
-int					ft_is_queue_empty(t_queue *queue);
-t_queue				*ft_queue_init(void);
-void				ft_bt_instert(t_bt_key *bt_key, t_bt_data *bt_data,
-						t_bt_node **bt_root);
-void				ft_bt_print(t_bt_node *bt_node, int *count);
-int					find_elem_index(t_bt_key *bt_key, t_bt_node **bt_node,
-						t_bt_data *bt_data);
-void				ft_bt_find(t_bt_key *bt_key, t_bt_node *bt_root,
-						t_bt_data *return_bt_data);
-void				ft_bt_remove(t_bt_node **bt_node, t_bt_key *bt_key,
-						void ((*fn)(void *data, size_t size)));
-int					search_key_position(t_bt_node *bt_node, t_bt_key *bt_key,
-						t_bt_data *bt_data);
-void				split_node(t_bt_node **bt_node, t_bt_node **parent,
-						t_bt_key *bt_key);
-void				ft_prio_enqueue(t_bt_node **states_prio_queue, int *prio,
-						void *puzzle_status);
-void				*ft_prio_dequeue(t_bt_node **states_prio_queue);
-void				ft_print_memory(const void *addr, size_t size);
-int					ft_open_fd(char *file_path);
-void				ft_arg_parser(t_arg_parser_data *arg_parser_data, int argc,
-						char **argv, char *options);
-
-# define FT_LOG_FATAL(...)	ft_log_fatal(__FILE__, __LINE__, __VA_ARGS__)
-# define FT_LOG_ERROR(...)	ft_log_error(__FILE__, __LINE__, __VA_ARGS__)
-# define FT_LOG_WARN(...)	ft_log_warn(__FILE__, __LINE__, __VA_ARGS__)
-# define FT_LOG_INFO(...)	ft_log_info(__FILE__, __LINE__, __VA_ARGS__)
-# define FT_LOG_DEBUG(...)	ft_log_debug(__FILE__, __LINE__, __VA_ARGS__)
-# define FT_LOG_TRACE(...)	ft_log_trace(__FILE__, __LINE__, __VA_ARGS__)
+void					ft_event_logging_release(
+							t_event_logging_data **event_logging_data);
+double					ft_radian(double angle_degree);
+int						ft_max_int(int nbr1, int nbr2);
+int						ft_min_int(int nbr1, int nbr2);
+double					ft_max_double(double nbr1, double nbr2);
+double					ft_min_double(double nbr1, double nbr2);
+double					ft_mod_double(double dividend, double divisor);
+int						ft_mod_int(int dividend, int divisor);
+void					ft_matrix_x_vector_double(t_matrix_size *matrix_size,
+							double **matrix, double *vector,
+							double *new_vector);
+int						ft_isdigit_base(int c, int base);
+int						ft_strtoi(const char *str, char **endptr, int base);
+void					stdout_callback(t_log_event *event);
+void					unlock(void);
+void					lock(void);
+void					file_callback(t_log_event *event);
+void					execute_login_extensions(t_log_event *event,
+							const char *fmt, ...);
+int						ft_log_add_callback(t_loging_function fn,
+							void *additional_event_data, int level);
+void					ft_release_loging_params(void);
+void					ft_openssl_init(void);
+SSL_CTX					*ft_openssl_init_ctx(const SSL_METHOD	*tls_method,
+							char *pem_cert_file, char *pem_private_key_file);
+SSL_CTX					*ft_openssl_init_client(char *pem_cert_file,
+							char *pem_private_key_file, int *socket_fd);
+t_tls_connection		*ft_openssl_connect(char *hostname, char *port,
+							int socket_fd, SSL_CTX *ctx);
+void					ft_openssl_rel_conn(t_tls_connection **connection);
+void					ft_stack_push(t_list **stack, void *data);
+void					*ft_stack_pop(t_list **stack);
+void					ft_enqueue(t_queue *queue, void *data);
+void					*ft_dequeue(t_queue *queue);
+int						ft_is_queue_empty(t_queue *queue);
+t_queue					*ft_queue_init(void);
+void					ft_bt_instert(t_bt_key *bt_key, t_bt_data *bt_data,
+							t_bt_node **bt_root);
+void					ft_bt_print(t_bt_node *bt_node, int *count);
+int						find_elem_index(t_bt_key *bt_key, t_bt_node **bt_node,
+							t_bt_data *bt_data);
+void					ft_bt_find(t_bt_key *bt_key, t_bt_node *bt_root,
+							t_bt_data *return_bt_data);
+void					ft_bt_remove(t_bt_node **bt_node, t_bt_key *bt_key,
+							void ((*fn)(void *data, size_t size)));
+int						search_key_position(t_bt_node *bt_node,
+							t_bt_key *bt_key, t_bt_data *bt_data);
+void					split_node(t_bt_node **bt_node, t_bt_node **parent,
+							t_bt_key *bt_key);
+void					ft_prio_enqueue(t_bt_node **states_prio_queue,
+							int *prio, void *puzzle_status);
+void					*ft_prio_dequeue(t_bt_node **states_prio_queue);
+void					ft_print_memory(const void *addr, size_t size);
+int						ft_open_fd(char *file_path);
+void					ft_arg_parser(t_arg_parser_data *arg_parser_data,
+							int argc, char **argv, char *options);
 
 #endif
