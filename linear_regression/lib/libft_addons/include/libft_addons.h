@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 14:53:13 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/20 10:57:57 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/21 11:11:36 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,7 +190,7 @@ double					ft_mod_double(double dividend, double divisor);
 int						ft_mod_int(int dividend, int divisor);
 void					ft_matrix_x_vector_double(t_matrix_size *matrix_size,
 							double **matrix, double *vector,
-							double *new_vector);
+							double **new_vector);
 int						ft_isdigit_base(int c, int base);
 int						ft_strtoi(const char *str, char **endptr, int base);
 void					stdout_callback(t_log_event *event);

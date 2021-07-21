@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 13:34:18 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/21 08:33:00 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/21 13:33:16 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,13 @@ void	perform_linear_regression_data(t_lin_reg_data *linear_regression_data)
 	pre_process_input_variables(linear_regression_data);
 	pre_process_observed_values(linear_regression_data);
 	matrix = matrix_initialize(variable, &matrix_size);
+	theta = theta_initialize();
 	ft_printf("   KM MIN=%d MAX=%d\n", *(int *)variable->min_max_value
 		.min_value, *(int *)variable->min_max_value.max_value);
 	variable = &linear_regression_data->measured_variables.price;
 	ft_printf("PRICE MIN=%d MAX=%d\n", *(int *)variable->min_max_value
 		.min_value, *(int *)variable->min_max_value.max_value);
-	theta = theta_initialize();
-	calculate_error(theta, matrix, &matrix_size);
+	calculate_error(theta, matrix, &matrix_size, variable);
 	ft_memdel((void **)&theta);
 	variable = &linear_regression_data->input_variables.km;
 	i = -1;

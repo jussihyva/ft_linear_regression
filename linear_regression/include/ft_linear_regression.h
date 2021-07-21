@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/20 12:19:09 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/21 11:37:07 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,9 @@ void			pre_process_observed_values(
 double			*theta_initialize(void);
 double			**matrix_initialize(t_variable *km, t_matrix_size *matrix_size);
 void			calculate_error(double *theta, double **matrix,
-					t_matrix_size *matrix_size);
+					t_matrix_size *matrix_size, t_variable *input_variable);
+void			ft_matrix_subtrack_vector_double(t_matrix_size *matrix_size,
+					double **matrix, double *vector, double **new_vector);
+void			**ft_create_vector(size_t size, size_t vector_size);
 
 #endif

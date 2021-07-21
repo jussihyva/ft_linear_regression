@@ -6,7 +6,7 @@
 #    By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/20 10:35:04 by ubuntu            #+#    #+#              #
-#    Updated: 2021/07/19 16:57:52 by jkauppi          ###   ########.fr        #
+#    Updated: 2021/07/21 13:15:48 by jkauppi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -106,3 +106,4 @@ endif
 ifeq (, $(shell pip3 list | egrep "^matplotlib "))
 	pip3 install matplotlib
 endif
+	jupyter notebook
