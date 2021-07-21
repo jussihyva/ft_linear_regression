@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/21 11:37:07 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/21 17:28:26 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,5 +96,6 @@ void			calculate_error(double *theta, double **matrix,
 void			ft_matrix_subtrack_vector_double(t_matrix_size *matrix_size,
 					double **matrix, double *vector, double **new_vector);
 void			**ft_create_vector(size_t size, size_t vector_size);
+double			ft_matrix_sum(t_matrix_size *matrix_size, double **matrix);
 
 #endif
