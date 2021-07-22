@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/20 11:16:30 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/20 12:57:11 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/22 11:05:09 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,8 @@ static void	save_int_variable(t_variable *variable, size_t i, int new_value)
 static void	initalize_int_variable(t_variable *variable, size_t num_of_records)
 {
 	variable->values = (int *)ft_memalloc(sizeof(int) * num_of_records);
-	variable->normalized_values
-		= (double *)ft_memalloc(sizeof(*variable->normalized_values)
-			* num_of_records);
+	variable->normalized_values = (double **)ft_create_vector(sizeof(double),
+			num_of_records);
 	variable->min_max_value.min_value = (int *)ft_memalloc(sizeof(int));
 	*(int *)variable->min_max_value.min_value = INT_MAX;
 	variable->min_max_value.max_value = (int *)ft_memalloc(sizeof(int));
@@ -47,7 +46,7 @@ void	normalize_variable(t_variable *variable, size_t num_of_records)
 	i = -1;
 	while (++i < num_of_records)
 	{
-		variable->normalized_values[i] = (((int *)variable->values)[i]
+		variable->normalized_values[i][0] = (((int *)variable->values)[i]
 				- *(int *)variable->min_max_value.min_value) / value_range;
 		if (i)
 			ft_printf(",");

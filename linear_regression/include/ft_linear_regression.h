@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/21 17:28:26 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/22 11:18:38 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ typedef struct s_variable
 	size_t				size;
 	void				*values;
 	t_min_max_value		min_max_value;
-	double				*normalized_values;
-	double				*standardized_values;
+	double				**normalized_values;
+	double				**standardized_values_not_implemented_yet;
 }				t_variable;
 
 typedef struct s_measured_variables
@@ -89,13 +89,15 @@ void			pre_process_input_variables(
 					t_lin_reg_data *linear_regression_data);
 void			pre_process_observed_values(
 					t_lin_reg_data *linear_regression_data);
-double			*theta_initialize(void);
+double			**theta_initialize(void);
 double			**matrix_initialize(t_variable *km, t_matrix_size *matrix_size);
-void			calculate_error(double *theta, double **matrix,
+void			calculate_error(double **theta, double **matrix,
 					t_matrix_size *matrix_size, t_variable *input_variable);
 void			ft_matrix_subtrack_vector_double(t_matrix_size *matrix_size,
-					double **matrix, double *vector, double **new_vector);
+					double **matrix, double **vector, double **new_vector);
 void			**ft_create_vector(size_t size, size_t vector_size);
 double			ft_matrix_sum(t_matrix_size *matrix_size, double **matrix);
+void			ft_matrix_dot_vector_double(t_matrix_size *matrix_size,
+					double **matrix, double **vector, double **new_vector);
 
 #endif

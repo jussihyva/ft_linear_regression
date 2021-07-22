@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 13:34:18 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/21 13:33:16 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/22 11:16:37 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void	release_data_record(void *content, size_t size)
 
 void	perform_linear_regression_data(t_lin_reg_data *linear_regression_data)
 {
-	double				*theta;
+	double				**theta;
 	double				**matrix;
 	t_variable			*variable;
 	t_matrix_size		matrix_size;
