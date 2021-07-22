@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 18:02:04 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/22 11:21:46 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/22 13:02:42 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,59 +24,70 @@ double	**theta_initialize(void)
 	return (theta);
 }
 
-double	**matrix_initialize(t_variable *km, t_matrix_size *matrix_size)
+double	**matrix_initialize(t_variable *variable, t_matrix_size *matrix_size)
 {
 	static size_t	num_of_columns = 2;
 	double			**matrix;
 	size_t			i;
 
-	matrix = (double **)ft_memalloc(sizeof(*matrix) * km->size);
-	matrix_size->rows = km->size;
+	matrix = (double **)ft_memalloc(sizeof(*matrix) * variable->size);
+	matrix_size->rows = variable->size;
 	matrix_size->columns = num_of_columns;
 	i = -1;
-	while (++i < km->size)
+	while (++i < variable->size)
 	{
 		matrix[i] = (double *)ft_memalloc(sizeof(*matrix[i]) * num_of_columns);
 		matrix[i][0] = 1;
-		matrix[i][1] = km->normalized_values[i][0];
+		matrix[i][1] = variable->normalized_values[i][0];
 	}
 	return (matrix);
 }
 
-void	calculate_error(double **theta, double **matrix,
-					t_matrix_size *matrix_size, t_variable *measured_variable)
+static void	print_error_result(size_t size, double **response_variable,
+							t_error_data *error_data, double new_theta[2][1])
 {
-	static size_t	columns = 1;
-	static double	alpha = 0.8;
 	size_t			i;
-	double			**response_variable;
-	double			**error;
-	double			error_sum;
-	double			new_theta[2][1];
 
-	response_variable = (double **)ft_create_vector(sizeof(double),
-			matrix_size->rows);
-	ft_matrix_dot_vector_double(matrix_size, matrix, theta, response_variable);
-	matrix_size->columns = columns;
-	error = (double **)ft_create_vector(sizeof(double),
-			matrix_size->rows);
-	ft_matrix_subtrack_vector_double(matrix_size, response_variable,
-		measured_variable->normalized_values, error);
-	error_sum = ft_matrix_sum(matrix_size, error);
-	new_theta[0][0] = theta[0][0] - (alpha * error_sum) / matrix_size->rows;
 	i = -1;
 	printf("response_variable: ");
-	while (++i < matrix_size->rows)
+	while (++i < size)
 		printf("%6.3f ", response_variable[i][0]);
 	printf("\n");
 	i = -1;
 	printf("            Error: ");
-	while (++i < matrix_size->rows)
-		printf("%6.3f ", error[i][0]);
+	while (++i < size)
+		printf("%6.3f ", error_data->error[i][0]);
 	printf("\n");
-	ft_printf("Error SUM: %f\n", error_sum);
+	ft_printf("Error SUM: %f\n", error_data->error_sum);
 	ft_printf("New theta[0]: %f\n", new_theta[0][0]);
-	ft_memdel((void **)&error[0]);
-	ft_memdel((void **)&error);
+	return ;
+}
+
+void	calculate_error(double alpha, double **theta,
+					t_variable *input_variable, t_variable *measured_variable)
+{
+	static size_t	columns = 1;
+	double			**response_variable;
+	t_error_data	error_data;
+	double			new_theta[2][1];
+
+	response_variable = (double **)ft_create_vector(sizeof(double),
+			input_variable->matrix_size.rows);
+	ft_matrix_dot_vector_double(&input_variable->matrix_size,
+		input_variable->matrix, theta, response_variable);
+	input_variable->matrix_size.columns = columns;
+	error_data.error = (double **)ft_create_vector(sizeof(double),
+			input_variable->matrix_size.rows);
+	ft_matrix_subtrack_vector_double(&input_variable->matrix_size,
+		response_variable, measured_variable->normalized_values,
+		error_data.error);
+	error_data.error_sum = ft_matrix_sum(&input_variable->matrix_size,
+			error_data.error);
+	new_theta[0][0] = theta[0][0] - (alpha * error_data.error_sum)
+		/ input_variable->matrix_size.rows;
+	print_error_result(input_variable->matrix_size.rows, response_variable,
+		&error_data, new_theta);
+	ft_memdel((void **)&error_data.error[0]);
+	ft_memdel((void **)&error_data.error);
 	return ;
 }

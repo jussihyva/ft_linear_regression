@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/22 11:18:38 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/22 13:05:06 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ typedef struct s_variable
 	t_min_max_value		min_max_value;
 	double				**normalized_values;
 	double				**standardized_values_not_implemented_yet;
+	double				**matrix;
+	t_matrix_size		matrix_size;
 }				t_variable;
 
 typedef struct s_measured_variables
@@ -70,6 +72,12 @@ typedef struct s_lin_reg_data
 	t_input_variables		input_variables;
 	t_measured_variables	measured_variables;
 }				t_lin_reg_data;
+
+typedef struct s_error_data
+{
+	double		**error;
+	double		error_sum;
+}				t_error_data;
 
 void			*initialize_cmd_args(int argc, char **argv);
 void			save_cmd_argument(void *input_params, char opt,
@@ -91,8 +99,8 @@ void			pre_process_observed_values(
 					t_lin_reg_data *linear_regression_data);
 double			**theta_initialize(void);
 double			**matrix_initialize(t_variable *km, t_matrix_size *matrix_size);
-void			calculate_error(double **theta, double **matrix,
-					t_matrix_size *matrix_size, t_variable *input_variable);
+void			calculate_error(double alpha, double **theta,
+					t_variable *input_variable, t_variable *measured_variable);
 void			ft_matrix_subtrack_vector_double(t_matrix_size *matrix_size,
 					double **matrix, double **vector, double **new_vector);
 void			**ft_create_vector(size_t size, size_t vector_size);
