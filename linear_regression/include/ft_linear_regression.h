@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/23 17:11:18 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/23 19:17:59 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,96 @@
 # include "libft.h"
 # include "ft_printf.h"
 # include "libft_addons.h"
+# include <sys/resource.h>
+
+# if DARWIN
+#  include <sys/sysctl.h>
+#  define OS					"DARWIN"
+# else
+#  include <sys/sysinfo.h>
+#  define OS					"LINUX"
+# endif
+
+# define MILLI_SECONDS					1000
+# define MINUTE							60
+# define EXECUTION_TIME_LIMIT_MIN		5
+# define SEND_REC_BUF_MAX_SIZE			4096
+# define PEM_CERT_FILE					"/var/tmp/tls-selfsigned.crt"
+# define PEM_PRIVTE_KEY_FILE			"/var/tmp/tls-selfsigned.key"
+
+typedef struct s_memory_info
+{
+	int				mem_limit;
+	long			usage_prev;
+	struct rusage	rusage;
+	struct rlimit	rlim;
+	long			av_phys_pages;
+	long			tot_phys_pages;
+	int				mem_usage;
+
+}						t_memory_info;
+
+typedef enum e_connection_status
+{
+	E_IDLE,
+	E_CONNECTED
+}						t_connection_status;
+
+typedef struct s_influxdb
+{
+	void					*connection;
+	t_connection_status		connection_status;
+}						t_influxdb;
+
+# define	NUM_OF_STAT_COUNTERS	18
+
+typedef enum e_stat_counter_name
+{
+	E_PUZZLE_INITIAL_STATE,
+	E_PUZZLE_FINAL_STATE,
+	E_IS_PUZZLE_SOLVABLE,
+	E_IS_PUZZLE_SOLVED,
+	E_IS_TIME_LIMIT_REACHED,
+	E_IS_MEM_LIMIT_REACHED,
+	E_NUM_OF_SOLUTION_MOVES,
+	E_EXECUTION_TIME,
+	E_TOTAL_CPU_USAGE_TIME,
+	E_SOLVER_CPU_USAGE_TIME,
+	E_PRINTING_CPU_USAGE_TIME,
+	E_TOTAL_NUM_OF_PUZZLE_STATES,
+	E_TOTAL_NUM_OF_PUZZLE_STATE_COLLISIONS,
+	E_MAX_NUM_OF_SAVED_PUZZLE_STATES,
+	E_MAX_QUEUE_LEN,
+	E_TOTAL_NUM_OF_ELEM_IN_QUEUE,
+	E_MAX_MEM_USAGE,
+	E_MIN_FREE_MEM
+}				t_stat_counter_name;
+
+typedef struct s_stat_counters
+{
+	char				*counter_names[NUM_OF_STAT_COUNTERS];
+	int					value[NUM_OF_STAT_COUNTERS];
+	long				is_active[NUM_OF_STAT_COUNTERS];
+}				t_stat_counters;
+
+typedef struct s_statistics
+{
+	char				*algorithm;
+	char				*algorithm_substring;
+	struct timespec		start_time;
+	struct timespec		end_time;
+	time_t				start_time_ms;
+	time_t				end_time_ms;
+	clock_t				cpu_usage_ms;
+	t_tls_connection	*connection;
+	int					solution_move_cnt;
+	int					puzzle_size;
+	int					puzzle_states_cnt;
+	int					puzzle_state_collision_cnt;
+	t_stat_counters		stat_counters;
+	int					solver_start_time_ms;
+	int					solver_end_time_ms;
+}				t_statistics;
 
 typedef struct s_file_params
 {
@@ -109,5 +199,8 @@ void			ft_matrix_dot_vector_double(t_matrix_size *matrix_size,
 double			**variable_normalize(void *values,
 					t_min_max_value *min_max_value, size_t num_of_records);
 void			variable_remove(t_variable *variable);
+time_t			get_execution_time(t_statistics *statistics);
+void			write_influxdb(t_tls_connection *connection, char *body,
+					char *database);
 
 #endif
