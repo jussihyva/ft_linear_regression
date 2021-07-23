@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/23 16:40:26 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/23 17:11:18 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,5 +108,6 @@ void			ft_matrix_dot_vector_double(t_matrix_size *matrix_size,
 					double **matrix, double **vector, double **new_vector);
 double			**variable_normalize(void *values,
 					t_min_max_value *min_max_value, size_t num_of_records);
+void			variable_remove(t_variable *variable);
 
 #endif

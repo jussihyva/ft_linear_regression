@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 13:34:18 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/23 17:01:06 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/23 17:14:10 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,27 +60,10 @@ void	perform_linear_regression_data(t_lin_reg_data *linear_regression_data)
 void	linear_regression_data_release(
 							t_lin_reg_data **linear_regression_data)
 {
-	size_t		i;
-	t_variable	*variable;
-
 	ft_lstdel((*linear_regression_data)->data_record_lst, release_data_record);
 	ft_memdel((void **)&(*linear_regression_data)->data_record_lst);
-	variable = &(*linear_regression_data)->input_variables.km;
-	ft_memdel((void **)&variable->min_max_value.min_value);
-	ft_memdel((void **)&variable->min_max_value.max_value);
-	ft_memdel((void **)&variable->values);
-	ft_vector_remove((void ***)&variable->normalized_values,
-		variable->size);
-	i = -1;
-	while (++i < variable->size)
-		ft_memdel((void **)&variable->matrix[i]);
-	ft_memdel((void **)&variable->matrix);
-	variable = &(*linear_regression_data)->measured_variables.price;
-	ft_memdel((void **)&variable->min_max_value.min_value);
-	ft_memdel((void **)&variable->min_max_value.max_value);
-	ft_memdel((void **)&variable->values);
-	ft_vector_remove((void ***)&variable->normalized_values,
-		variable->size);
+	variable_remove(&(*linear_regression_data)->input_variables.km);
+	variable_remove(&(*linear_regression_data)->measured_variables.price);
 	ft_memdel((void **)linear_regression_data);
 	return ;
 }

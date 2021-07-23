@@ -6,13 +6,13 @@
 #    By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/09 12:38:32 by jkauppi           #+#    #+#              #
-#    Updated: 2021/07/23 15:58:53 by jkauppi          ###   ########.fr        #
+#    Updated: 2021/07/23 17:06:26 by jkauppi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC_C_FILES		=	read_dataset_file.c cmd_arguments.c linear_regression.c \
-					gradient_rescent.c variables.c \
-					ft_matrix_subtrack_vector_double.c ft_create_vector.c \
+					gradient_rescent.c variable.c variable_remove.c \
+					ft_matrix_subtrack_vector_double.c ft_vector_create.c \
 					ft_matrix_sum.c ft_matrix_dot_vector_double.c \
 					variable_normalize.c
 SRC_H_FILES		=	ft_linear_regression.h
