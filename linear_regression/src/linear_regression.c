@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 13:34:18 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/22 12:47:21 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/23 17:01:06 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ void	perform_linear_regression_data(t_lin_reg_data *linear_regression_data)
 
 	input_variable = &linear_regression_data->input_variables.km;
 	pre_process_input_variables(linear_regression_data);
-	pre_process_observed_values(linear_regression_data);
 	theta = theta_initialize();
 	ft_printf("   KM MIN=%d MAX=%d\n", *(int *)input_variable->min_max_value
 		.min_value, *(int *)input_variable->min_max_value.max_value);
@@ -52,6 +51,8 @@ void	perform_linear_regression_data(t_lin_reg_data *linear_regression_data)
 	ft_printf("PRICE MIN=%d MAX=%d\n", *(int *)measured_variable->min_max_value
 		.min_value, *(int *)measured_variable->min_max_value.max_value);
 	calculate_error(alpha, theta, input_variable, measured_variable);
+	ft_memdel((void **)&theta[0]);
+	ft_memdel((void **)&theta[1]);
 	ft_memdel((void **)&theta);
 	return ;
 }
@@ -68,19 +69,18 @@ void	linear_regression_data_release(
 	ft_memdel((void **)&variable->min_max_value.min_value);
 	ft_memdel((void **)&variable->min_max_value.max_value);
 	ft_memdel((void **)&variable->values);
-	ft_memdel((void **)&variable->normalized_values);
+	ft_vector_remove((void ***)&variable->normalized_values,
+		variable->size);
 	i = -1;
 	while (++i < variable->size)
 		ft_memdel((void **)&variable->matrix[i]);
 	ft_memdel((void **)&variable->matrix);
-	ft_memdel((void **)&(*linear_regression_data)->measured_variables.price
-		.min_max_value.min_value);
-	ft_memdel((void **)&(*linear_regression_data)->measured_variables.price
-		.min_max_value.max_value);
-	ft_memdel((void **)&(*linear_regression_data)->measured_variables.price
-		.values);
-	ft_memdel((void **)&(*linear_regression_data)->measured_variables.price
-		.normalized_values);
+	variable = &(*linear_regression_data)->measured_variables.price;
+	ft_memdel((void **)&variable->min_max_value.min_value);
+	ft_memdel((void **)&variable->min_max_value.max_value);
+	ft_memdel((void **)&variable->values);
+	ft_vector_remove((void ***)&variable->normalized_values,
+		variable->size);
 	ft_memdel((void **)linear_regression_data);
 	return ;
 }

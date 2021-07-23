@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 18:02:04 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/22 13:02:42 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/23 16:47:15 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,20 @@ double	**theta_initialize(void)
 	theta = (double **)ft_memalloc(sizeof(*theta) * 2);
 	theta[0] = (double *)ft_memalloc(sizeof(**theta));
 	theta[1] = (double *)ft_memalloc(sizeof(**theta));
-	theta[0][0] = 0.0;
-	theta[1][0] = 0.0;
+	theta[0][0] = 0.4;
+	theta[1][0] = -0.4;
 	return (theta);
 }
 
-double	**matrix_initialize(t_variable *variable, t_matrix_size *matrix_size)
+double	**matrix_initialize(t_variable *variable)
 {
 	static size_t	num_of_columns = 2;
 	double			**matrix;
 	size_t			i;
 
 	matrix = (double **)ft_memalloc(sizeof(*matrix) * variable->size);
-	matrix_size->rows = variable->size;
-	matrix_size->columns = num_of_columns;
+	variable->matrix_size.rows = variable->size;
+	variable->matrix_size.columns = num_of_columns;
 	i = -1;
 	while (++i < variable->size)
 	{
@@ -71,12 +71,12 @@ void	calculate_error(double alpha, double **theta,
 	t_error_data	error_data;
 	double			new_theta[2][1];
 
-	response_variable = (double **)ft_create_vector(sizeof(double),
+	response_variable = (double **)ft_vector_create(sizeof(double),
 			input_variable->matrix_size.rows);
 	ft_matrix_dot_vector_double(&input_variable->matrix_size,
 		input_variable->matrix, theta, response_variable);
 	input_variable->matrix_size.columns = columns;
-	error_data.error = (double **)ft_create_vector(sizeof(double),
+	error_data.error = (double **)ft_vector_create(sizeof(double),
 			input_variable->matrix_size.rows);
 	ft_matrix_subtrack_vector_double(&input_variable->matrix_size,
 		response_variable, measured_variable->normalized_values,
@@ -87,7 +87,9 @@ void	calculate_error(double alpha, double **theta,
 		/ input_variable->matrix_size.rows;
 	print_error_result(input_variable->matrix_size.rows, response_variable,
 		&error_data, new_theta);
-	ft_memdel((void **)&error_data.error[0]);
-	ft_memdel((void **)&error_data.error);
+	ft_vector_remove((void ***)&error_data.error,
+		input_variable->matrix_size.rows);
+	ft_vector_remove((void ***)&response_variable,
+		input_variable->matrix_size.rows);
 	return ;
 }
