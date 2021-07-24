@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/01 13:14:25 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/24 09:52:22 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/24 18:51:50 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,19 +79,24 @@ void	ft_influxdb_write(t_tls_connection *connection, char *body,
 			"POST /write?db=%s&precision=s %sContent-Length: %ld\r\n\r\n",
 			database, "HTTP/1.1\r\nHost: none\r\n", strlen(body));
 		SSL_write(connection->ssl_bio, header, strlen(header));
+		FT_LOG_TRACE("BODY: %s", body);
 		SSL_write(connection->ssl_bio, body, strlen(body));
 		start = clock();
-		end = start + CLOCKS_PER_SEC;
-		chars = 1;
+		end = start + (CLOCKS_PER_SEC * 2);
+		chars = -1;
 		while (chars == -1 && end > clock())
+		{
 			chars = SSL_read(connection->ssl_bio, read_buf,
 					SEND_REC_BUF_MAX_SIZE);
+			FT_LOG_TRACE("CHARS: %s", read_buf);
+		}
 		if (chars == -1)
 			FT_LOG_ERROR("%s", read_buf);
 		chars = 1;
 		while (chars > 0)
 			chars = SSL_read(connection->ssl_bio, read_buf,
 					SEND_REC_BUF_MAX_SIZE);
+		FT_LOG_TRACE("CHARS: %s", read_buf);
 	}
 	return ;
 }

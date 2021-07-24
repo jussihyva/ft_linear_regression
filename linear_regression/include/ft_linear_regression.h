@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/24 12:15:04 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/24 18:16:18 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ typedef struct s_stat_counters
 typedef struct s_statistics
 {
 	t_influxdb			*influxdb;
+	char				*data_type;
+	int					id;
 	char				*algorithm;
 	char				*algorithm_substring;
 	struct timespec		start_time;
@@ -86,7 +88,7 @@ typedef struct s_statistics
 	int					puzzle_size;
 	int					puzzle_states_cnt;
 	int					puzzle_state_collision_cnt;
-	t_list				*stat_counters_lst;
+	t_list				**stat_counters_lst;
 	int					solver_start_time_ms;
 	int					solver_end_time_ms;
 }				t_statistics;
@@ -194,7 +196,7 @@ t_statistics	*ft_statistics_initialize(void);
 void			ft_influxdb_write(t_tls_connection *connection, char *body,
 					char *database);
 char			*create_influxdb_query_string(t_stat_counters *stat_counters,
-					struct timespec end_time);
+					struct timespec end_time, char *data_type, int id);
 void			stat_set_end_time(t_statistics *statistics);
 
 #endif

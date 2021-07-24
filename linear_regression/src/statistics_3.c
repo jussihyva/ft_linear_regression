@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 18:08:13 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/24 11:33:06 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/24 18:32:19 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static char	*add_counters_to_string(char *format_string_ptr,
 }
 
 char	*create_influxdb_query_string(t_stat_counters *stat_counters,
-													struct timespec end_time)
+							struct timespec end_time, char *data_type, int id)
 {
 	char	*influxdb_query_string;
 	char	*string;
@@ -84,9 +84,10 @@ char	*create_influxdb_query_string(t_stat_counters *stat_counters,
 	tag_string = (char *)ft_memalloc(sizeof(*tag_string) * 100000);
 	tag_format_string = (char *)ft_memalloc(sizeof(*tag_format_string)
 			* 100000);
-	ft_strcat(string, "project=%s");
+	ft_strcat(string, "project=%s,data_type=%s,id=%d");
 	ft_strcat(tag_format_string, string);
-	ft_sprintf(tag_string, tag_format_string, "ft_linear_regression");
+	ft_sprintf(tag_string, tag_format_string, "ft_linear_regression",
+		data_type, id);
 	ft_memdel((void **)&tag_format_string);
 	offset_ptr = add_counters_to_string(tag_string, stat_counters,
 			influxdb_query_string);
