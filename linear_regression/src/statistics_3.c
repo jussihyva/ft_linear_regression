@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 18:08:13 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/23 19:09:07 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/24 11:33:06 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ void	release_statistics_params(t_statistics *statistics)
 		ft_strdel(&statistics->algorithm);
 		ft_strdel(&statistics->algorithm_substring);
 		i = -1;
-		while (++i < NUM_OF_STAT_COUNTERS)
-			ft_memdel((void **)&statistics->stat_counters.counter_names[i]);
-		ft_memdel((void **)&statistics->stat_counters.counter_names);
+		// while (++i < NUM_OF_STAT_COUNTERS)
+		// 	ft_memdel((void **)&statistics->stat_counters.counter_names[i]);
+		// ft_memdel((void **)&statistics->stat_counters.counter_names);
 		ft_memdel((void **)&statistics);
 	}
 	return ;
@@ -69,7 +69,8 @@ static char	*add_counters_to_string(char *format_string_ptr,
 	return (string_ptr);
 }
 
-static char	*create_influxdb_query_string(t_statistics *statistics)
+char	*create_influxdb_query_string(t_stat_counters *stat_counters,
+													struct timespec end_time)
 {
 	char	*influxdb_query_string;
 	char	*string;
@@ -83,32 +84,30 @@ static char	*create_influxdb_query_string(t_statistics *statistics)
 	tag_string = (char *)ft_memalloc(sizeof(*tag_string) * 100000);
 	tag_format_string = (char *)ft_memalloc(sizeof(*tag_format_string)
 			* 100000);
-	ft_strcat(string, "project=%s,algorithm=%s,algorithm_substring=%s");
-	ft_strcat(string, ",puzzle_size=%d");
+	ft_strcat(string, "project=%s");
 	ft_strcat(tag_format_string, string);
-	ft_sprintf(tag_string, tag_format_string, "n-puzzle", statistics->algorithm,
-		statistics->algorithm_substring, statistics->puzzle_size);
+	ft_sprintf(tag_string, tag_format_string, "ft_linear_regression");
 	ft_memdel((void **)&tag_format_string);
-	offset_ptr = add_counters_to_string(tag_string, &statistics->stat_counters,
+	offset_ptr = add_counters_to_string(tag_string, stat_counters,
 			influxdb_query_string);
 	ft_memdel((void **)&tag_string);
-	ft_sprintf(offset_ptr, " %d\n", statistics->end_time);
+	ft_sprintf(offset_ptr, " %d\n", end_time);
 	ft_memdel((void **)&string);
 	return (influxdb_query_string);
 }
 
-void	influxdb_plugin(t_log_event *event)
-{
-	t_statistics	*statistics;
-	char			*influxdb_query_string;
-	int				*counter_values;
+// void	influxdb_plugin(t_log_event *event)
+// {
+// 	t_statistics	*statistics;
+// 	char			*influxdb_query_string;
+// 	int				*counter_values;
 
-	statistics = (t_statistics *)event->additional_event_data;
-	counter_values = statistics->stat_counters.value;
-	statistics->stat_counters.is_active[E_EXECUTION_TIME] = 1;
-	counter_values[E_EXECUTION_TIME] = (int)get_execution_time(statistics);
-	influxdb_query_string = create_influxdb_query_string(statistics);
-	write_influxdb(statistics->connection, influxdb_query_string, "Hive");
-	ft_memdel((void **)&influxdb_query_string);
-	return ;
-}
+// 	statistics = (t_statistics *)event->additional_event_data;
+// 	counter_values = statistics->stat_counters.value;
+// 	statistics->stat_counters.is_active[E_EXECUTION_TIME] = 1;
+// 	counter_values[E_EXECUTION_TIME] = (int)get_execution_time(statistics);
+// 	influxdb_query_string = create_influxdb_query_string(statistics);
+// 	ft_influxdb_write(statistics->connection, influxdb_query_string, "Hive");
+// 	ft_memdel((void **)&influxdb_query_string);
+// 	return ;
+// }

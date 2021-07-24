@@ -6,7 +6,7 @@
 #    By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/20 10:35:04 by ubuntu            #+#    #+#              #
-#    Updated: 2021/07/21 13:15:48 by jkauppi          ###   ########.fr        #
+#    Updated: 2021/07/24 09:56:16 by jkauppi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,7 +49,7 @@ help: all
 	@echo "DONE"
 
 .PHONY: build
-build: check_openssl check_docker check_jupyter folders
+build: check_openssl check_docker folders check_jupyter
 	@echo "DONE"
 
 .PHONY: run

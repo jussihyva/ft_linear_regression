@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 11:14:46 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/13 15:37:02 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/24 10:15:51 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int	main(int argc, char **argv)
 	char						*options;
 	t_lin_reg_data				*linear_regression_data;
 	t_event_logging_data		*event_logging_data;
+	t_statistics				*statistics;
 
 	options = ft_strdup("L:f:h");
 	arg_parser_data
@@ -29,9 +30,10 @@ int	main(int argc, char **argv)
 	ft_arg_parser(arg_parser_data, argc, argv, options);
 	event_logging_data = ft_event_logging_init(((t_input_params *)
 				arg_parser_data->input_params)->event_logging_level);
+	statistics = ft_statistics_initialize();
 	linear_regression_data = read_dataset_file(
 			((t_input_params *)arg_parser_data->input_params)->dataset_file);
-	perform_linear_regression_data(linear_regression_data);
+	create_linear_regression_model(linear_regression_data, statistics);
 	release_input_params((t_input_params **)&arg_parser_data->input_params);
 	ft_event_logging_release(&event_logging_data);
 	linear_regression_data_release(&linear_regression_data);

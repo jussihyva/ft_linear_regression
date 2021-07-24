@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/23 19:17:59 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/24 12:15:04 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,39 +56,24 @@ typedef struct s_influxdb
 	t_connection_status		connection_status;
 }						t_influxdb;
 
-# define	NUM_OF_STAT_COUNTERS	18
+# define	NUM_OF_STAT_COUNTERS	2
 
 typedef enum e_stat_counter_name
 {
-	E_PUZZLE_INITIAL_STATE,
-	E_PUZZLE_FINAL_STATE,
-	E_IS_PUZZLE_SOLVABLE,
-	E_IS_PUZZLE_SOLVED,
-	E_IS_TIME_LIMIT_REACHED,
-	E_IS_MEM_LIMIT_REACHED,
-	E_NUM_OF_SOLUTION_MOVES,
-	E_EXECUTION_TIME,
-	E_TOTAL_CPU_USAGE_TIME,
-	E_SOLVER_CPU_USAGE_TIME,
-	E_PRINTING_CPU_USAGE_TIME,
-	E_TOTAL_NUM_OF_PUZZLE_STATES,
-	E_TOTAL_NUM_OF_PUZZLE_STATE_COLLISIONS,
-	E_MAX_NUM_OF_SAVED_PUZZLE_STATES,
-	E_MAX_QUEUE_LEN,
-	E_TOTAL_NUM_OF_ELEM_IN_QUEUE,
-	E_MAX_MEM_USAGE,
-	E_MIN_FREE_MEM
+	E_INDEPENDENT,
+	E_DEPENDENT
 }				t_stat_counter_name;
 
 typedef struct s_stat_counters
 {
 	char				*counter_names[NUM_OF_STAT_COUNTERS];
-	int					value[NUM_OF_STAT_COUNTERS];
+	double				value[NUM_OF_STAT_COUNTERS];
 	long				is_active[NUM_OF_STAT_COUNTERS];
 }				t_stat_counters;
 
 typedef struct s_statistics
 {
+	t_influxdb			*influxdb;
 	char				*algorithm;
 	char				*algorithm_substring;
 	struct timespec		start_time;
@@ -101,7 +86,7 @@ typedef struct s_statistics
 	int					puzzle_size;
 	int					puzzle_states_cnt;
 	int					puzzle_state_collision_cnt;
-	t_stat_counters		stat_counters;
+	t_list				*stat_counters_lst;
 	int					solver_start_time_ms;
 	int					solver_end_time_ms;
 }				t_statistics;
@@ -181,8 +166,9 @@ void			linear_regression_data_release(
 void			linear_regression_add_data_record(
 					t_lin_reg_data *linear_regression_data,
 					t_data_record *data_record);
-void			perform_linear_regression_data(
-					t_lin_reg_data *linear_regression_data);
+void			create_linear_regression_model(
+					t_lin_reg_data *linear_regression_data,
+					t_statistics *statistics);
 void			pre_process_input_variables(
 					t_lin_reg_data *linear_regression_data);
 double			**theta_initialize(void);
@@ -200,7 +186,15 @@ double			**variable_normalize(void *values,
 					t_min_max_value *min_max_value, size_t num_of_records);
 void			variable_remove(t_variable *variable);
 time_t			get_execution_time(t_statistics *statistics);
-void			write_influxdb(t_tls_connection *connection, char *body,
+void			ft_influxdb_write(t_tls_connection *connection, char *body,
 					char *database);
+t_influxdb		*ft_influxdb_connect(char *host_name, char *port_number,
+					t_statistics *statistics);
+t_statistics	*ft_statistics_initialize(void);
+void			ft_influxdb_write(t_tls_connection *connection, char *body,
+					char *database);
+char			*create_influxdb_query_string(t_stat_counters *stat_counters,
+					struct timespec end_time);
+void			stat_set_end_time(t_statistics *statistics);
 
 #endif

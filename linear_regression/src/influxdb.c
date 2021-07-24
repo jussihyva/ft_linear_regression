@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/01 13:14:25 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/23 18:48:02 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/24 09:52:22 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static t_influxdb	*init_influx_session(t_tls_connection *tls_connection)
 	return (influxdb);
 }
 
-t_influxdb	*setup_influxdb_connection(char *host_name, char *port_number,
+t_influxdb	*ft_influxdb_connect(char *host_name, char *port_number,
 													t_statistics *statistics)
 {
 	t_tls_connection	*tls_connection;
@@ -64,7 +64,8 @@ t_influxdb	*setup_influxdb_connection(char *host_name, char *port_number,
 	return (influxdb);
 }
 
-void	write_influxdb(t_tls_connection *connection, char *body, char *database)
+void	ft_influxdb_write(t_tls_connection *connection, char *body,
+																char *database)
 {
 	char		header[SEND_REC_BUF_MAX_SIZE];
 	char		read_buf[SEND_REC_BUF_MAX_SIZE];
