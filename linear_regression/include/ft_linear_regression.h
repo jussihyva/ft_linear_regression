@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/24 18:16:18 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/25 07:29:35 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,7 @@ typedef struct s_lin_reg_data
 	size_t					num_of_records;
 	t_input_variables		input_variables;
 	t_measured_variables	measured_variables;
+	t_variable				predicted_price;
 }				t_lin_reg_data;
 
 typedef struct s_error_data
@@ -155,6 +156,12 @@ typedef struct s_error_data
 	double		**error;
 	double		error_sum;
 }				t_error_data;
+
+typedef struct s_gradient_descent_data
+{
+	double		alpha;
+	double		**theta;
+}				t_gradient_descent_data;
 
 void			*initialize_cmd_args(int argc, char **argv);
 void			save_cmd_argument(void *input_params, char opt,
@@ -175,8 +182,9 @@ void			pre_process_input_variables(
 					t_lin_reg_data *linear_regression_data);
 double			**theta_initialize(void);
 double			**matrix_initialize(t_variable *km);
-void			calculate_error(double alpha, double **theta,
-					t_variable *input_variable, t_variable *measured_variable);
+void			calculate_error(t_gradient_descent_data *gradient_descent_data,
+					t_variable *input_variable, t_variable *measured_variable,
+					double new_theta[2][1]);
 void			ft_matrix_subtrack_vector_double(t_matrix_size *matrix_size,
 					double **matrix, double **vector, double **new_vector);
 void			**ft_vector_create(size_t size, size_t vector_size);
@@ -198,5 +206,7 @@ void			ft_influxdb_write(t_tls_connection *connection, char *body,
 char			*create_influxdb_query_string(t_stat_counters *stat_counters,
 					struct timespec end_time, char *data_type, int id);
 void			stat_set_end_time(t_statistics *statistics);
+void			initalize_variable(t_variable *variable, size_t num_of_records,
+					size_t size);
 
 #endif

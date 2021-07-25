@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 13:34:18 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/24 18:18:02 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/25 08:07:17 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,31 +81,68 @@ static void	create_statistics(t_list **stat_counters_lst,
 	return ;
 }
 
+static void	estimate_prize(t_variable *input_variable,
+							t_variable *measured_variable,
+							t_gradient_descent_data *gradient_descent_data,
+							t_variable *predicted_price)
+{
+	size_t		i;
+	double		**theta;
+	double		range;
+
+	theta = gradient_descent_data->theta;
+	initalize_variable(predicted_price, input_variable->size, sizeof(double));
+	*(double *)predicted_price->min_max_value.min_value
+		= (double)(*(int *)measured_variable->min_max_value.min_value);
+	*(double *)predicted_price->min_max_value.max_value
+		= (double)(*(int *)measured_variable->min_max_value.max_value);
+	range = *(double *)predicted_price->min_max_value.max_value
+		- *(double *)predicted_price->min_max_value.min_value;
+	predicted_price->normalized_values
+		= (double **)ft_vector_create(sizeof(double), input_variable->size);
+	i = -1;
+	while (++i < input_variable->size)
+	{
+		predicted_price->normalized_values[i][0] = theta[0][0]
+			+ theta[1][0] * input_variable->normalized_values[i][0];
+		((double *)predicted_price->values)[i]
+			= *(double *)predicted_price->min_max_value.min_value
+			+ (range * predicted_price->normalized_values[i][0]);
+	}
+	return ;
+}
+
 void	create_linear_regression_model(t_lin_reg_data *linear_regression_data,
 													t_statistics *statistics)
 {
-	static double		alpha = 0.8;
-	double				**theta;
-	t_variable			*input_variable;
-	t_variable			*measured_variable;
+	t_gradient_descent_data		gradient_descent_data;
+	double						new_theta[2][1];
+	t_variable					*input_variable;
+	t_variable					*measured_variable;
+	t_variable					*predicted_price;
 
+	predicted_price = &linear_regression_data->predicted_price;
+	gradient_descent_data.alpha = 0.01;
+	gradient_descent_data.theta = theta_initialize();
 	input_variable = &linear_regression_data->input_variables.km;
 	pre_process_input_variables(linear_regression_data);
-	theta = theta_initialize();
 	ft_printf("   KM MIN=%d MAX=%d\n", *(int *)input_variable->min_max_value
 		.min_value, *(int *)input_variable->min_max_value.max_value);
 	measured_variable = &linear_regression_data->measured_variables.price;
 	ft_printf("PRICE MIN=%d MAX=%d\n", *(int *)measured_variable->min_max_value
 		.min_value, *(int *)measured_variable->min_max_value.max_value);
-	calculate_error(alpha, theta, input_variable, measured_variable);
+	calculate_error(&gradient_descent_data, input_variable, measured_variable,
+		new_theta);
+	estimate_prize(input_variable, measured_variable, &gradient_descent_data,
+		predicted_price);
 	create_statistics(statistics->stat_counters_lst, input_variable,
 		measured_variable, linear_regression_data->num_of_records);
 	stat_set_end_time(statistics);
 	if (*statistics->stat_counters_lst)
 		save_result(statistics);
-	ft_memdel((void **)&theta[0]);
-	ft_memdel((void **)&theta[1]);
-	ft_memdel((void **)&theta);
+	ft_memdel((void **)&gradient_descent_data.theta[0]);
+	ft_memdel((void **)&gradient_descent_data.theta[1]);
+	ft_memdel((void **)&gradient_descent_data.theta);
 	return ;
 }
 

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   variables.c                                        :+:      :+:    :+:   */
+/*   variable.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/20 11:16:30 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/23 16:25:43 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/25 07:54:52 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,14 @@ static void	save_int_variable(t_variable *variable, size_t i, int new_value)
 	return ;
 }
 
-static void	initalize_int_variable(t_variable *variable, size_t num_of_records)
+void	initalize_variable(t_variable *variable, size_t num_of_records,
+																	size_t size)
 {
-	variable->values = (int *)ft_memalloc(sizeof(int) * num_of_records);
+	variable->values = ft_memalloc(size * num_of_records);
 	variable->size = num_of_records;
-	variable->min_max_value.min_value = (int *)ft_memalloc(sizeof(int));
+	variable->min_max_value.min_value = ft_memalloc(size);
 	*(int *)variable->min_max_value.min_value = INT_MAX;
-	variable->min_max_value.max_value = (int *)ft_memalloc(sizeof(int));
+	variable->min_max_value.max_value = ft_memalloc(size);
 	*(int *)variable->min_max_value.max_value = INT_MIN;
 	return ;
 }
@@ -93,11 +94,11 @@ void	pre_process_input_variables(t_lin_reg_data *linear_regression_data)
 
 	num_of_records = linear_regression_data->num_of_records;
 	variable = &linear_regression_data->input_variables.km;
-	initalize_int_variable(variable, num_of_records);
+	initalize_variable(variable, num_of_records, sizeof(int));
 	initialize_independent_variables(variable,
 		linear_regression_data->data_record_lst);
 	variable = &linear_regression_data->measured_variables.price;
-	initalize_int_variable(variable, num_of_records);
+	initalize_variable(variable, num_of_records, sizeof(int));
 	initialize_dependent_variables(variable,
 		linear_regression_data->data_record_lst);
 }

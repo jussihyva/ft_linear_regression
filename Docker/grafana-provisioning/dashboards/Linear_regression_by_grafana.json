@@ -212,7 +212,9 @@
 		  }
 		],
 		"thresholds": [],
+		"timeFrom": null,
 		"timeRegions": [],
+		"timeShift": null,
 		"title": "Number of received input records.",
 		"tooltip": {
 		  "shared": true,
@@ -266,6 +268,6 @@
 	"timezone": "",
 	"title": "Linear_regression_by_grafana",
 	"uid": "Linear_regression_by_grafana",
-	"version": 1
+	"version": 2
   }
   

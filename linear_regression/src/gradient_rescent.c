@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 18:02:04 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/23 16:47:15 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/25 07:04:18 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,14 +63,19 @@ static void	print_error_result(size_t size, double **response_variable,
 	return ;
 }
 
-void	calculate_error(double alpha, double **theta,
-					t_variable *input_variable, t_variable *measured_variable)
+void	calculate_error(t_gradient_descent_data *gradient_descent_data,
+						t_variable *input_variable,
+						t_variable *measured_variable,
+						double new_theta[2][1])
 {
 	static size_t	columns = 1;
 	double			**response_variable;
 	t_error_data	error_data;
-	double			new_theta[2][1];
+	double			alpha;
+	double			**theta;
 
+	alpha = gradient_descent_data->alpha;
+	theta = gradient_descent_data->theta;
 	response_variable = (double **)ft_vector_create(sizeof(double),
 			input_variable->matrix_size.rows);
 	ft_matrix_dot_vector_double(&input_variable->matrix_size,
