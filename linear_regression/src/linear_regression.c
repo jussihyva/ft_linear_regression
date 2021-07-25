@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 13:34:18 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/25 08:07:17 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/25 11:28:36 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,24 +57,31 @@ static void	save_result(t_statistics *statistics)
 }
 
 static void	create_statistics(t_list **stat_counters_lst,
-					t_variable *input_variable, t_variable *measured_variable,
-					size_t num_of_records)
+										t_lin_reg_data *linear_regression_data)
 {
 	size_t				i;
 	t_stat_counters		stat_counters;
 	t_list				*elem;
+	t_variable			*input_variable;
+	t_variable			*measured_variable;
 
+	input_variable = &linear_regression_data->input_variables.km;
+	measured_variable = &linear_regression_data->measured_variables.price;
 	i = -1;
-	while (++i < num_of_records)
+	while (++i < linear_regression_data->num_of_records)
 	{
 		stat_counters.counter_names[E_INDEPENDENT] = "independent=%d";
 		stat_counters.counter_names[E_DEPENDENT] = "dependent=%d";
+		stat_counters.counter_names[E_PREDICTED_PRICE] = "predicted_price=%d";
 		stat_counters.is_active[E_INDEPENDENT] = 1;
 		stat_counters.is_active[E_DEPENDENT] = 1;
+		stat_counters.is_active[E_PREDICTED_PRICE] = 1;
 		stat_counters.value[E_INDEPENDENT]
 			= ((int *)input_variable->values)[i];
 		stat_counters.value[E_DEPENDENT]
 			= ((int *)measured_variable->values)[i];
+		stat_counters.value[E_PREDICTED_PRICE]
+			= ((double *)linear_regression_data->predicted_price.values)[i];
 		elem = ft_lstnew(&stat_counters, sizeof(stat_counters));
 		ft_lstadd(stat_counters_lst, elem);
 	}
@@ -120,9 +127,10 @@ void	create_linear_regression_model(t_lin_reg_data *linear_regression_data,
 	t_variable					*input_variable;
 	t_variable					*measured_variable;
 	t_variable					*predicted_price;
+	size_t						i;
 
 	predicted_price = &linear_regression_data->predicted_price;
-	gradient_descent_data.alpha = 0.01;
+	gradient_descent_data.alpha = 0.1;
 	gradient_descent_data.theta = theta_initialize();
 	input_variable = &linear_regression_data->input_variables.km;
 	pre_process_input_variables(linear_regression_data);
@@ -131,12 +139,17 @@ void	create_linear_regression_model(t_lin_reg_data *linear_regression_data,
 	measured_variable = &linear_regression_data->measured_variables.price;
 	ft_printf("PRICE MIN=%d MAX=%d\n", *(int *)measured_variable->min_max_value
 		.min_value, *(int *)measured_variable->min_max_value.max_value);
-	calculate_error(&gradient_descent_data, input_variable, measured_variable,
-		new_theta);
+	i = -1;
+	while (++i < 10)
+	{
+		calculate_error(&gradient_descent_data, input_variable,
+			measured_variable, new_theta);
+		gradient_descent_data.theta[0][0] = new_theta[0][0];
+		gradient_descent_data.theta[1][0] = new_theta[1][0];
+	}
 	estimate_prize(input_variable, measured_variable, &gradient_descent_data,
 		predicted_price);
-	create_statistics(statistics->stat_counters_lst, input_variable,
-		measured_variable, linear_regression_data->num_of_records);
+	create_statistics(statistics->stat_counters_lst, linear_regression_data);
 	stat_set_end_time(statistics);
 	if (*statistics->stat_counters_lst)
 		save_result(statistics);

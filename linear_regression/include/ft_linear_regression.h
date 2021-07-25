@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/25 07:29:35 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/25 10:31:46 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,13 @@ typedef struct s_influxdb
 	t_connection_status		connection_status;
 }						t_influxdb;
 
-# define	NUM_OF_STAT_COUNTERS	2
+# define	NUM_OF_STAT_COUNTERS	3
 
 typedef enum e_stat_counter_name
 {
 	E_INDEPENDENT,
-	E_DEPENDENT
+	E_DEPENDENT,
+	E_PREDICTED_PRICE
 }				t_stat_counter_name;
 
 typedef struct s_stat_counters

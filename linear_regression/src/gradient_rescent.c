@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 18:02:04 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/25 07:04:18 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/25 11:32:04 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ double	**theta_initialize(void)
 	theta = (double **)ft_memalloc(sizeof(*theta) * 2);
 	theta[0] = (double *)ft_memalloc(sizeof(**theta));
 	theta[1] = (double *)ft_memalloc(sizeof(**theta));
-	theta[0][0] = 0.4;
-	theta[1][0] = -0.4;
+	theta[0][0] = 0.0;
+	theta[1][0] = -0.0;
 	return (theta);
 }
 
@@ -92,9 +92,18 @@ void	calculate_error(t_gradient_descent_data *gradient_descent_data,
 		/ input_variable->matrix_size.rows;
 	print_error_result(input_variable->matrix_size.rows, response_variable,
 		&error_data, new_theta);
+	ft_matrix_dot_vector_double(&input_variable->matrix_size, error_data.error,
+		input_variable->normalized_values, response_variable);
+	print_error_result(input_variable->matrix_size.rows, response_variable,
+		&error_data, new_theta);
+	error_data.error_sum = ft_matrix_sum(&input_variable->matrix_size,
+			response_variable);
+	new_theta[1][0] = theta[1][0] - (alpha * error_data.error_sum)
+		/ input_variable->matrix_size.rows;
 	ft_vector_remove((void ***)&error_data.error,
 		input_variable->matrix_size.rows);
 	ft_vector_remove((void ***)&response_variable,
 		input_variable->matrix_size.rows);
+	input_variable->matrix_size.columns = 2;
 	return ;
 }
