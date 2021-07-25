@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 13:34:18 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/25 11:28:36 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/25 11:58:44 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,8 +139,9 @@ void	create_linear_regression_model(t_lin_reg_data *linear_regression_data,
 	measured_variable = &linear_regression_data->measured_variables.price;
 	ft_printf("PRICE MIN=%d MAX=%d\n", *(int *)measured_variable->min_max_value
 		.min_value, *(int *)measured_variable->min_max_value.max_value);
+	ft_printf("ALPHA: %f\n", gradient_descent_data.alpha);
 	i = -1;
-	while (++i < 10)
+	while (++i < 10000)
 	{
 		calculate_error(&gradient_descent_data, input_variable,
 			measured_variable, new_theta);

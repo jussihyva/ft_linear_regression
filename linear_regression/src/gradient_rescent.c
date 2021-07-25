@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 18:02:04 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/25 11:32:04 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/25 12:06:45 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ double	**matrix_initialize(t_variable *variable)
 	return (matrix);
 }
 
-static void	print_error_result(size_t size, double **response_variable,
+void	print_error_result(size_t size, double **response_variable,
 							t_error_data *error_data, double new_theta[2][1])
 {
 	size_t			i;
@@ -73,9 +73,12 @@ void	calculate_error(t_gradient_descent_data *gradient_descent_data,
 	t_error_data	error_data;
 	double			alpha;
 	double			**theta;
+	double			range;
 
 	alpha = gradient_descent_data->alpha;
 	theta = gradient_descent_data->theta;
+	range = (double)(*(int *)measured_variable->min_max_value.max_value - *(int *)measured_variable->min_max_value.min_value);
+	printf("Theta: %f  %f\n", *(int *)measured_variable->min_max_value.min_value + range * theta[0][0], theta[1][0]);
 	response_variable = (double **)ft_vector_create(sizeof(double),
 			input_variable->matrix_size.rows);
 	ft_matrix_dot_vector_double(&input_variable->matrix_size,
@@ -90,12 +93,12 @@ void	calculate_error(t_gradient_descent_data *gradient_descent_data,
 			error_data.error);
 	new_theta[0][0] = theta[0][0] - (alpha * error_data.error_sum)
 		/ input_variable->matrix_size.rows;
-	print_error_result(input_variable->matrix_size.rows, response_variable,
-		&error_data, new_theta);
-	ft_matrix_dot_vector_double(&input_variable->matrix_size, error_data.error,
-		input_variable->normalized_values, response_variable);
-	print_error_result(input_variable->matrix_size.rows, response_variable,
-		&error_data, new_theta);
+	// print_error_result(input_variable->matrix_size.rows, response_variable,
+	// 	&error_data, new_theta);
+	ft_matrix_dot_vector_double(&input_variable->matrix_size,
+		input_variable->normalized_values, error_data.error, response_variable);
+	// print_error_result(input_variable->matrix_size.rows, response_variable,
+	// 	&error_data, new_theta);
 	error_data.error_sum = ft_matrix_sum(&input_variable->matrix_size,
 			response_variable);
 	new_theta[1][0] = theta[1][0] - (alpha * error_data.error_sum)
