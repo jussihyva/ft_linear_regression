@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 17:08:11 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/23 17:13:14 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/27 08:11:22 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@ void	variable_remove(t_variable *variable)
 	ft_memdel((void **)&variable->min_max_value.min_value);
 	ft_memdel((void **)&variable->min_max_value.max_value);
 	ft_memdel((void **)&variable->values);
-	ft_vector_remove((void ***)&variable->normalized_values,
-		variable->size);
+	ft_vector_remove(&variable->normalized_values);
 	if (variable->matrix)
 	{
 		i = -1;

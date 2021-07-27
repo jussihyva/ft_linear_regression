@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/20 11:16:30 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/25 07:54:52 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/27 07:16:42 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static void	initialize_independent_variables(t_variable *variable,
 		elem = elem->next;
 	}
 	ft_printf("\n");
-	variable->normalized_values = variable_normalize(variable->values,
+	variable->normalized_values = variable_normalize((int *)variable->values,
 			&variable->min_max_value, variable->size);
 	variable->matrix = matrix_initialize(variable);
 	return ;

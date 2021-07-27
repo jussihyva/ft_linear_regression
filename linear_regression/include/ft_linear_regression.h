@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/25 10:31:46 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/27 08:09:47 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,16 +121,21 @@ typedef struct s_min_max_value
 	void	*max_value;
 }				t_min_max_value;
 
+typedef struct s_matrix
+{
+	t_matrix_size	size;
+	void			**values;
+}				t_matrix;
+
 typedef struct s_variable
 {
 	char				*name;
 	size_t				size;
 	void				*values;
 	t_min_max_value		min_max_value;
-	double				**normalized_values;
-	double				**standardized_values_not_implemented_yet;
-	double				**matrix;
-	t_matrix_size		matrix_size;
+	t_matrix			*normalized_values;
+	t_matrix			*standardized_values_not_implemented_yet;
+	t_matrix			*matrix;
 }				t_variable;
 
 typedef struct s_measured_variables
@@ -154,14 +159,14 @@ typedef struct s_lin_reg_data
 
 typedef struct s_error_data
 {
-	double		**error;
+	t_matrix	*error;
 	double		error_sum;
 }				t_error_data;
 
 typedef struct s_gradient_descent_data
 {
 	double		alpha;
-	double		**theta;
+	t_matrix	*theta;
 }				t_gradient_descent_data;
 
 void			*initialize_cmd_args(int argc, char **argv);
@@ -181,19 +186,19 @@ void			create_linear_regression_model(
 					t_statistics *statistics);
 void			pre_process_input_variables(
 					t_lin_reg_data *linear_regression_data);
-double			**theta_initialize(void);
-double			**matrix_initialize(t_variable *km);
+t_matrix		*theta_initialize(void);
+t_matrix		*matrix_initialize(t_variable *km);
 void			calculate_error(t_gradient_descent_data *gradient_descent_data,
 					t_variable *input_variable, t_variable *measured_variable,
 					double new_theta[2][1]);
-void			ft_matrix_subtrack_vector_double(t_matrix_size *matrix_size,
-					double **matrix, double **vector, double **new_vector);
-void			**ft_vector_create(size_t size, size_t vector_size);
-void			ft_vector_remove(void ***vector, size_t vector_size);
-double			ft_matrix_sum(t_matrix_size *matrix_size, double **matrix);
-void			ft_matrix_dot_vector_double(t_matrix_size *matrix_size,
-					double **matrix, double **vector, double **new_vector);
-double			**variable_normalize(void *values,
+void			ft_matrix_subtrack_vector_double(t_matrix *matrix,
+					t_matrix *vector, t_matrix *new_vector);
+t_matrix		*ft_vector_create(size_t size, size_t vector_size);
+void			ft_vector_remove(t_matrix **vector);
+double			ft_matrix_sum(t_matrix *matrix);
+void			ft_matrix_dot_vector_double(t_matrix *matrix,
+					t_matrix *vector, t_matrix *new_vector);
+t_matrix		*variable_normalize(int *values,
 					t_min_max_value *min_max_value, size_t num_of_records);
 void			variable_remove(t_variable *variable);
 time_t			get_execution_time(t_statistics *statistics);

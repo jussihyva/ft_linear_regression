@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 13:34:18 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/25 11:58:44 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/27 07:59:01 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,10 +94,10 @@ static void	estimate_prize(t_variable *input_variable,
 							t_variable *predicted_price)
 {
 	size_t		i;
-	double		**theta;
+	double		**theta_values;
 	double		range;
 
-	theta = gradient_descent_data->theta;
+	theta_values = (double **)gradient_descent_data->theta->values;
 	initalize_variable(predicted_price, input_variable->size, sizeof(double));
 	*(double *)predicted_price->min_max_value.min_value
 		= (double)(*(int *)measured_variable->min_max_value.min_value);
@@ -105,16 +105,17 @@ static void	estimate_prize(t_variable *input_variable,
 		= (double)(*(int *)measured_variable->min_max_value.max_value);
 	range = *(double *)predicted_price->min_max_value.max_value
 		- *(double *)predicted_price->min_max_value.min_value;
-	predicted_price->normalized_values
-		= (double **)ft_vector_create(sizeof(double), input_variable->size);
+	predicted_price->normalized_values = ft_vector_create(sizeof(double),
+			input_variable->size);
 	i = -1;
 	while (++i < input_variable->size)
 	{
-		predicted_price->normalized_values[i][0] = theta[0][0]
-			+ theta[1][0] * input_variable->normalized_values[i][0];
+		((double **)predicted_price->normalized_values->values)[i][0]
+			= theta_values[0][0] + theta_values[1][0]
+			* ((double **)input_variable->normalized_values->values)[i][0];
 		((double *)predicted_price->values)[i]
 			= *(double *)predicted_price->min_max_value.min_value
-			+ (range * predicted_price->normalized_values[i][0]);
+			+ (range * ((double **)predicted_price->normalized_values)[i][0]);
 	}
 	return ;
 }
@@ -145,8 +146,10 @@ void	create_linear_regression_model(t_lin_reg_data *linear_regression_data,
 	{
 		calculate_error(&gradient_descent_data, input_variable,
 			measured_variable, new_theta);
-		gradient_descent_data.theta[0][0] = new_theta[0][0];
-		gradient_descent_data.theta[1][0] = new_theta[1][0];
+		((double **)gradient_descent_data.theta->values)[0][0]
+			= new_theta[0][0];
+		((double **)gradient_descent_data.theta->values)[1][0]
+			= new_theta[1][0];
 	}
 	estimate_prize(input_variable, measured_variable, &gradient_descent_data,
 		predicted_price);

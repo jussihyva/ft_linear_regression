@@ -6,25 +6,27 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 19:31:54 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/22 10:56:14 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/27 08:04:17 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_linear_regression.h"
 
-void	ft_matrix_dot_vector_double(t_matrix_size *matrix_size,
-						double **matrix, double **vector, double **new_vector)
+void	ft_matrix_dot_vector_double(t_matrix *matrix, t_matrix *vector,
+	t_matrix *new_vector)
 {
 	size_t			i;
 	size_t			j;
 
 	i = -1;
-	while (++i < matrix_size->rows)
+	while (++i < matrix->size.rows)
 	{
-		new_vector[i][0] = 0;
+		((double **)new_vector->values)[i][0] = (double)0;
 		j = -1;
-		while (++j < matrix_size->columns)
-			new_vector[i][0] += matrix[i][j] * vector[j][0];
+		while (++j < matrix->size.columns)
+			((double **)new_vector->values)[i][0]
+				+= ((double **)matrix->values)[i][j]
+				* ((double **)vector->values)[j][0];
 	}
 	return ;
 }
