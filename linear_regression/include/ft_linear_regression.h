@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/27 08:09:47 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/27 16:27:37 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,5 +214,6 @@ char			*create_influxdb_query_string(t_stat_counters *stat_counters,
 void			stat_set_end_time(t_statistics *statistics);
 void			initalize_variable(t_variable *variable, size_t num_of_records,
 					size_t size);
+t_matrix		*ft_matrix_transpose(t_matrix *matrix);
 
 #endif

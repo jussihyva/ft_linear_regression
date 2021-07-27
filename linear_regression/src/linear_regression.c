@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 13:34:18 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/27 07:59:01 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/27 17:37:14 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,8 @@ static void	estimate_prize(t_variable *input_variable,
 			* ((double **)input_variable->normalized_values->values)[i][0];
 		((double *)predicted_price->values)[i]
 			= *(double *)predicted_price->min_max_value.min_value
-			+ (range * ((double **)predicted_price->normalized_values)[i][0]);
+			+ (range
+			* ((double **)predicted_price->normalized_values->values)[i][0]);
 	}
 	return ;
 }
@@ -130,6 +131,7 @@ void	create_linear_regression_model(t_lin_reg_data *linear_regression_data,
 	t_variable					*predicted_price;
 	size_t						i;
 
+	gradient_descent_data.theta = ft_vector_create(sizeof(double), 2);
 	predicted_price = &linear_regression_data->predicted_price;
 	gradient_descent_data.alpha = 0.1;
 	gradient_descent_data.theta = theta_initialize();
@@ -142,7 +144,7 @@ void	create_linear_regression_model(t_lin_reg_data *linear_regression_data,
 		.min_value, *(int *)measured_variable->min_max_value.max_value);
 	ft_printf("ALPHA: %f\n", gradient_descent_data.alpha);
 	i = -1;
-	while (++i < 10000)
+	while (++i < 1000)
 	{
 		calculate_error(&gradient_descent_data, input_variable,
 			measured_variable, new_theta);
@@ -157,9 +159,7 @@ void	create_linear_regression_model(t_lin_reg_data *linear_regression_data,
 	stat_set_end_time(statistics);
 	if (*statistics->stat_counters_lst)
 		save_result(statistics);
-	ft_memdel((void **)&gradient_descent_data.theta[0]);
-	ft_memdel((void **)&gradient_descent_data.theta[1]);
-	ft_memdel((void **)&gradient_descent_data.theta);
+	ft_vector_remove(&gradient_descent_data.theta);
 	return ;
 }
 

@@ -6,29 +6,32 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/26 10:00:51 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/26 10:25:59 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/27 16:33:00 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_linear_regression.h"
 
-double	**ft_matrix_transpose(t_matrix_size *matrix_size, double **matrix)
+t_matrix	*ft_matrix_transpose(t_matrix *matrix)
 {
-	double		**new_matrix;
+	t_matrix	*new_matrix;
 	size_t		i;
 	size_t		j;
 
-	new_matrix = (double **)ft_memalloc(sizeof(*matrix) * matrix_size->columns);
+	new_matrix = (t_matrix *)ft_memalloc(sizeof(*new_matrix));
+	new_matrix->size.rows = matrix->size.columns;
+	new_matrix->size.columns = matrix->size.rows;
+	new_matrix->values = ft_memalloc(sizeof(*new_matrix->values)
+			* matrix->size.columns);
 	i = -1;
-	while (++i < matrix_size->columns)
+	while (++i < new_matrix->size.rows)
 	{
-		new_matrix[i]
-			= (double *)ft_memalloc(sizeof(**matrix) * matrix_size->rows);
+		new_matrix->values[i]
+			= ft_memalloc(sizeof(double) * new_matrix->size.columns);
 		j = -1;
-		while (++j < matrix_size->rows)
-		{
-			new_matrix[i][j] = matrix[j][i];
-		}
+		while (++j < new_matrix->size.columns)
+			((double **)new_matrix->values)[i][j]
+				= ((double **)matrix->values)[j][i];
 	}
 	return (new_matrix);
 }

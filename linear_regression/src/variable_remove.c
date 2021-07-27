@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 17:08:11 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/27 08:11:22 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/27 15:24:35 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,9 @@ void	variable_remove(t_variable *variable)
 	if (variable->matrix)
 	{
 		i = -1;
-		while (++i < variable->size)
-			ft_memdel((void **)&variable->matrix[i]);
+		while (++i < variable->matrix->size.rows)
+			ft_memdel((void **)&variable->matrix->values[i]);
+		ft_memdel((void **)&variable->matrix->values);
 		ft_memdel((void **)&variable->matrix);
 	}
 	return ;

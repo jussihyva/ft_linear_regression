@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 19:31:54 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/27 07:31:30 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/27 17:35:55 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@ void	ft_matrix_subtrack_vector_double(t_matrix *matrix, t_matrix *vector,
 	i = -1;
 	while (++i < matrix->size.rows)
 	{
-		((double **)new_vector->values)[i][0] = (double)0;
+		// ((double **)new_vector->values)[i][0] = (double)0;
 		j = -1;
 		while (++j < matrix->size.columns)
-			((double **)new_vector->values)[i][0]
-				+= ((double **)matrix->values)[i][j]
-				- ((double **)vector->values)[j][0];
+			((double **)new_vector->values)[i][j]
+				= ((double **)matrix->values)[i][j]
+				- ((double **)vector->values)[i][0];
 	}
 	return ;
 }
