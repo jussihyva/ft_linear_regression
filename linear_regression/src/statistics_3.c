@@ -6,28 +6,11 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 18:08:13 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/29 14:02:13 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/29 19:38:25 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_linear_regression.h"
-
-void	release_statistics_params(t_statistics *statistics)
-{
-	int		i;
-
-	if (statistics)
-	{
-		ft_strdel(&statistics->algorithm);
-		ft_strdel(&statistics->algorithm_substring);
-		i = -1;
-		// while (++i < NUM_OF_STAT_COUNTERS)
-		// 	ft_memdel((void **)&statistics->stat_counters.counter_names[i]);
-		// ft_memdel((void **)&statistics->stat_counters.counter_names);
-		ft_memdel((void **)&statistics);
-	}
-	return ;
-}
 
 static void	add_counter_to_string(char **string_ptr, char *counter_name,
 											int counter_value, char sep_char)

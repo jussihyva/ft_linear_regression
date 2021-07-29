@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/01 13:14:25 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/24 18:51:50 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/29 23:42:19 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,14 +64,38 @@ t_influxdb	*ft_influxdb_connect(char *host_name, char *port_number,
 	return (influxdb);
 }
 
+static void	read_response(SSL *ssl_bio)
+{
+	char		*read_buf;
+	int			chars;
+	clock_t		start;
+	clock_t		end;
+
+	read_buf = (char *)ft_memalloc(sizeof(*read_buf) * SEND_REC_BUF_MAX_SIZE);
+	start = clock();
+	end = start + (CLOCKS_PER_SEC * 2);
+	chars = -1;
+	while (chars == -1 && end > clock())
+		chars = SSL_read(ssl_bio, read_buf, SEND_REC_BUF_MAX_SIZE);
+	if (chars == -1)
+		FT_LOG_ERROR("%s", "Reading of influxdb response failed!");
+	else
+	{
+		while (chars > 0)
+		{
+			FT_LOG_TRACE("CHARS: %s", read_buf);
+			chars = SSL_read(ssl_bio, read_buf,
+					SEND_REC_BUF_MAX_SIZE);
+		}
+	}
+	ft_strdel(&read_buf);
+	return ;
+}
+
 void	ft_influxdb_write(t_tls_connection *connection, char *body,
 																char *database)
 {
 	char		header[SEND_REC_BUF_MAX_SIZE];
-	char		read_buf[SEND_REC_BUF_MAX_SIZE];
-	int			chars;
-	clock_t		start;
-	clock_t		end;
 
 	if (connection)
 	{
@@ -81,22 +105,7 @@ void	ft_influxdb_write(t_tls_connection *connection, char *body,
 		SSL_write(connection->ssl_bio, header, strlen(header));
 		FT_LOG_TRACE("BODY: %s", body);
 		SSL_write(connection->ssl_bio, body, strlen(body));
-		start = clock();
-		end = start + (CLOCKS_PER_SEC * 2);
-		chars = -1;
-		while (chars == -1 && end > clock())
-		{
-			chars = SSL_read(connection->ssl_bio, read_buf,
-					SEND_REC_BUF_MAX_SIZE);
-			FT_LOG_TRACE("CHARS: %s", read_buf);
-		}
-		if (chars == -1)
-			FT_LOG_ERROR("%s", read_buf);
-		chars = 1;
-		while (chars > 0)
-			chars = SSL_read(connection->ssl_bio, read_buf,
-					SEND_REC_BUF_MAX_SIZE);
-		FT_LOG_TRACE("CHARS: %s", read_buf);
+		read_response(connection->ssl_bio);
 	}
 	return ;
 }

@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/21 11:23:37 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/27 08:12:49 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/29 20:10:32 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,20 @@ t_matrix	*ft_vector_create(size_t size, size_t vector_size)
 	return (vector);
 }
 
-void	ft_vector_remove(t_matrix **vector)
+void	ft_matrix_remove(t_matrix **matrix)
 {
 	size_t	i;
 
 	i = -1;
-	while (++i < (*vector)->size.rows)
-		ft_memdel(&(*vector)->values[i]);
-	ft_memdel((void **)&(*vector)->values);
-	ft_memdel((void **)vector);
+	while (++i < (*matrix)->size.rows)
+		ft_memdel(&(*matrix)->values[i]);
+	ft_memdel((void **)&(*matrix)->values);
+	ft_memdel((void **)matrix);
+	return ;
+}
+
+void	ft_vector_remove(t_matrix **vector)
+{
+	ft_matrix_remove(vector);
 	return ;
 }

@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/29 12:55:43 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/29 20:19:17 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,6 +197,7 @@ void			ft_matrix_subtrack_vector_double(t_matrix *matrix,
 					t_matrix *vector, t_matrix *new_vector);
 t_matrix		*ft_vector_create(size_t size, size_t vector_size);
 void			ft_vector_remove(t_matrix **vector);
+void			ft_matrix_remove(t_matrix **matrix);
 double			ft_matrix_sum(t_matrix *matrix);
 void			ft_matrix_dot_vector_double(t_matrix *matrix,
 					t_matrix *vector, t_matrix *new_vector);
@@ -217,5 +218,6 @@ void			stat_set_end_time(t_statistics *statistics);
 void			initalize_variable(t_variable *variable, size_t num_of_records,
 					size_t size);
 t_matrix		*ft_matrix_transpose(t_matrix *matrix);
+void			statistics_remove(t_statistics **statistics);
 
 #endif

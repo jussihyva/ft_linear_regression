@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 18:02:04 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/29 13:12:49 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/29 20:12:41 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,8 @@ void	calculate_new_theta(t_gradient_descent_data *gradient_descent_data,
 		/ input_variable->size;
 	normalized_values_transposed
 		= ft_matrix_transpose(input_variable->normalized_values);
-	response_variable = ft_vector_create(sizeof(double), input_variable->size);
+	response_variable = ft_vector_create(sizeof(double),
+			normalized_values_transposed->size.rows);
 	ft_matrix_dot_vector_double(normalized_values_transposed,
 		error_data.error, response_variable);
 	error_data.error_sum = ft_matrix_sum(response_variable);
@@ -105,5 +106,6 @@ void	calculate_new_theta(t_gradient_descent_data *gradient_descent_data,
 		/ input_variable->size;
 	ft_vector_remove(&error_data.error);
 	ft_vector_remove(&response_variable);
+	ft_matrix_remove(&normalized_values_transposed);
 	return ;
 }

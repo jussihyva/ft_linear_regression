@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 13:34:18 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/29 13:54:11 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/29 22:25:37 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ static void	save_result(t_statistics *statistics)
 		body = create_influxdb_query_string(stat_counters,
 				statistics->end_time, statistics->data_type, statistics->id);
 		ft_influxdb_write(statistics->connection, body, "Hive");
+		ft_strdel(&body);
 		elem = elem->next;
 		statistics->id++;
 	}
@@ -70,9 +71,12 @@ static void	create_statistics(t_list **stat_counters_lst,
 	i = -1;
 	while (++i < linear_regression_data->num_of_records)
 	{
-		stat_counters.counter_names[E_INDEPENDENT] = "independent=%d";
-		stat_counters.counter_names[E_DEPENDENT] = "dependent=%d";
-		stat_counters.counter_names[E_PREDICTED_PRICE] = "predicted_price=%d";
+		stat_counters.counter_names[E_INDEPENDENT]
+			= ft_strdup("independent=%d");
+		stat_counters.counter_names[E_DEPENDENT]
+			= ft_strdup("dependent=%d");
+		stat_counters.counter_names[E_PREDICTED_PRICE]
+			= ft_strdup("predicted_price=%d");
 		stat_counters.is_active[E_INDEPENDENT] = 1;
 		stat_counters.is_active[E_DEPENDENT] = 1;
 		stat_counters.is_active[E_PREDICTED_PRICE] = 1;
@@ -173,6 +177,7 @@ void	linear_regression_data_release(
 {
 	ft_lstdel((*linear_regression_data)->data_record_lst, release_data_record);
 	ft_memdel((void **)&(*linear_regression_data)->data_record_lst);
+	variable_remove(&(*linear_regression_data)->predicted_price);
 	variable_remove(&(*linear_regression_data)->input_variables.km);
 	variable_remove(&(*linear_regression_data)->measured_variables.price);
 	ft_memdel((void **)linear_regression_data);

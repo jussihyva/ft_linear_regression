@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 11:14:46 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/24 10:15:51 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/29 20:18:12 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	main(int argc, char **argv)
 	linear_regression_data = read_dataset_file(
 			((t_input_params *)arg_parser_data->input_params)->dataset_file);
 	create_linear_regression_model(linear_regression_data, statistics);
+	statistics_remove(&statistics);
 	release_input_params((t_input_params **)&arg_parser_data->input_params);
 	ft_event_logging_release(&event_logging_data);
 	linear_regression_data_release(&linear_regression_data);
