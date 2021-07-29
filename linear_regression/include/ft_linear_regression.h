@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/27 16:27:37 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/29 12:55:43 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ typedef struct s_min_max_value
 {
 	void	*min_value;
 	void	*max_value;
+	void	*range;
 }				t_min_max_value;
 
 typedef struct s_matrix
@@ -188,9 +189,10 @@ void			pre_process_input_variables(
 					t_lin_reg_data *linear_regression_data);
 t_matrix		*theta_initialize(void);
 t_matrix		*matrix_initialize(t_variable *km);
-void			calculate_error(t_gradient_descent_data *gradient_descent_data,
+void			calculate_new_theta(
+					t_gradient_descent_data *gradient_descent_data,
 					t_variable *input_variable, t_variable *measured_variable,
-					double new_theta[2][1]);
+					double **new_theta_values);
 void			ft_matrix_subtrack_vector_double(t_matrix *matrix,
 					t_matrix *vector, t_matrix *new_vector);
 t_matrix		*ft_vector_create(size_t size, size_t vector_size);

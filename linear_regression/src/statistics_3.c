@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 18:08:13 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/24 18:32:19 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/29 14:02:13 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,19 +96,3 @@ char	*create_influxdb_query_string(t_stat_counters *stat_counters,
 	ft_memdel((void **)&string);
 	return (influxdb_query_string);
 }
-
-// void	influxdb_plugin(t_log_event *event)
-// {
-// 	t_statistics	*statistics;
-// 	char			*influxdb_query_string;
-// 	int				*counter_values;
-
-// 	statistics = (t_statistics *)event->additional_event_data;
-// 	counter_values = statistics->stat_counters.value;
-// 	statistics->stat_counters.is_active[E_EXECUTION_TIME] = 1;
-// 	counter_values[E_EXECUTION_TIME] = (int)get_execution_time(statistics);
-// 	influxdb_query_string = create_influxdb_query_string(statistics);
-// 	ft_influxdb_write(statistics->connection, influxdb_query_string, "Hive");
-// 	ft_memdel((void **)&influxdb_query_string);
-// 	return ;
-// }
