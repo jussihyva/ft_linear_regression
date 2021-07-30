@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/30 07:51:40 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/30 13:00:28 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,13 +149,20 @@ typedef struct s_input_variables
 	t_variable		km;
 }				t_input_variables;
 
+typedef struct s_gradient_descent_data
+{
+	double		alpha;
+	t_matrix	*theta;
+	char		*theta_file;
+}				t_gradient_descent_data;
+
 typedef struct s_lin_reg_data
 {
-	t_list					*data_record_lst;
-	size_t					num_of_records;
-	t_input_variables		input_variables;
-	t_measured_variables	measured_variables;
-	t_variable				predicted_price;
+	t_list						*data_record_lst;
+	size_t						num_of_records;
+	t_input_variables			input_variables;
+	t_measured_variables		measured_variables;
+	t_variable					predicted_price;
 }				t_lin_reg_data;
 
 typedef struct s_error_data
@@ -163,13 +170,6 @@ typedef struct s_error_data
 	t_matrix	*error;
 	double		error_sum;
 }				t_error_data;
-
-typedef struct s_gradient_descent_data
-{
-	double		alpha;
-	t_matrix	*theta;
-	char		*theta_file;
-}				t_gradient_descent_data;
 
 void			*initialize_cmd_args(int argc, char **argv);
 void			save_cmd_argument(void *input_params, char opt,
@@ -185,7 +185,6 @@ void			linear_regression_add_data_record(
 					t_data_record *data_record);
 void			create_linear_regression_model(
 					t_lin_reg_data *linear_regression_data,
-					t_gradient_descent_data *gradient_descent_data,
 					t_statistics *statistics);
 void			pre_process_input_variables(
 					t_lin_reg_data *linear_regression_data);

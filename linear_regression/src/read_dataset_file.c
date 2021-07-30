@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 12:52:29 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/30 07:59:22 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/30 12:48:16 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ t_lin_reg_data	*read_dataset_file(char *dataset_file)
 	file_params.ret = ft_get_next_line(file_params.fd, &file_params.line);
 	ft_strdel((char **)&file_params.line);
 	file_params.ret = ft_get_next_line(file_params.fd, &file_params.line);
-	while (file_params.ret)
+	while (file_params.ret > 0)
 	{
 		data_record = read_data_line(file_params.line);
 		linear_regression_add_data_record(linear_regression_data, data_record);

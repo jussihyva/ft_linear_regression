@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 13:34:18 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/30 07:53:24 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/30 13:01:34 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,14 +135,28 @@ static void	estimate_prize(t_variable *input_variable,
 	return ;
 }
 
+static t_gradient_descent_data	*gradient_descent_data_initialize(void)
+{
+	t_gradient_descent_data		*gradient_descent_data;
+
+	gradient_descent_data = (t_gradient_descent_data *)
+		ft_memalloc(sizeof(*gradient_descent_data));
+	gradient_descent_data->theta_file = "/tmp/theta.yml";
+	gradient_descent_data->alpha = 0.1;
+	gradient_descent_data->theta = theta_initialize();
+	return (gradient_descent_data);
+}
+
 void	create_linear_regression_model(t_lin_reg_data *linear_regression_data,
-	t_gradient_descent_data *gradient_descent_data, t_statistics *statistics)
+													t_statistics *statistics)
 {
 	t_matrix					*new_theta;
 	t_variable					*input_variable;
 	t_variable					*measured_variable;
+	t_gradient_descent_data		*gradient_descent_data;
 	size_t						i;
 
+	gradient_descent_data = gradient_descent_data_initialize();
 	new_theta = ft_vector_create(sizeof(double), 2);
 	input_variable = &linear_regression_data->input_variables.km;
 	measured_variable = &linear_regression_data->measured_variables.price;
@@ -165,6 +179,8 @@ void	create_linear_regression_model(t_lin_reg_data *linear_regression_data,
 	if (*statistics->stat_counters_lst)
 		save_result(statistics);
 	ft_vector_remove(&new_theta);
+	ft_vector_remove(&gradient_descent_data->theta);
+	ft_memdel((void **)&gradient_descent_data);
 	return ;
 }
 

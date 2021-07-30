@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 14:53:13 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/22 11:12:27 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/30 11:34:30 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,7 @@ typedef struct s_arg_parser_data
 	t_initialize_cmd_args	fn_initialize_cmd_args;
 	t_save_cmd_argument		fn_save_cmd_argument;
 	t_usage					fn_usage;
+	char					*options;
 	void					*input_params;
 }				t_arg_parser_data;
 
@@ -235,6 +236,6 @@ void					*ft_prio_dequeue(t_bt_node **states_prio_queue);
 void					ft_print_memory(const void *addr, size_t size);
 int						ft_open_fd(char *file_path);
 void					ft_arg_parser(t_arg_parser_data *arg_parser_data,
-							int argc, char **argv, char *options);
+							int argc, char **argv);
 
 #endif

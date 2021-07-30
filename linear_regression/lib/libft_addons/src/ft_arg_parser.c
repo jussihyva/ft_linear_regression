@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 17:42:28 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/13 15:29:13 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/30 11:33:08 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,7 @@ static char	*pre_analyse_argument(char *options, char arg, int *argc,
 static void	split_cmd_argument(
 							t_arg_parser_data *arg_parser_data,
 							int *argc,
-							char ***argv,
-							char *options)
+							char ***argv)
 {
 	t_save_cmd_argument		fn_save_cmd_argument;
 	char					*arg;
@@ -59,7 +58,8 @@ static void	split_cmd_argument(
 	opt_ptr = arg;
 	while (*arg && *opt_ptr != ':')
 	{
-		opt_ptr = pre_analyse_argument(options, *arg, argc, argv);
+		opt_ptr = pre_analyse_argument(arg_parser_data->options, *arg, argc,
+				argv);
 		fn_save_cmd_argument(input_params, *arg, **argv);
 		arg++;
 	}
@@ -68,8 +68,7 @@ static void	split_cmd_argument(
 void	ft_arg_parser(
 					t_arg_parser_data *arg_parser_data,
 					int argc,
-					char **argv,
-					char *options)
+					char **argv)
 {
 	int						arg_index;
 	t_initialize_cmd_args	initialize_cmd_args;
@@ -82,7 +81,7 @@ void	ft_arg_parser(
 	{
 		argv++;
 		if ((*argv)[0] == '-' && ft_strlen(*argv) > 1)
-			split_cmd_argument(arg_parser_data, &argc, &argv, options);
+			split_cmd_argument(arg_parser_data, &argc, &argv);
 		else
 			arg_parser_data->fn_usage();
 		argc--;
