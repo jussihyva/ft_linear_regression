@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/20 11:16:30 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/29 13:55:20 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/30 07:54:16 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void	pre_process_input_variables(t_lin_reg_data *linear_regression_data)
 	*(int *)variable->min_max_value.max_value = INT_MIN;
 	*(int *)variable->min_max_value.range = 0;
 	initialize_independent_variables(variable,
-		linear_regression_data->data_record_lst);
+		&linear_regression_data->data_record_lst);
 	FT_LOG_INFO("   KM MIN=%d MAX=%d", *(int *)variable->min_max_value
 		.min_value, *(int *)variable->min_max_value.max_value);
 	variable = &linear_regression_data->measured_variables.price;
@@ -113,7 +113,7 @@ void	pre_process_input_variables(t_lin_reg_data *linear_regression_data)
 	*(int *)variable->min_max_value.max_value = INT_MIN;
 	*(int *)variable->min_max_value.range = 0;
 	initialize_dependent_variables(variable,
-		linear_regression_data->data_record_lst);
+		&linear_regression_data->data_record_lst);
 	FT_LOG_INFO("PRICE MIN=%d MAX=%d", *(int *)variable->min_max_value
 		.min_value, *(int *)variable->min_max_value.max_value);
 }

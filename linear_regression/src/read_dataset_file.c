@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 12:52:29 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/13 13:48:24 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/30 07:59:22 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,6 @@ t_lin_reg_data	*read_dataset_file(char *dataset_file)
 	file_params.fd = ft_open_fd(dataset_file);
 	linear_regression_data = (t_lin_reg_data *)ft_memalloc(
 			sizeof(*linear_regression_data));
-	linear_regression_data->data_record_lst = (t_list **)ft_memalloc(
-			sizeof(*linear_regression_data->data_record_lst));
 	file_params.line = NULL;
 	file_params.ret = ft_get_next_line(file_params.fd, &file_params.line);
 	ft_strdel((char **)&file_params.line);

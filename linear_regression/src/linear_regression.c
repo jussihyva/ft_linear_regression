@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 13:34:18 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/29 22:25:37 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/30 07:53:24 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	linear_regression_add_data_record(
 
 	linear_regression_data->num_of_records++;
 	elem = ft_lstnew(&data_record, sizeof(data_record));
-	ft_lstadd(linear_regression_data->data_record_lst, elem);
+	ft_lstadd(&linear_regression_data->data_record_lst, elem);
 	return ;
 }
 
@@ -136,38 +136,34 @@ static void	estimate_prize(t_variable *input_variable,
 }
 
 void	create_linear_regression_model(t_lin_reg_data *linear_regression_data,
-													t_statistics *statistics)
+	t_gradient_descent_data *gradient_descent_data, t_statistics *statistics)
 {
-	t_gradient_descent_data		gradient_descent_data;
 	t_matrix					*new_theta;
 	t_variable					*input_variable;
 	t_variable					*measured_variable;
 	size_t						i;
 
 	new_theta = ft_vector_create(sizeof(double), 2);
-	gradient_descent_data.alpha = 0.1;
-	gradient_descent_data.theta = theta_initialize();
 	input_variable = &linear_regression_data->input_variables.km;
 	measured_variable = &linear_regression_data->measured_variables.price;
 	pre_process_input_variables(linear_regression_data);
-	FT_LOG_INFO("ALPHA: %f", gradient_descent_data.alpha);
+	FT_LOG_INFO("ALPHA: %f", gradient_descent_data->alpha);
 	i = -1;
 	while (++i < 1000)
 	{
-		calculate_new_theta(&gradient_descent_data, input_variable,
+		calculate_new_theta(gradient_descent_data, input_variable,
 			measured_variable, (double **)new_theta->values);
-		((double **)gradient_descent_data.theta->values)[0][0]
+		((double **)gradient_descent_data->theta->values)[0][0]
 			= ((double **)new_theta->values)[0][0];
-		((double **)gradient_descent_data.theta->values)[1][0]
+		((double **)gradient_descent_data->theta->values)[1][0]
 			= ((double **)new_theta->values)[1][0];
 	}
-	estimate_prize(input_variable, measured_variable, &gradient_descent_data,
+	estimate_prize(input_variable, measured_variable, gradient_descent_data,
 		&linear_regression_data->predicted_price);
 	create_statistics(statistics->stat_counters_lst, linear_regression_data);
 	stat_set_end_time(statistics);
 	if (*statistics->stat_counters_lst)
 		save_result(statistics);
-	ft_vector_remove(&gradient_descent_data.theta);
 	ft_vector_remove(&new_theta);
 	return ;
 }
@@ -175,8 +171,12 @@ void	create_linear_regression_model(t_lin_reg_data *linear_regression_data,
 void	linear_regression_data_release(
 							t_lin_reg_data **linear_regression_data)
 {
-	ft_lstdel((*linear_regression_data)->data_record_lst, release_data_record);
-	ft_memdel((void **)&(*linear_regression_data)->data_record_lst);
+	if ((*linear_regression_data)->data_record_lst)
+	{
+		ft_lstdel(&(*linear_regression_data)->data_record_lst,
+			release_data_record);
+		ft_memdel((void **)&(*linear_regression_data)->data_record_lst);
+	}
 	variable_remove(&(*linear_regression_data)->predicted_price);
 	variable_remove(&(*linear_regression_data)->input_variables.km);
 	variable_remove(&(*linear_regression_data)->measured_variables.price);

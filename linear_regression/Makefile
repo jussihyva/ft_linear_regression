@@ -6,7 +6,7 @@
 #    By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/09 10:45:12 by jkauppi           #+#    #+#              #
-#    Updated: 2021/07/29 19:53:45 by jkauppi          ###   ########.fr        #
+#    Updated: 2021/07/30 07:07:54 by jkauppi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -104,7 +104,7 @@ ifeq ($(OS), Darwin)
 	$(CUR_DIR)/$(BIN)/$(NAME) $(DATA_FILE)
 else
 	valgrind -s --tool=memcheck --leak-check=full --show-leak-kinds=all \
-	$(CUR_DIR)/$(BIN)/$(NAME) $(DATA_FILE)
+	$(CUR_DIR)/$(BIN)/$(NAME) $(LOGGING_LEVEL) $(DATA_FILE)
 endif
 
 .PHONY: run_leaks

@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 12:56:02 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/13 11:49:01 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/30 07:09:40 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	*initialize_cmd_args(int argc, char **argv)
 	input_params = (t_input_params *)ft_memalloc(sizeof(*input_params));
 	input_params->argc = argc;
 	input_params->argv = argv;
+	input_params->event_logging_level = LOG_WARN;
 	return ((void *)input_params);
 }
 
