@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 13:34:18 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/30 13:01:34 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/31 20:03:10 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,10 @@ static void	save_result(t_statistics *statistics)
 
 	statistics->data_type = "input";
 	statistics->id = 0;
-	elem = *statistics->stat_counters_lst;
+	elem = statistics->stat_counters_lst;
 	while (elem)
 	{
-		stat_counters = (t_stat_counters *)elem->content;
+		stat_counters = *(t_stat_counters **)elem->content;
 		body = create_influxdb_query_string(stat_counters,
 				statistics->end_time, statistics->data_type, statistics->id);
 		ft_influxdb_write(statistics->connection, body, "Hive");
@@ -57,11 +57,28 @@ static void	save_result(t_statistics *statistics)
 	return ;
 }
 
+static t_stat_counters	*stat_counters_initialize(void)
+{
+	t_stat_counters		*stat_counters;
+
+	stat_counters = (t_stat_counters *)ft_memalloc(sizeof(*stat_counters));
+	stat_counters->counter_names[E_INDEPENDENT]
+		= ft_strdup("independent=%d");
+	stat_counters->counter_names[E_DEPENDENT]
+		= ft_strdup("dependent=%d");
+	stat_counters->counter_names[E_PREDICTED_PRICE]
+		= ft_strdup("predicted_price=%d");
+	stat_counters->is_active[E_INDEPENDENT] = 1;
+	stat_counters->is_active[E_DEPENDENT] = 1;
+	stat_counters->is_active[E_PREDICTED_PRICE] = 1;
+	return (stat_counters);
+}
+
 static void	create_statistics(t_list **stat_counters_lst,
 										t_lin_reg_data *linear_regression_data)
 {
 	size_t				i;
-	t_stat_counters		stat_counters;
+	t_stat_counters		*stat_counters;
 	t_list				*elem;
 	t_variable			*input_variable;
 	t_variable			*measured_variable;
@@ -71,20 +88,12 @@ static void	create_statistics(t_list **stat_counters_lst,
 	i = -1;
 	while (++i < linear_regression_data->num_of_records)
 	{
-		stat_counters.counter_names[E_INDEPENDENT]
-			= ft_strdup("independent=%d");
-		stat_counters.counter_names[E_DEPENDENT]
-			= ft_strdup("dependent=%d");
-		stat_counters.counter_names[E_PREDICTED_PRICE]
-			= ft_strdup("predicted_price=%d");
-		stat_counters.is_active[E_INDEPENDENT] = 1;
-		stat_counters.is_active[E_DEPENDENT] = 1;
-		stat_counters.is_active[E_PREDICTED_PRICE] = 1;
-		stat_counters.value[E_INDEPENDENT]
+		stat_counters = stat_counters_initialize();
+		stat_counters->value[E_INDEPENDENT]
 			= ((int *)input_variable->values)[i];
-		stat_counters.value[E_DEPENDENT]
+		stat_counters->value[E_DEPENDENT]
 			= ((int *)measured_variable->values)[i];
-		stat_counters.value[E_PREDICTED_PRICE]
+		stat_counters->value[E_PREDICTED_PRICE]
 			= ((double *)linear_regression_data->predicted_price.values)[i];
 		elem = ft_lstnew(&stat_counters, sizeof(stat_counters));
 		ft_lstadd(stat_counters_lst, elem);
@@ -114,14 +123,12 @@ static void	calculate_prices(t_variable *input_variable,
 
 static void	estimate_prize(t_variable *input_variable,
 							t_variable *measured_variable,
-							t_gradient_descent_data *gradient_descent_data,
+							double **theta_values,
 							t_variable *predicted_price)
 {
-	double				**theta_values;
 	t_min_max_value		*min_max_value;
 
 	min_max_value = &predicted_price->min_max_value;
-	theta_values = (double **)gradient_descent_data->theta->values;
 	initalize_variable(predicted_price, input_variable->size, sizeof(double));
 	*(double *)min_max_value->min_value
 		= (double)(*(int *)measured_variable->min_max_value.min_value);
@@ -147,20 +154,16 @@ static t_gradient_descent_data	*gradient_descent_data_initialize(void)
 	return (gradient_descent_data);
 }
 
-void	create_linear_regression_model(t_lin_reg_data *linear_regression_data,
-													t_statistics *statistics)
+static t_gradient_descent_data	*unknown_variables_iterate_values(
+												t_variable *input_variable,
+												t_variable *measured_variable)
 {
-	t_matrix					*new_theta;
-	t_variable					*input_variable;
-	t_variable					*measured_variable;
 	t_gradient_descent_data		*gradient_descent_data;
+	t_matrix					*new_theta;
 	size_t						i;
 
-	gradient_descent_data = gradient_descent_data_initialize();
 	new_theta = ft_vector_create(sizeof(double), 2);
-	input_variable = &linear_regression_data->input_variables.km;
-	measured_variable = &linear_regression_data->measured_variables.price;
-	pre_process_input_variables(linear_regression_data);
+	gradient_descent_data = gradient_descent_data_initialize();
 	FT_LOG_INFO("ALPHA: %f", gradient_descent_data->alpha);
 	i = -1;
 	while (++i < 1000)
@@ -172,13 +175,29 @@ void	create_linear_regression_model(t_lin_reg_data *linear_regression_data,
 		((double **)gradient_descent_data->theta->values)[1][0]
 			= ((double **)new_theta->values)[1][0];
 	}
-	estimate_prize(input_variable, measured_variable, gradient_descent_data,
-		&linear_regression_data->predicted_price);
-	create_statistics(statistics->stat_counters_lst, linear_regression_data);
-	stat_set_end_time(statistics);
-	if (*statistics->stat_counters_lst)
-		save_result(statistics);
 	ft_vector_remove(&new_theta);
+	return (gradient_descent_data);
+}
+
+void	create_linear_regression_model(t_lin_reg_data *linear_regression_data,
+													t_statistics *statistics)
+{
+	t_variable					*input_variable;
+	t_variable					*measured_variable;
+	t_gradient_descent_data		*gradient_descent_data;
+
+	input_variable = &linear_regression_data->input_variables.km;
+	measured_variable = &linear_regression_data->measured_variables.price;
+	pre_process_input_variables(linear_regression_data);
+	gradient_descent_data = unknown_variables_iterate_values(input_variable,
+			measured_variable);
+	estimate_prize(input_variable, measured_variable,
+		(double **)gradient_descent_data->theta->values,
+		&linear_regression_data->predicted_price);
+	create_statistics(&statistics->stat_counters_lst, linear_regression_data);
+	stat_set_end_time(statistics);
+	if (statistics->stat_counters_lst)
+		save_result(statistics);
 	ft_vector_remove(&gradient_descent_data->theta);
 	ft_memdel((void **)&gradient_descent_data);
 	return ;

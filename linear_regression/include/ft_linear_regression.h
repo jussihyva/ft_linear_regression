@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/30 13:00:28 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/31 19:23:44 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,21 +77,10 @@ typedef struct s_statistics
 	t_influxdb			*influxdb;
 	char				*data_type;
 	int					id;
-	char				*algorithm;
-	char				*algorithm_substring;
-	struct timespec		start_time;
 	struct timespec		end_time;
-	time_t				start_time_ms;
 	time_t				end_time_ms;
-	clock_t				cpu_usage_ms;
 	t_tls_connection	*connection;
-	int					solution_move_cnt;
-	int					puzzle_size;
-	int					puzzle_states_cnt;
-	int					puzzle_state_collision_cnt;
-	t_list				**stat_counters_lst;
-	int					solver_start_time_ms;
-	int					solver_end_time_ms;
+	t_list				*stat_counters_lst;
 }				t_statistics;
 
 typedef struct s_file_params

@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 18:02:04 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/29 20:12:41 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/07/30 13:06:32 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,5 +107,4 @@ void	calculate_new_theta(t_gradient_descent_data *gradient_descent_data,
 	ft_vector_remove(&error_data.error);
 	ft_vector_remove(&response_variable);
 	ft_matrix_remove(&normalized_values_transposed);
-	return ;
 }
