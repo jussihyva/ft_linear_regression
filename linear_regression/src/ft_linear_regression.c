@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 11:14:46 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/02 23:53:43 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/03 00:29:55 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,13 @@ int	main(int argc, char **argv)
 			if (input_params->km)
 			{
 				stat_counters = stat_counters_initialize();
-				stat_counters->is_active[E_DEPENDENT] = 0;
 				stat_counters->value[E_INDEPENDENT] = input_params->km;
 				stat_counters->value[E_PREDICTED_PRICE]
 					= calculate_price(input_params->km,
 						linear_regression_data->theta_values[0],
 						linear_regression_data->theta_values[1]);
+				stat_counters->value[E_DEPENDENT]
+					= stat_counters->value[E_PREDICTED_PRICE];
 				elem = ft_lstnew(&stat_counters, sizeof(stat_counters));
 				ft_lstadd(&statistics->stat_counters_lst, elem);
 			}
