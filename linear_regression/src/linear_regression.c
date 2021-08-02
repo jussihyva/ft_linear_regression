@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 13:34:18 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/02 20:23:36 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/02 23:21:13 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,25 @@ void	linear_regression_add_data_record(
 	return ;
 }
 
+double	calculate_price(int km, double theta0, double theta1)
+{
+	double		price;
+
+	price = theta0 + (theta1 * km);
+	return (price);
+}
+
 static void	calculate_prices(t_variable *input_variable,
 							t_variable *predicted_price, double **theta_values)
 {
-	size_t				i;
+	size_t		i;
 
 	i = -1;
 	while (++i < input_variable->size)
 	{
 		((double *)predicted_price->values)[i]
-			= theta_values[0][0] + (theta_values[1][0]
-				* ((int *)input_variable->values)[i]);
+			= calculate_price(((int *)input_variable->values)[i],
+				theta_values[0][0], theta_values[1][0]);
 	}
 	return ;
 }
@@ -60,7 +68,7 @@ static void	estimate_prize(t_variable *input_variable,
 	return ;
 }
 
-double	*create_linear_regression_model(t_lin_reg_data *linear_regression_data,
+void	create_linear_regression_model(t_lin_reg_data *linear_regression_data,
 													t_statistics *statistics)
 {
 	t_variable					*input_variable;
@@ -68,7 +76,7 @@ double	*create_linear_regression_model(t_lin_reg_data *linear_regression_data,
 	t_gradient_descent_data		*gradient_descent_data;
 	double						*theta_values;
 
-	theta_values = (double *)ft_memalloc(sizeof(*theta_values) * 2);
+	theta_values = linear_regression_data->theta_values;
 	input_variable = &linear_regression_data->input_variables.km;
 	measured_variable = &linear_regression_data->measured_variables.price;
 	pre_process_input_variables(linear_regression_data);
@@ -81,13 +89,11 @@ double	*create_linear_regression_model(t_lin_reg_data *linear_regression_data,
 	statistics_create_records(&statistics->stat_counters_lst,
 		linear_regression_data);
 	stat_set_end_time(statistics);
-	if (statistics->stat_counters_lst)
-		statistics_save_records(statistics);
 	theta_values[0] = ((double **)gradient_descent_data->theta->values)[0][0];
 	theta_values[1] = ((double **)gradient_descent_data->theta->values)[1][0];
 	ft_vector_remove(&gradient_descent_data->theta);
 	ft_memdel((void **)&gradient_descent_data);
-	return (theta_values);
+	return ;
 }
 
 void	linear_regression_data_release(
@@ -102,6 +108,7 @@ void	linear_regression_data_release(
 	variable_remove(&(*linear_regression_data)->predicted_price);
 	variable_remove(&(*linear_regression_data)->input_variables.km);
 	variable_remove(&(*linear_regression_data)->measured_variables.price);
+	ft_memdel((void **)&(*linear_regression_data)->theta_values);
 	ft_memdel((void **)linear_regression_data);
 	return ;
 }

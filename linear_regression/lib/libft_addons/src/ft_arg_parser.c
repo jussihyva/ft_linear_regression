@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 17:42:28 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/02 19:55:34 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/03 00:18:50 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	param_error(const char *error_string, const char s)
 	return ;
 }
 
-static char	*pre_analyse_argument(char *options, char arg,
+static void	pre_analyse_argument(char *options, char arg,
 														t_argc_argv *argc_argv)
 {
 	char					*opt_ptr;
@@ -38,7 +38,7 @@ static char	*pre_analyse_argument(char *options, char arg,
 	}
 	else
 		param_error("Unknown parameter: -%c", arg);
-	return (opt_ptr);
+	return ;
 }
 
 static void	split_cmd_argument(
@@ -49,7 +49,6 @@ static void	split_cmd_argument(
 	t_save_cmd_argument		fn_save_cmd_argument;
 	char					*arg;
 	void					*input_params;
-	char					*opt_ptr;
 
 	input_params = arg_parser_data->input_params;
 	fn_save_cmd_argument = arg_parser_data->fn_save_cmd_argument;
@@ -57,11 +56,9 @@ static void	split_cmd_argument(
 	if (cmd_param_type == E_OPTIONAL_SHORT)
 	{
 		arg++;
-		opt_ptr = arg;
-		while (*arg && *opt_ptr != ':')
+		while (*arg)
 		{
-			opt_ptr = pre_analyse_argument(arg_parser_data->options, *arg,
-					argc_argv);
+			pre_analyse_argument(arg_parser_data->options, *arg, argc_argv);
 			fn_save_cmd_argument(input_params, *arg, argc_argv, cmd_param_type);
 			arg++;
 		}

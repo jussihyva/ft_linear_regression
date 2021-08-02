@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 11:14:46 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/02 20:24:41 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/02 23:53:43 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ int	main(int argc, char **argv)
 	t_event_logging_data		*event_logging_data;
 	t_statistics				*statistics;
 	t_input_params				*input_params;
-	double						*theta_values;
+	t_stat_counters				*stat_counters;
+	t_list						*elem;
 
 	arg_parser_data = arg_parser_data_initialize(argc, argv);
 	input_params = (t_input_params *)arg_parser_data->input_params;
@@ -58,8 +59,21 @@ int	main(int argc, char **argv)
 		linear_regression_data = read_dataset_file(input_params->dataset_file);
 		if (linear_regression_data->num_of_records)
 		{
-			theta_values = create_linear_regression_model(
-					linear_regression_data, statistics);
+			create_linear_regression_model(linear_regression_data, statistics);
+			if (input_params->km)
+			{
+				stat_counters = stat_counters_initialize();
+				stat_counters->is_active[E_DEPENDENT] = 0;
+				stat_counters->value[E_INDEPENDENT] = input_params->km;
+				stat_counters->value[E_PREDICTED_PRICE]
+					= calculate_price(input_params->km,
+						linear_regression_data->theta_values[0],
+						linear_regression_data->theta_values[1]);
+				elem = ft_lstnew(&stat_counters, sizeof(stat_counters));
+				ft_lstadd(&statistics->stat_counters_lst, elem);
+			}
+			if (statistics->stat_counters_lst)
+				statistics_save_records(statistics);
 			linear_regression_data_release(&linear_regression_data);
 		}
 		else

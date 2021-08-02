@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/02 20:23:51 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/02 23:32:43 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,7 @@ typedef struct s_lin_reg_data
 	t_input_variables			input_variables;
 	t_measured_variables		measured_variables;
 	t_variable					predicted_price;
+	double						*theta_values;
 }				t_lin_reg_data;
 
 typedef struct s_error_data
@@ -175,7 +176,7 @@ void					linear_regression_data_release(
 void					linear_regression_add_data_record(
 							t_lin_reg_data *linear_regression_data,
 							t_data_record *data_record);
-double					*create_linear_regression_model(
+void					create_linear_regression_model(
 							t_lin_reg_data *linear_regression_data,
 							t_statistics *statistics);
 void					pre_process_input_variables(
@@ -224,5 +225,7 @@ void					statistics_save_records(t_statistics *statistics);
 void					statistics_release_record(void *content, size_t size);
 void					save_unknown_variables(double **theta_values);
 const char				*get_home_dir(void);
+double					calculate_price(int km, double theta0, double theta1);
+t_stat_counters			*stat_counters_initialize(void);
 
 #endif

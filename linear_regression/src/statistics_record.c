@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/02 08:01:07 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/02 08:08:30 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/02 23:32:31 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	statistics_save_records(t_statistics *statistics)
 	return ;
 }
 
-static t_stat_counters	*stat_counters_initialize(void)
+t_stat_counters	*stat_counters_initialize(void)
 {
 	t_stat_counters		*stat_counters;
 
