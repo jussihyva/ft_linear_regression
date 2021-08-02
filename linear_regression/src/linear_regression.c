@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 13:34:18 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/02 08:09:08 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/02 15:42:13 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,9 @@ static void	calculate_prices(t_variable *input_variable,
 	i = -1;
 	while (++i < input_variable->size)
 	{
-		((double **)predicted_price->normalized_values->values)[i][0]
-			= theta_values[0][0] + theta_values[1][0]
-			* ((double **)input_variable->normalized_values->values)[i][0];
 		((double *)predicted_price->values)[i]
-			= *(double *)predicted_price->min_max_value.min_value
-			+ (*(double *)predicted_price->min_max_value.range
-				* ((double **)predicted_price->normalized_values
-					->values)[i][0]);
+			= theta_values[0][0] + (theta_values[1][0]
+				* ((int *)input_variable->values)[i]);
 	}
 	return ;
 }
@@ -77,6 +72,7 @@ void	create_linear_regression_model(t_lin_reg_data *linear_regression_data,
 	pre_process_input_variables(linear_regression_data);
 	gradient_descent_data = unknown_variables_iterate_values(input_variable,
 			measured_variable);
+	save_unknown_variables((double **)gradient_descent_data->theta->values);
 	estimate_prize(input_variable, measured_variable,
 		(double **)gradient_descent_data->theta->values,
 		&linear_regression_data->predicted_price);

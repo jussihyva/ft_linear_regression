@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/02 08:08:43 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/02 15:33:39 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # define SEND_REC_BUF_MAX_SIZE			4096
 # define PEM_CERT_FILE					"/var/tmp/tls-selfsigned.crt"
 # define PEM_PRIVTE_KEY_FILE			"/var/tmp/tls-selfsigned.key"
+# define WRITE_BUF_SIZE					1000
 
 typedef struct s_memory_info
 {
@@ -219,5 +220,7 @@ void					statistics_create_records(t_list **stat_counters_lst,
 							t_lin_reg_data *linear_regression_data);
 void					statistics_save_records(t_statistics *statistics);
 void					statistics_release_record(void *content, size_t size);
+void					save_unknown_variables(double **theta_values);
+const char				*get_home_dir(void);
 
 #endif

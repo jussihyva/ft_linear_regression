@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 14:53:13 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/30 11:34:30 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/02 12:45:34 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <arpa/inet.h>
 # include <sys/socket.h>
 # include <sys/types.h>
+# include <sys/stat.h>
 # include <openssl/ssl.h>
 # include <openssl/err.h>
 
