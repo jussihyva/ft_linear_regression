@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 11:14:46 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/30 12:58:05 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/02 20:24:41 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,13 @@ static t_arg_parser_data	*arg_parser_data_initialize(int argc, char **argv)
 
 	arg_parser_data
 		= (t_arg_parser_data *)ft_memalloc(sizeof(*arg_parser_data));
+	arg_parser_data->argc_argv.argc = argc;
+	arg_parser_data->argc_argv.argv = argv;
 	arg_parser_data->fn_initialize_cmd_args = initialize_cmd_args;
 	arg_parser_data->fn_save_cmd_argument = save_cmd_argument;
 	arg_parser_data->fn_usage = print_usage;
 	arg_parser_data->options = ft_strdup("L:f:h");
-	ft_arg_parser(arg_parser_data, argc, argv);
+	ft_arg_parser(arg_parser_data);
 	return (arg_parser_data);
 }
 
@@ -44,6 +46,7 @@ int	main(int argc, char **argv)
 	t_event_logging_data		*event_logging_data;
 	t_statistics				*statistics;
 	t_input_params				*input_params;
+	double						*theta_values;
 
 	arg_parser_data = arg_parser_data_initialize(argc, argv);
 	input_params = (t_input_params *)arg_parser_data->input_params;
@@ -55,7 +58,8 @@ int	main(int argc, char **argv)
 		linear_regression_data = read_dataset_file(input_params->dataset_file);
 		if (linear_regression_data->num_of_records)
 		{
-			create_linear_regression_model(linear_regression_data, statistics);
+			theta_values = create_linear_regression_model(
+					linear_regression_data, statistics);
 			linear_regression_data_release(&linear_regression_data);
 		}
 		else

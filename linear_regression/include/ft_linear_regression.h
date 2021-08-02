@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/02 15:33:39 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/02 20:23:51 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ typedef struct s_input_params
 	int				argc;
 	char			**argv;
 	char			*dataset_file;
+	int				km;
 	t_loging_level	event_logging_level;
 }				t_input_params;
 
@@ -161,9 +162,10 @@ typedef struct s_error_data
 	double		error_sum;
 }				t_error_data;
 
-void					*initialize_cmd_args(int argc, char **argv);
+void					*initialize_cmd_args(t_argc_argv *argc_argv);
 void					save_cmd_argument(void *input_params, char opt,
-							char *next_arg);
+							t_argc_argv *argc_argv,
+							t_cmd_param_type cmd_param_type);
 void					print_usage(void);
 t_lin_reg_data			*read_dataset_file(char *dataset_file);
 void					release_input_params(t_input_params **input_params);
@@ -173,7 +175,7 @@ void					linear_regression_data_release(
 void					linear_regression_add_data_record(
 							t_lin_reg_data *linear_regression_data,
 							t_data_record *data_record);
-void					create_linear_regression_model(
+double					*create_linear_regression_model(
 							t_lin_reg_data *linear_regression_data,
 							t_statistics *statistics);
 void					pre_process_input_variables(

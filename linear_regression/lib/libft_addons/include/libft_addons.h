@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 14:53:13 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/02 12:45:34 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/02 18:03:47 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,19 @@ typedef enum e_loging_level
 	LOG_ERROR = 4,
 	LOG_FATAL = 5
 }				t_loging_level;
+
+typedef enum e_cmd_param_type
+{
+	E_OPTIONAL_SHORT,
+	E_OPTIONAL_LONG,
+	E_MANDATORY
+}				t_cmd_param_type;
+
+typedef struct s_argc_argv
+{
+	int		argc;
+	char	**argv;
+}				t_argc_argv;
 
 typedef struct s_event_logging_data
 {
@@ -141,14 +154,16 @@ typedef struct s_bt_node
 	t_bt_elem			bt_elem[MAX_NUM_OF_B_TREE_ELEMS];
 }				t_bt_node;
 
-typedef void	(*t_save_cmd_argument)(void*, char, char*);
+typedef void	(*t_save_cmd_argument)(void*, char, t_argc_argv*,
+															t_cmd_param_type);
 
-typedef void*	(*t_initialize_cmd_args)(int argc, char **argv);
+typedef void*	(*t_initialize_cmd_args)(t_argc_argv *argc_argv);
 
 typedef void	(*t_usage)(void);
 
 typedef struct s_arg_parser_data
 {
+	t_argc_argv				argc_argv;
 	t_initialize_cmd_args	fn_initialize_cmd_args;
 	t_save_cmd_argument		fn_save_cmd_argument;
 	t_usage					fn_usage;
@@ -236,7 +251,6 @@ void					ft_prio_enqueue(t_bt_node **states_prio_queue,
 void					*ft_prio_dequeue(t_bt_node **states_prio_queue);
 void					ft_print_memory(const void *addr, size_t size);
 int						ft_open_fd(char *file_path);
-void					ft_arg_parser(t_arg_parser_data *arg_parser_data,
-							int argc, char **argv);
+void					ft_arg_parser(t_arg_parser_data *arg_parser_data);
 
 #endif

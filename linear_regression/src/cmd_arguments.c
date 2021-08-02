@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 12:56:02 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/30 07:09:40 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/02 20:26:08 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,22 +31,25 @@ void	print_usage(void)
 	exit(42);
 }
 
-void	*initialize_cmd_args(int argc, char **argv)
+void	*initialize_cmd_args(t_argc_argv *argc_argv)
 {
 	t_input_params			*input_params;
 
 	input_params = (t_input_params *)ft_memalloc(sizeof(*input_params));
-	input_params->argc = argc;
-	input_params->argv = argv;
+	input_params->argc = argc_argv->argc;
+	input_params->argv = argc_argv->argv;
 	input_params->event_logging_level = LOG_WARN;
 	return ((void *)input_params);
 }
 
-void	save_cmd_argument(void *input_params, char opt, char *next_arg)
+void	save_cmd_argument_short(void *input_params, char opt,
+														t_argc_argv *argc_argv)
 {
 	t_input_params		*params;
 	char				*endptr;
+	char				*next_arg;
 
+	next_arg = *argc_argv->argv;
 	params = (t_input_params *)input_params;
 	if (opt == 'f')
 		params->dataset_file = next_arg;
@@ -57,13 +60,45 @@ void	save_cmd_argument(void *input_params, char opt, char *next_arg)
 		if (params->event_logging_level >= 6 || params->event_logging_level < 0
 			|| *endptr != '\0' || errno != 0)
 		{
-			ft_printf("Value of cmd line attribute -L (%d) is not valid\n",
-				params->event_logging_level);
+			ft_printf("Value of cmd line attribute -L (%s) is not valid\n",
+				next_arg);
 			exit(42);
 		}
 	}
 	else if (opt == 'h')
 		print_usage();
+	return ;
+}
+
+void	save_cmd_argument_mandatory(void *input_params, char opt,
+														t_argc_argv *argc_argv)
+{
+	t_input_params		*params;
+	char				*endptr;
+
+	(void)opt;
+	params = (t_input_params *)input_params;
+	if (argc_argv->argc == 1)
+	{
+		params->km = ft_strtoi(*argc_argv->argv, &endptr, 10);
+		if (*endptr != '\0' || errno != 0)
+		{
+			ft_printf("km param (%s) is not valid\n", *argc_argv->argv);
+			exit(42);
+		}
+	}
+	else
+		print_usage();
+	return ;
+}
+
+void	save_cmd_argument(void *input_params, char opt, t_argc_argv *argc_argv,
+												t_cmd_param_type cmd_param_type)
+{
+	if (cmd_param_type == E_OPTIONAL_SHORT)
+		save_cmd_argument_short(input_params, opt, argc_argv);
+	else
+		save_cmd_argument_mandatory(input_params, opt, argc_argv);
 	return ;
 }
 

@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 17:42:28 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/30 11:33:08 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/02 19:55:34 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ static void	param_error(const char *error_string, const char s)
 	return ;
 }
 
-static char	*pre_analyse_argument(char *options, char arg, int *argc,
-																char ***argv)
+static char	*pre_analyse_argument(char *options, char arg,
+														t_argc_argv *argc_argv)
 {
 	char					*opt_ptr;
 
@@ -30,10 +30,10 @@ static char	*pre_analyse_argument(char *options, char arg, int *argc,
 	{
 		if (*(opt_ptr + 1) == ':')
 		{
-			if (*argc < 2)
+			if (argc_argv->argc < 2)
 				param_error("Missing argument for parameter: -%c", arg);
-			(*argc)--;
-			(*argv)++;
+			argc_argv->argc--;
+			argc_argv->argv++;
 		}
 	}
 	else
@@ -43,8 +43,8 @@ static char	*pre_analyse_argument(char *options, char arg, int *argc,
 
 static void	split_cmd_argument(
 							t_arg_parser_data *arg_parser_data,
-							int *argc,
-							char ***argv)
+							t_argc_argv *argc_argv,
+							t_cmd_param_type cmd_param_type)
 {
 	t_save_cmd_argument		fn_save_cmd_argument;
 	char					*arg;
@@ -53,38 +53,50 @@ static void	split_cmd_argument(
 
 	input_params = arg_parser_data->input_params;
 	fn_save_cmd_argument = arg_parser_data->fn_save_cmd_argument;
-	arg = **argv;
-	arg++;
-	opt_ptr = arg;
-	while (*arg && *opt_ptr != ':')
+	arg = *argc_argv->argv;
+	if (cmd_param_type == E_OPTIONAL_SHORT)
 	{
-		opt_ptr = pre_analyse_argument(arg_parser_data->options, *arg, argc,
-				argv);
-		fn_save_cmd_argument(input_params, *arg, **argv);
 		arg++;
+		opt_ptr = arg;
+		while (*arg && *opt_ptr != ':')
+		{
+			opt_ptr = pre_analyse_argument(arg_parser_data->options, *arg,
+					argc_argv);
+			fn_save_cmd_argument(input_params, *arg, argc_argv, cmd_param_type);
+			arg++;
+		}
 	}
+	else if (cmd_param_type == E_MANDATORY)
+		fn_save_cmd_argument(input_params, *arg, argc_argv, cmd_param_type);
+	return ;
 }
 
-void	ft_arg_parser(
-					t_arg_parser_data *arg_parser_data,
-					int argc,
-					char **argv)
+void	ft_arg_parser(t_arg_parser_data *arg_parser_data)
 {
 	int						arg_index;
 	t_initialize_cmd_args	initialize_cmd_args;
+	t_cmd_param_type		cmd_param_type;
+	t_argc_argv				*argc_argv;
 
+	argc_argv = &arg_parser_data->argc_argv;
 	initialize_cmd_args = arg_parser_data->fn_initialize_cmd_args;
-	arg_parser_data->input_params = (void *)initialize_cmd_args(argc, argv);
+	arg_parser_data->input_params
+		= (void *)initialize_cmd_args(&arg_parser_data->argc_argv);
 	arg_index = 0;
-	argc--;
-	while (argc)
+	argc_argv->argc--;
+	while (argc_argv->argc)
 	{
-		argv++;
-		if ((*argv)[0] == '-' && ft_strlen(*argv) > 1)
-			split_cmd_argument(arg_parser_data, &argc, &argv);
+		argc_argv->argv++;
+		if (ft_strlen(*argc_argv->argv) > 2
+			&& (*argc_argv->argv)[0] == '-' && (*argc_argv->argv)[1] == '-')
+			cmd_param_type = E_OPTIONAL_LONG;
+		else if (ft_strlen(*argc_argv->argv) > 1
+			&& (*argc_argv->argv)[0] == '-')
+			cmd_param_type = E_OPTIONAL_SHORT;
 		else
-			arg_parser_data->fn_usage();
-		argc--;
+			cmd_param_type = E_MANDATORY;
+		split_cmd_argument(arg_parser_data, argc_argv, cmd_param_type);
+		argc_argv->argc--;
 	}
 	return ;
 }
