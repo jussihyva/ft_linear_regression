@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/31 19:23:44 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/02 08:08:43 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,54 +160,64 @@ typedef struct s_error_data
 	double		error_sum;
 }				t_error_data;
 
-void			*initialize_cmd_args(int argc, char **argv);
-void			save_cmd_argument(void *input_params, char opt,
-					char *next_arg);
-void			print_usage(void);
-t_lin_reg_data	*read_dataset_file(char *dataset_file);
-void			release_input_params(t_input_params **input_params);
-void			release_data_record_lst(t_list **data_record_lst);
-void			linear_regression_data_release(
-					t_lin_reg_data **linear_regression_data);
-void			linear_regression_add_data_record(
-					t_lin_reg_data *linear_regression_data,
-					t_data_record *data_record);
-void			create_linear_regression_model(
-					t_lin_reg_data *linear_regression_data,
-					t_statistics *statistics);
-void			pre_process_input_variables(
-					t_lin_reg_data *linear_regression_data);
-t_matrix		*theta_initialize(void);
-t_matrix		*matrix_initialize(t_variable *km);
-void			calculate_new_theta(
-					t_gradient_descent_data *gradient_descent_data,
-					t_variable *input_variable, t_variable *measured_variable,
-					double **new_theta_values);
-void			ft_matrix_subtrack_vector_double(t_matrix *matrix,
-					t_matrix *vector, t_matrix *new_vector);
-t_matrix		*ft_vector_create(size_t size, size_t vector_size);
-void			ft_vector_remove(t_matrix **vector);
-void			ft_matrix_remove(t_matrix **matrix);
-double			ft_matrix_sum(t_matrix *matrix);
-void			ft_matrix_dot_vector_double(t_matrix *matrix,
-					t_matrix *vector, t_matrix *new_vector);
-t_matrix		*variable_normalize(int *values,
-					t_min_max_value *min_max_value, size_t num_of_records);
-void			variable_remove(t_variable *variable);
-time_t			get_execution_time(t_statistics *statistics);
-void			ft_influxdb_write(t_tls_connection *connection, char *body,
-					char *database);
-t_influxdb		*ft_influxdb_connect(char *host_name, char *port_number,
-					t_statistics *statistics);
-t_statistics	*ft_statistics_initialize(void);
-void			ft_influxdb_write(t_tls_connection *connection, char *body,
-					char *database);
-char			*create_influxdb_query_string(t_stat_counters *stat_counters,
-					struct timespec end_time, char *data_type, int id);
-void			stat_set_end_time(t_statistics *statistics);
-void			initalize_variable(t_variable *variable, size_t num_of_records,
-					size_t size);
-t_matrix		*ft_matrix_transpose(t_matrix *matrix);
-void			statistics_remove(t_statistics **statistics);
+void					*initialize_cmd_args(int argc, char **argv);
+void					save_cmd_argument(void *input_params, char opt,
+							char *next_arg);
+void					print_usage(void);
+t_lin_reg_data			*read_dataset_file(char *dataset_file);
+void					release_input_params(t_input_params **input_params);
+void					release_data_record_lst(t_list **data_record_lst);
+void					linear_regression_data_release(
+							t_lin_reg_data **linear_regression_data);
+void					linear_regression_add_data_record(
+							t_lin_reg_data *linear_regression_data,
+							t_data_record *data_record);
+void					create_linear_regression_model(
+							t_lin_reg_data *linear_regression_data,
+							t_statistics *statistics);
+void					pre_process_input_variables(
+							t_lin_reg_data *linear_regression_data);
+t_matrix				*theta_initialize(void);
+t_matrix				*matrix_initialize(t_variable *km);
+void					calculate_new_theta(
+							t_gradient_descent_data *gradient_descent_data,
+							t_variable *input_variable,
+							t_variable *measured_variable,
+							double **new_theta_values);
+void					ft_matrix_subtrack_vector_double(t_matrix *matrix,
+							t_matrix *vector, t_matrix *new_vector);
+t_matrix				*ft_vector_create(size_t size, size_t vector_size);
+void					ft_vector_remove(t_matrix **vector);
+void					ft_matrix_remove(t_matrix **matrix);
+double					ft_matrix_sum(t_matrix *matrix);
+void					ft_matrix_dot_vector_double(t_matrix *matrix,
+							t_matrix *vector, t_matrix *new_vector);
+t_matrix				*variable_normalize(int *values,
+							t_min_max_value *min_max_value,
+							size_t num_of_records);
+void					variable_remove(t_variable *variable);
+time_t					get_execution_time(t_statistics *statistics);
+void					ft_influxdb_write(t_tls_connection *connection,
+							char *body, char *database);
+t_influxdb				*ft_influxdb_connect(char *host_name, char *port_number,
+							t_statistics *statistics);
+t_statistics			*ft_statistics_initialize(void);
+void					ft_influxdb_write(t_tls_connection *connection,
+							char *body, char *database);
+char					*create_influxdb_query_string(
+							t_stat_counters *stat_counters,
+							struct timespec end_time, char *data_type, int id);
+void					stat_set_end_time(t_statistics *statistics);
+void					initalize_variable(t_variable *variable,
+							size_t num_of_records, size_t size);
+t_matrix				*ft_matrix_transpose(t_matrix *matrix);
+void					statistics_remove(t_statistics **statistics);
+t_gradient_descent_data	*unknown_variables_iterate_values(
+							t_variable *input_variable,
+							t_variable *measured_variable);
+void					statistics_create_records(t_list **stat_counters_lst,
+							t_lin_reg_data *linear_regression_data);
+void					statistics_save_records(t_statistics *statistics);
+void					statistics_release_record(void *content, size_t size);
 
 #endif
