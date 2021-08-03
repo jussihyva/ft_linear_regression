@@ -6,11 +6,18 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/20 11:16:30 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/03 11:42:09 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/03 17:54:20 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_linear_regression.h"
+
+static void	variable_calculate_range_int(t_min_max_value *min_max_value)
+{
+	*(int *)min_max_value->range = *(int *)min_max_value->max_value
+		- *(int *)min_max_value->min_value;
+	return ;
+}
 
 static void	save_int_variable(t_variable *variable, size_t i, int new_value)
 {
@@ -42,6 +49,8 @@ static void	initialize_independent_variables(t_variable *variable,
 	t_list				*elem;
 	t_data_record		*data_record;
 
+	*(int *)variable->min_max_value.min_value = INT_MAX;
+	*(int *)variable->min_max_value.max_value = INT_MIN;
 	elem = *data_record_lst;
 	i = variable->size;
 	ft_printf("   KM: ");
@@ -55,9 +64,7 @@ static void	initialize_independent_variables(t_variable *variable,
 		elem = elem->next;
 	}
 	ft_printf("\n");
-	*(int *)variable->min_max_value.range
-		= *(int *)variable->min_max_value.max_value
-		- *(int *)variable->min_max_value.min_value;
+	variable_calculate_range_int(&variable->min_max_value);
 	variable->normalized_values = variable_normalize((int *)variable->values,
 			&variable->min_max_value, variable->size);
 	variable->matrix = matrix_initialize(variable);
@@ -71,6 +78,8 @@ static void	initialize_dependent_variables(t_variable *variable,
 	t_list				*elem;
 	t_data_record		*data_record;
 
+	*(int *)variable->min_max_value.min_value = INT_MAX;
+	*(int *)variable->min_max_value.max_value = INT_MIN;
 	elem = *data_record_lst;
 	i = variable->size;
 	ft_printf("PRICE: ");
@@ -84,9 +93,7 @@ static void	initialize_dependent_variables(t_variable *variable,
 		elem = elem->next;
 	}
 	ft_printf("\n");
-	*(int *)variable->min_max_value.range
-		= *(int *)variable->min_max_value.max_value
-		- *(int *)variable->min_max_value.min_value;
+	variable_calculate_range_int(&variable->min_max_value);
 	variable->normalized_values = variable_normalize(variable->values,
 			&variable->min_max_value, variable->size);
 	return ;
@@ -100,18 +107,12 @@ void	pre_process_input_variables(t_lin_reg *linear_regression)
 	num_of_records = linear_regression->dataset->num_of_records;
 	variable = &linear_regression->input_variables.km;
 	initalize_variable(variable, num_of_records, sizeof(int));
-	*(int *)variable->min_max_value.min_value = INT_MAX;
-	*(int *)variable->min_max_value.max_value = INT_MIN;
-	*(int *)variable->min_max_value.range = 0;
 	initialize_independent_variables(variable,
 		&linear_regression->dataset->data_record_lst);
 	FT_LOG_INFO("   KM MIN=%d MAX=%d", *(int *)variable->min_max_value
 		.min_value, *(int *)variable->min_max_value.max_value);
 	variable = &linear_regression->measured_variables.price;
 	initalize_variable(variable, num_of_records, sizeof(int));
-	*(int *)variable->min_max_value.min_value = INT_MAX;
-	*(int *)variable->min_max_value.max_value = INT_MIN;
-	*(int *)variable->min_max_value.range = 0;
 	initialize_dependent_variables(variable,
 		&linear_regression->dataset->data_record_lst);
 	FT_LOG_INFO("PRICE MIN=%d MAX=%d", *(int *)variable->min_max_value

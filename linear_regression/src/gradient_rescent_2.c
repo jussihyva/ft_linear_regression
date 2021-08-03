@@ -6,13 +6,13 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/02 07:43:32 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/03 11:41:05 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/03 20:27:02 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_linear_regression.h"
 
-static t_gradient_descent	*gradient_descent_initialize(void)
+t_gradient_descent	*gradient_descent_initialize(void)
 {
 	t_gradient_descent		*gradient_descent;
 
@@ -20,7 +20,6 @@ static t_gradient_descent	*gradient_descent_initialize(void)
 		ft_memalloc(sizeof(*gradient_descent));
 	gradient_descent->theta_file = "/tmp/theta.yml";
 	gradient_descent->alpha = 0.1;
-	gradient_descent->theta = theta_initialize();
 	return (gradient_descent);
 }
 
@@ -35,6 +34,7 @@ t_gradient_descent	*unknown_variables_iterate_values(
 
 	new_theta = ft_vector_create(sizeof(double), 2);
 	gradient_descent = gradient_descent_initialize();
+	gradient_descent->theta = theta_initialize();
 	theta_values = (double **)gradient_descent->theta->values;
 	FT_LOG_INFO("ALPHA: %f", gradient_descent->alpha);
 	i = -1;

@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 12:52:29 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/03 11:57:13 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/03 18:18:50 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,6 @@ t_lin_reg	*linear_regression_initialize(void)
 	t_lin_reg	*linear_regression;
 
 	linear_regression = (t_lin_reg *)ft_memalloc(sizeof(*linear_regression));
-	linear_regression->theta_values
-		= (double *)ft_memalloc(sizeof(*linear_regression->theta_values) * 2);
 	return (linear_regression);
 }
 

@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/03 11:55:44 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/03 20:30:40 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 # define PEM_CERT_FILE					"/var/tmp/tls-selfsigned.crt"
 # define PEM_PRIVTE_KEY_FILE			"/var/tmp/tls-selfsigned.key"
 # define WRITE_BUF_SIZE					1000
+# define THETA_FILE_NAME				"/theta_values.yaml"
 
 typedef struct s_memory_info
 {
@@ -42,7 +43,6 @@ typedef struct s_memory_info
 	long			av_phys_pages;
 	long			tot_phys_pages;
 	int				mem_usage;
-
 }						t_memory_info;
 
 typedef enum e_connection_status
@@ -158,8 +158,8 @@ typedef struct s_lin_reg
 	t_dataset				*dataset;
 	t_input_variables		input_variables;
 	t_measured_variables	measured_variables;
+	t_gradient_descent		*gradient_descent;
 	t_variable				predicted_price;
-	double					*theta_values;
 }				t_lin_reg;
 
 typedef struct s_error_data
@@ -230,8 +230,10 @@ void					statistics_save_records(t_statistics *statistics);
 void					statistics_release_record(void *content, size_t size);
 void					save_unknown_variables(double **theta_values);
 const char				*get_home_dir(void);
-double					calculate_price(int km, double theta0, double theta1);
+double					calculate_price(int km, double **theta_values);
 t_stat_counters			*stat_counters_initialize(void);
 t_lin_reg				*linear_regression_initialize(void);
+t_matrix				*unknown_variables_read(void);
+t_gradient_descent		*gradient_descent_initialize(void);
 
 #endif

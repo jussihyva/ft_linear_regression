@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 11:14:46 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/03 11:52:48 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/03 20:31:37 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ int	main(int argc, char **argv)
 	event_logging_data = ft_event_logging_init(
 			input_params->event_logging_level);
 	statistics = ft_statistics_initialize();
+	linear_regression = linear_regression_initialize();
 	if (input_params->dataset_file)
 	{
-		linear_regression = linear_regression_initialize();
 		linear_regression->dataset
 			= read_dataset_file(input_params->dataset_file);
 		if (linear_regression->dataset->num_of_records)
@@ -67,21 +67,27 @@ int	main(int argc, char **argv)
 				stat_counters->value[E_INDEPENDENT] = input_params->km;
 				stat_counters->value[E_PREDICTED_PRICE]
 					= calculate_price(input_params->km,
-						linear_regression->theta_values[0],
-						linear_regression->theta_values[1]);
+						(double **)linear_regression->gradient_descent->theta
+						->values);
 				stat_counters->value[E_DEPENDENT]
 					= stat_counters->value[E_PREDICTED_PRICE];
 				elem = ft_lstnew(&stat_counters, sizeof(stat_counters));
 				ft_lstadd(&statistics->stat_counters_lst, elem);
 			}
-			if (statistics->stat_counters_lst)
-				statistics_save_records(statistics);
-			linear_regression_release(&linear_regression);
 		}
 		else
 			FT_LOG_ERROR("No record in the input file (%s)",
 				input_params->dataset_file);
 	}
+	else
+	{
+		linear_regression->gradient_descent = gradient_descent_initialize();
+		linear_regression->gradient_descent->theta = unknown_variables_read();
+		// FT_LOG_ERROR("Theta inputfile is not available!");
+	}
+	if (statistics->stat_counters_lst)
+		statistics_save_records(statistics);
+	linear_regression_release(&linear_regression);
 	main_remove(arg_parser, statistics, event_logging_data);
 	return (0);
 }
