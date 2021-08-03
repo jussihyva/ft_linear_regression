@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 12:52:29 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/02 21:10:45 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/03 11:57:13 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static t_data_record	*read_data_line(char *line)
 	t_data_record	*data_record;
 
 	line_counter++;
-	ft_printf("LINE %d: %s\n", line_counter, line);
+	FT_LOG_INFO("LINE %d: %s", line_counter, line);
 	data_record = (t_data_record *)ft_memalloc(sizeof(*data_record));
 	data_record->km = ft_strtoi(line, &endptr, 10);
 	if (errno == EINVAL && *endptr == ',')
@@ -45,30 +45,45 @@ static t_data_record	*read_data_line(char *line)
 	return (data_record);
 }
 
-t_lin_reg_data	*read_dataset_file(char *dataset_file)
+t_lin_reg	*linear_regression_initialize(void)
 {
-	t_lin_reg_data		*linear_regression_data;
-	t_file_params		file_params;
-	t_data_record		*data_record;
+	t_lin_reg	*linear_regression;
 
+	linear_regression = (t_lin_reg *)ft_memalloc(sizeof(*linear_regression));
+	linear_regression->theta_values
+		= (double *)ft_memalloc(sizeof(*linear_regression->theta_values) * 2);
+	return (linear_regression);
+}
+
+void	dataset_add_record(t_dataset *dataset, t_data_record *data_record)
+{
+	t_list						*elem;
+
+	dataset->num_of_records++;
+	elem = ft_lstnew(&data_record, sizeof(data_record));
+	ft_lstadd(&dataset->data_record_lst, elem);
+	return ;
+}
+
+t_dataset	*read_dataset_file(char *dataset_file)
+{
+	t_file_params	file_params;
+	t_data_record	*data_record;
+	t_dataset		*dataset;
+
+	dataset = (t_dataset *)ft_memalloc(sizeof(*dataset));
 	file_params.fd = ft_open_fd(dataset_file);
-	linear_regression_data = (t_lin_reg_data *)ft_memalloc(
-			sizeof(*linear_regression_data));
-	linear_regression_data->theta_values
-		= (double *)ft_memalloc(sizeof(*linear_regression_data
-				->theta_values) * 2);
-	file_params.line = NULL;
 	file_params.ret = ft_get_next_line(file_params.fd, &file_params.line);
 	ft_strdel((char **)&file_params.line);
 	file_params.ret = ft_get_next_line(file_params.fd, &file_params.line);
 	while (file_params.ret > 0)
 	{
 		data_record = read_data_line(file_params.line);
-		linear_regression_add_data_record(linear_regression_data, data_record);
+		dataset_add_record(dataset, data_record);
 		ft_strdel((char **)&file_params.line);
 		file_params.ret = ft_get_next_line(file_params.fd, &file_params.line);
 	}
 	ft_strdel((char **)&file_params.line);
 	close(file_params.fd);
-	return (linear_regression_data);
+	return (dataset);
 }

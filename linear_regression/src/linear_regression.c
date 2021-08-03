@@ -6,23 +6,11 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 13:34:18 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/02 23:21:13 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/03 11:49:40 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_linear_regression.h"
-
-void	linear_regression_add_data_record(
-							t_lin_reg_data *linear_regression_data,
-							t_data_record *data_record)
-{
-	t_list						*elem;
-
-	linear_regression_data->num_of_records++;
-	elem = ft_lstnew(&data_record, sizeof(data_record));
-	ft_lstadd(&linear_regression_data->data_record_lst, elem);
-	return ;
-}
 
 double	calculate_price(int km, double theta0, double theta1)
 {
@@ -68,47 +56,49 @@ static void	estimate_prize(t_variable *input_variable,
 	return ;
 }
 
-void	create_linear_regression_model(t_lin_reg_data *linear_regression_data,
+void	create_linear_regression_model(t_lin_reg *linear_regression,
 													t_statistics *statistics)
 {
 	t_variable					*input_variable;
 	t_variable					*measured_variable;
-	t_gradient_descent_data		*gradient_descent_data;
+	t_gradient_descent			*gradient_descent;
 	double						*theta_values;
 
-	theta_values = linear_regression_data->theta_values;
-	input_variable = &linear_regression_data->input_variables.km;
-	measured_variable = &linear_regression_data->measured_variables.price;
-	pre_process_input_variables(linear_regression_data);
-	gradient_descent_data = unknown_variables_iterate_values(input_variable,
+	theta_values = linear_regression->theta_values;
+	input_variable = &linear_regression->input_variables.km;
+	measured_variable = &linear_regression->measured_variables.price;
+	pre_process_input_variables(linear_regression);
+	gradient_descent = unknown_variables_iterate_values(input_variable,
 			measured_variable);
-	save_unknown_variables((double **)gradient_descent_data->theta->values);
+	save_unknown_variables((double **)gradient_descent->theta->values);
 	estimate_prize(input_variable, measured_variable,
-		(double **)gradient_descent_data->theta->values,
-		&linear_regression_data->predicted_price);
+		(double **)gradient_descent->theta->values,
+		&linear_regression->predicted_price);
 	statistics_create_records(&statistics->stat_counters_lst,
-		linear_regression_data);
+		linear_regression);
 	stat_set_end_time(statistics);
-	theta_values[0] = ((double **)gradient_descent_data->theta->values)[0][0];
-	theta_values[1] = ((double **)gradient_descent_data->theta->values)[1][0];
-	ft_vector_remove(&gradient_descent_data->theta);
-	ft_memdel((void **)&gradient_descent_data);
+	theta_values[0] = ((double **)gradient_descent->theta->values)[0][0];
+	theta_values[1] = ((double **)gradient_descent->theta->values)[1][0];
+	ft_vector_remove(&gradient_descent->theta);
+	ft_memdel((void **)&gradient_descent);
 	return ;
 }
 
-void	linear_regression_data_release(
-							t_lin_reg_data **linear_regression_data)
+void	linear_regression_release(
+							t_lin_reg **linear_regression)
 {
-	if ((*linear_regression_data)->data_record_lst)
+	if ((*linear_regression)->dataset->data_record_lst)
 	{
-		ft_lstdel(&(*linear_regression_data)->data_record_lst,
+		ft_lstdel(&(*linear_regression)->dataset->data_record_lst,
 			statistics_release_record);
-		ft_memdel((void **)&(*linear_regression_data)->data_record_lst);
+		ft_memdel((void **)&(*linear_regression)->dataset
+			->data_record_lst);
 	}
-	variable_remove(&(*linear_regression_data)->predicted_price);
-	variable_remove(&(*linear_regression_data)->input_variables.km);
-	variable_remove(&(*linear_regression_data)->measured_variables.price);
-	ft_memdel((void **)&(*linear_regression_data)->theta_values);
-	ft_memdel((void **)linear_regression_data);
+	ft_memdel((void **)&(*linear_regression)->dataset);
+	variable_remove(&(*linear_regression)->predicted_price);
+	variable_remove(&(*linear_regression)->input_variables.km);
+	variable_remove(&(*linear_regression)->measured_variables.price);
+	ft_memdel((void **)&(*linear_regression)->theta_values);
+	ft_memdel((void **)linear_regression);
 	return ;
 }

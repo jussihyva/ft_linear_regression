@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 14:53:13 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/02 18:03:47 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/03 11:44:45 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ typedef void*	(*t_initialize_cmd_args)(t_argc_argv *argc_argv);
 
 typedef void	(*t_usage)(void);
 
-typedef struct s_arg_parser_data
+typedef struct s_arg_parser
 {
 	t_argc_argv				argc_argv;
 	t_initialize_cmd_args	fn_initialize_cmd_args;
@@ -169,7 +169,7 @@ typedef struct s_arg_parser_data
 	t_usage					fn_usage;
 	char					*options;
 	void					*input_params;
-}				t_arg_parser_data;
+}				t_arg_parser;
 
 void					ft_log_trace(const char *file, const int line,
 							const char *fmt, ...);
@@ -251,6 +251,6 @@ void					ft_prio_enqueue(t_bt_node **states_prio_queue,
 void					*ft_prio_dequeue(t_bt_node **states_prio_queue);
 void					ft_print_memory(const void *addr, size_t size);
 int						ft_open_fd(char *file_path);
-void					ft_arg_parser(t_arg_parser_data *arg_parser_data);
+void					ft_arg_parser(t_arg_parser *arg_parser);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/02 23:32:43 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/03 11:55:44 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,22 +140,27 @@ typedef struct s_input_variables
 	t_variable		km;
 }				t_input_variables;
 
-typedef struct s_gradient_descent_data
+typedef struct s_gradient_descent
 {
 	double		alpha;
 	t_matrix	*theta;
 	char		*theta_file;
-}				t_gradient_descent_data;
+}				t_gradient_descent;
 
-typedef struct s_lin_reg_data
+typedef struct s_dataset
 {
-	t_list						*data_record_lst;
-	size_t						num_of_records;
-	t_input_variables			input_variables;
-	t_measured_variables		measured_variables;
-	t_variable					predicted_price;
-	double						*theta_values;
-}				t_lin_reg_data;
+	t_list		*data_record_lst;
+	size_t		num_of_records;
+}				t_dataset;
+
+typedef struct s_lin_reg
+{
+	t_dataset				*dataset;
+	t_input_variables		input_variables;
+	t_measured_variables	measured_variables;
+	t_variable				predicted_price;
+	double					*theta_values;
+}				t_lin_reg;
 
 typedef struct s_error_data
 {
@@ -168,23 +173,23 @@ void					save_cmd_argument(void *input_params, char opt,
 							t_argc_argv *argc_argv,
 							t_cmd_param_type cmd_param_type);
 void					print_usage(void);
-t_lin_reg_data			*read_dataset_file(char *dataset_file);
+t_dataset				*read_dataset_file(char *dataset_file);
 void					release_input_params(t_input_params **input_params);
 void					release_data_record_lst(t_list **data_record_lst);
-void					linear_regression_data_release(
-							t_lin_reg_data **linear_regression_data);
+void					linear_regression_release(
+							t_lin_reg **linear_regression);
 void					linear_regression_add_data_record(
-							t_lin_reg_data *linear_regression_data,
+							t_lin_reg *linear_regression,
 							t_data_record *data_record);
 void					create_linear_regression_model(
-							t_lin_reg_data *linear_regression_data,
+							t_lin_reg *linear_regression,
 							t_statistics *statistics);
 void					pre_process_input_variables(
-							t_lin_reg_data *linear_regression_data);
+							t_lin_reg *linear_regression);
 t_matrix				*theta_initialize(void);
 t_matrix				*matrix_initialize(t_variable *km);
 void					calculate_new_theta(
-							t_gradient_descent_data *gradient_descent_data,
+							t_gradient_descent *gradient_descent,
 							t_variable *input_variable,
 							t_variable *measured_variable,
 							double **new_theta_values);
@@ -216,16 +221,17 @@ void					initalize_variable(t_variable *variable,
 							size_t num_of_records, size_t size);
 t_matrix				*ft_matrix_transpose(t_matrix *matrix);
 void					statistics_remove(t_statistics **statistics);
-t_gradient_descent_data	*unknown_variables_iterate_values(
+t_gradient_descent		*unknown_variables_iterate_values(
 							t_variable *input_variable,
 							t_variable *measured_variable);
 void					statistics_create_records(t_list **stat_counters_lst,
-							t_lin_reg_data *linear_regression_data);
+							t_lin_reg *linear_regression);
 void					statistics_save_records(t_statistics *statistics);
 void					statistics_release_record(void *content, size_t size);
 void					save_unknown_variables(double **theta_values);
 const char				*get_home_dir(void);
 double					calculate_price(int km, double theta0, double theta1);
 t_stat_counters			*stat_counters_initialize(void);
+t_lin_reg				*linear_regression_initialize(void);
 
 #endif

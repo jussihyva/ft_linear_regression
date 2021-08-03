@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gradient_rescent.c                                 :+:      :+:    :+:   */
+/*   gradient_rescent_1.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 18:02:04 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/30 13:06:32 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/03 11:38:54 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	calculate_error(t_matrix *theta, t_variable *input_variable,
 	return ;
 }
 
-void	calculate_new_theta(t_gradient_descent_data *gradient_descent_data,
+void	calculate_new_theta(t_gradient_descent *gradient_descent,
 					t_variable *input_variable, t_variable *measured_variable,
 					double **new_theta_values)
 {
@@ -88,10 +88,10 @@ void	calculate_new_theta(t_gradient_descent_data *gradient_descent_data,
 	double			alpha;
 	double			**theta_values;
 
-	alpha = gradient_descent_data->alpha;
-	theta_values = (double **)gradient_descent_data->theta->values;
+	alpha = gradient_descent->alpha;
+	theta_values = (double **)gradient_descent->theta->values;
 	error_data.error = ft_vector_create(sizeof(double), input_variable->size);
-	calculate_error(gradient_descent_data->theta, input_variable,
+	calculate_error(gradient_descent->theta, input_variable,
 		measured_variable, &error_data);
 	new_theta_values[0][0] = theta_values[0][0] - (alpha * error_data.error_sum)
 		/ input_variable->size;

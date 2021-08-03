@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 17:42:28 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/03 00:18:50 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/03 11:49:15 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,7 @@ static void	pre_analyse_argument(char *options, char arg,
 	return ;
 }
 
-static void	split_cmd_argument(
-							t_arg_parser_data *arg_parser_data,
+static void	split_cmd_argument(t_arg_parser *arg_parser,
 							t_argc_argv *argc_argv,
 							t_cmd_param_type cmd_param_type)
 {
@@ -50,15 +49,15 @@ static void	split_cmd_argument(
 	char					*arg;
 	void					*input_params;
 
-	input_params = arg_parser_data->input_params;
-	fn_save_cmd_argument = arg_parser_data->fn_save_cmd_argument;
+	input_params = arg_parser->input_params;
+	fn_save_cmd_argument = arg_parser->fn_save_cmd_argument;
 	arg = *argc_argv->argv;
 	if (cmd_param_type == E_OPTIONAL_SHORT)
 	{
 		arg++;
 		while (*arg)
 		{
-			pre_analyse_argument(arg_parser_data->options, *arg, argc_argv);
+			pre_analyse_argument(arg_parser->options, *arg, argc_argv);
 			fn_save_cmd_argument(input_params, *arg, argc_argv, cmd_param_type);
 			arg++;
 		}
@@ -68,17 +67,17 @@ static void	split_cmd_argument(
 	return ;
 }
 
-void	ft_arg_parser(t_arg_parser_data *arg_parser_data)
+void	ft_arg_parser(t_arg_parser *arg_parser)
 {
 	int						arg_index;
 	t_initialize_cmd_args	initialize_cmd_args;
 	t_cmd_param_type		cmd_param_type;
 	t_argc_argv				*argc_argv;
 
-	argc_argv = &arg_parser_data->argc_argv;
-	initialize_cmd_args = arg_parser_data->fn_initialize_cmd_args;
-	arg_parser_data->input_params
-		= (void *)initialize_cmd_args(&arg_parser_data->argc_argv);
+	argc_argv = &arg_parser->argc_argv;
+	initialize_cmd_args = arg_parser->fn_initialize_cmd_args;
+	arg_parser->input_params
+		= (void *)initialize_cmd_args(&arg_parser->argc_argv);
 	arg_index = 0;
 	argc_argv->argc--;
 	while (argc_argv->argc)
@@ -92,7 +91,7 @@ void	ft_arg_parser(t_arg_parser_data *arg_parser_data)
 			cmd_param_type = E_OPTIONAL_SHORT;
 		else
 			cmd_param_type = E_MANDATORY;
-		split_cmd_argument(arg_parser_data, argc_argv, cmd_param_type);
+		split_cmd_argument(arg_parser, argc_argv, cmd_param_type);
 		argc_argv->argc--;
 	}
 	return ;

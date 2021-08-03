@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/02 08:01:07 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/02 23:32:31 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/03 11:28:35 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ t_stat_counters	*stat_counters_initialize(void)
 }
 
 void	statistics_create_records(t_list **stat_counters_lst,
-										t_lin_reg_data *linear_regression_data)
+											t_lin_reg *linear_regression_data)
 {
 	size_t				i;
 	t_stat_counters		*stat_counters;
@@ -63,7 +63,7 @@ void	statistics_create_records(t_list **stat_counters_lst,
 	input_variable = &linear_regression_data->input_variables.km;
 	measured_variable = &linear_regression_data->measured_variables.price;
 	i = -1;
-	while (++i < linear_regression_data->num_of_records)
+	while (++i < input_variable->size)
 	{
 		stat_counters = stat_counters_initialize();
 		stat_counters->value[E_INDEPENDENT]
