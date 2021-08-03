@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/02 11:59:02 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/03 20:25:17 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/03 21:58:21 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,27 @@ void	save_unknown_variables(double **theta_values)
 	return ;
 }
 
+static double	parse_theta_value(char *line)
+{
+	char		**param_value;
+	char		*endptr;
+	double		theta_value;
+
+	theta_value = 0;
+	param_value = ft_strsplit(line, ':');
+	if (param_value[0] && param_value[1])
+	{
+		theta_value = strtod(param_value[1], &endptr);
+		if (errno != 0 || *endptr != '\0')
+			FT_LOG_ERROR("Content of the theta input file (%s) is not valid!",
+				THETA_FILE_NAME);
+	}
+	else
+		FT_LOG_ERROR("Content of the theta input file (%s) is not valid!",
+			THETA_FILE_NAME);
+	return (theta_value);
+}
+
 t_matrix	*unknown_variables_read(void)
 {
 	t_matrix	*theta;
@@ -48,13 +69,17 @@ t_matrix	*unknown_variables_read(void)
 	fd = open(theta_file_yaml, O_RDONLY);
 	if (fd > 0)
 	{
+		theta = ft_vector_create(sizeof(double), 2);
 		ret = ft_get_next_line(fd, &line);
+		if (ret > 0)
+			((double **)theta->values)[0][0] = parse_theta_value(line);
 		FT_LOG_INFO("Theta0: %s", line);
 		ft_strdel(&line);
 		ret = ft_get_next_line(fd, &line);
+		if (ret > 0)
+			((double **)theta->values)[1][0] = parse_theta_value(line);
 		FT_LOG_INFO("Theta1: %s", line);
 		ft_strdel(&line);
-		theta = ft_vector_create(sizeof(double), 2);
 	}
 	return (theta);
 }

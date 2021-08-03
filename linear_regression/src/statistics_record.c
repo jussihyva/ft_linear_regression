@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/02 08:01:07 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/03 11:28:35 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/03 22:19:56 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	statistics_save_records(t_statistics *statistics)
 	t_list				*elem;
 	t_stat_counters		*stat_counters;
 
+	stat_set_end_time(statistics);
 	statistics->data_type = "input";
 	statistics->id = 0;
 	elem = statistics->stat_counters_lst;

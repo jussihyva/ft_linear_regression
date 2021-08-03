@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 11:14:46 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/03 20:31:37 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/03 22:11:47 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,23 @@ static void	main_remove(t_arg_parser *arg_parser,
 	return ;
 }
 
+static void	statistics_price_prediction(int km, double **theta_values,
+													t_statistics *statistics)
+{
+	t_stat_counters		*stat_counters;
+	t_list				*elem;
+
+	stat_counters = stat_counters_initialize();
+	stat_counters->value[E_INDEPENDENT] = km;
+	stat_counters->value[E_PREDICTED_PRICE]
+		= calculate_price(km, theta_values);
+	stat_counters->value[E_DEPENDENT]
+		= stat_counters->value[E_PREDICTED_PRICE];
+	elem = ft_lstnew(&stat_counters, sizeof(stat_counters));
+	ft_lstadd(&statistics->stat_counters_lst, elem);
+	return ;
+}
+
 int	main(int argc, char **argv)
 {
 	t_arg_parser			*arg_parser;
@@ -45,8 +62,6 @@ int	main(int argc, char **argv)
 	t_event_logging_data	*event_logging_data;
 	t_statistics			*statistics;
 	t_input_params			*input_params;
-	t_stat_counters			*stat_counters;
-	t_list					*elem;
 
 	arg_parser = arg_parser_initialize(argc, argv);
 	input_params = (t_input_params *)arg_parser->input_params;
@@ -62,18 +77,9 @@ int	main(int argc, char **argv)
 		{
 			create_linear_regression_model(linear_regression, statistics);
 			if (input_params->km)
-			{
-				stat_counters = stat_counters_initialize();
-				stat_counters->value[E_INDEPENDENT] = input_params->km;
-				stat_counters->value[E_PREDICTED_PRICE]
-					= calculate_price(input_params->km,
-						(double **)linear_regression->gradient_descent->theta
-						->values);
-				stat_counters->value[E_DEPENDENT]
-					= stat_counters->value[E_PREDICTED_PRICE];
-				elem = ft_lstnew(&stat_counters, sizeof(stat_counters));
-				ft_lstadd(&statistics->stat_counters_lst, elem);
-			}
+				statistics_price_prediction(input_params->km,
+					(double **)linear_regression->gradient_descent->theta
+					->values, statistics);
 		}
 		else
 			FT_LOG_ERROR("No record in the input file (%s)",
@@ -83,7 +89,10 @@ int	main(int argc, char **argv)
 	{
 		linear_regression->gradient_descent = gradient_descent_initialize();
 		linear_regression->gradient_descent->theta = unknown_variables_read();
-		// FT_LOG_ERROR("Theta inputfile is not available!");
+		if (input_params->km)
+			statistics_price_prediction(input_params->km,
+				(double **)linear_regression->gradient_descent->theta->values,
+				statistics);
 	}
 	if (statistics->stat_counters_lst)
 		statistics_save_records(statistics);

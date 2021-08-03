@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 13:34:18 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/03 18:17:56 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/03 22:19:37 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,21 +74,23 @@ void	create_linear_regression_model(t_lin_reg *linear_regression,
 		&linear_regression->predicted_price);
 	statistics_create_records(&statistics->stat_counters_lst,
 		linear_regression);
-	stat_set_end_time(statistics);
 	return ;
 }
 
 void	linear_regression_release(
 							t_lin_reg **linear_regression)
 {
-	if ((*linear_regression)->dataset->data_record_lst)
+	if ((*linear_regression)->dataset)
 	{
-		ft_lstdel(&(*linear_regression)->dataset->data_record_lst,
-			statistics_release_record);
-		ft_memdel((void **)&(*linear_regression)->dataset
-			->data_record_lst);
+		if ((*linear_regression)->dataset->data_record_lst)
+		{
+			ft_lstdel(&(*linear_regression)->dataset->data_record_lst,
+				statistics_release_record);
+			ft_memdel((void **)&(*linear_regression)->dataset
+				->data_record_lst);
+		}
+		ft_memdel((void **)&(*linear_regression)->dataset);
 	}
-	ft_memdel((void **)&(*linear_regression)->dataset);
 	variable_remove(&(*linear_regression)->predicted_price);
 	variable_remove(&(*linear_regression)->input_variables.km);
 	variable_remove(&(*linear_regression)->measured_variables.price);
