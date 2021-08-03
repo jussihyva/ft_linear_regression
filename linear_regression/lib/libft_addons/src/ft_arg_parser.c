@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 17:42:28 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/03 11:49:15 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/03 22:40:44 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,17 +70,14 @@ static void	split_cmd_argument(t_arg_parser *arg_parser,
 void	ft_arg_parser(t_arg_parser *arg_parser)
 {
 	int						arg_index;
-	t_initialize_cmd_args	initialize_cmd_args;
 	t_cmd_param_type		cmd_param_type;
 	t_argc_argv				*argc_argv;
 
 	argc_argv = &arg_parser->argc_argv;
-	initialize_cmd_args = arg_parser->fn_initialize_cmd_args;
 	arg_parser->input_params
-		= (void *)initialize_cmd_args(&arg_parser->argc_argv);
+		= (void *)arg_parser->fn_initialize_cmd_args(&arg_parser->argc_argv);
 	arg_index = 0;
-	argc_argv->argc--;
-	while (argc_argv->argc)
+	while (--argc_argv->argc)
 	{
 		argc_argv->argv++;
 		if (ft_strlen(*argc_argv->argv) > 2
@@ -92,7 +89,6 @@ void	ft_arg_parser(t_arg_parser *arg_parser)
 		else
 			cmd_param_type = E_MANDATORY;
 		split_cmd_argument(arg_parser, argc_argv, cmd_param_type);
-		argc_argv->argc--;
 	}
 	return ;
 }
