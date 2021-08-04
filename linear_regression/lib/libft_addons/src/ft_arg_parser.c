@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 17:42:28 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/04 12:40:52 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/04 18:22:34 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	pre_analyse_argument(char *options, char arg,
 	int						result;
 
 	opt_ptr = ft_strchr(options, arg);
-	if (opt_ptr)
+	if (opt_ptr && arg != ':')
 	{
 		if (*(opt_ptr + 1) == ':')
 		{
