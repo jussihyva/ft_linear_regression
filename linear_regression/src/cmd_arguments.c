@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 12:56:02 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/02 20:26:08 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/04 07:57:57 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,10 @@ void	save_cmd_argument_short(void *input_params, char opt,
 	next_arg = *argc_argv->argv;
 	params = (t_input_params *)input_params;
 	if (opt == 'f')
+	{
 		params->dataset_file = next_arg;
+		params->order |= E_CALCULATE_UNKNOWN_VARIABLES;
+	}
 	else if (opt == 'L')
 	{
 		params->event_logging_level
@@ -86,6 +89,7 @@ void	save_cmd_argument_mandatory(void *input_params, char opt,
 			ft_printf("km param (%s) is not valid\n", *argc_argv->argv);
 			exit(42);
 		}
+		params->order |= E_CALCULATE_PRICE;
 	}
 	else
 		print_usage();

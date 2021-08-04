@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/03 20:30:40 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/04 07:52:19 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,12 @@ typedef struct s_memory_info
 	long			tot_phys_pages;
 	int				mem_usage;
 }						t_memory_info;
+
+typedef enum e_order
+{
+	E_CALCULATE_UNKNOWN_VARIABLES = 0x01,
+	E_CALCULATE_PRICE = 0x02
+}				t_order;
 
 typedef enum e_connection_status
 {
@@ -97,6 +103,7 @@ typedef struct s_input_params
 	char			**argv;
 	char			*dataset_file;
 	int				km;
+	unsigned int	order;
 	t_loging_level	event_logging_level;
 }				t_input_params;
 

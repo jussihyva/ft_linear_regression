@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 17:42:28 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/03 22:40:44 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/04 08:09:55 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,11 @@ static void	param_error(const char *error_string, const char s)
 	return ;
 }
 
-static void	pre_analyse_argument(char *options, char arg,
+static int	pre_analyse_argument(char *options, char arg,
 														t_argc_argv *argc_argv)
 {
 	char					*opt_ptr;
+	int						result;
 
 	opt_ptr = ft_strchr(options, arg);
 	if (opt_ptr)
@@ -35,10 +36,11 @@ static void	pre_analyse_argument(char *options, char arg,
 			argc_argv->argc--;
 			argc_argv->argv++;
 		}
+		result = 1;
 	}
 	else
-		param_error("Unknown parameter: -%c", arg);
-	return ;
+		result = 0;
+	return (result);
 }
 
 static void	split_cmd_argument(t_arg_parser *arg_parser,
@@ -57,9 +59,17 @@ static void	split_cmd_argument(t_arg_parser *arg_parser,
 		arg++;
 		while (*arg)
 		{
-			pre_analyse_argument(arg_parser->options, *arg, argc_argv);
-			fn_save_cmd_argument(input_params, *arg, argc_argv, cmd_param_type);
-			arg++;
+			if (pre_analyse_argument(arg_parser->options, *arg, argc_argv))
+			{
+				fn_save_cmd_argument(input_params, *arg, argc_argv, cmd_param_type);
+				arg++;
+			}
+			else
+			{
+				cmd_param_type = E_MANDATORY;
+				fn_save_cmd_argument(input_params, *arg, argc_argv, cmd_param_type);
+				break ;
+			}
 		}
 	}
 	else if (cmd_param_type == E_MANDATORY)

@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 11:14:46 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/03 22:11:47 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/04 07:59:55 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	main(int argc, char **argv)
 			input_params->event_logging_level);
 	statistics = ft_statistics_initialize();
 	linear_regression = linear_regression_initialize();
-	if (input_params->dataset_file)
+	if (input_params->order & E_CALCULATE_UNKNOWN_VARIABLES)
 	{
 		linear_regression->dataset
 			= read_dataset_file(input_params->dataset_file);
@@ -85,14 +85,13 @@ int	main(int argc, char **argv)
 			FT_LOG_ERROR("No record in the input file (%s)",
 				input_params->dataset_file);
 	}
-	else
+	if (input_params->order & E_CALCULATE_PRICE)
 	{
 		linear_regression->gradient_descent = gradient_descent_initialize();
 		linear_regression->gradient_descent->theta = unknown_variables_read();
-		if (input_params->km)
-			statistics_price_prediction(input_params->km,
-				(double **)linear_regression->gradient_descent->theta->values,
-				statistics);
+		statistics_price_prediction(input_params->km,
+			(double **)linear_regression->gradient_descent->theta->values,
+			statistics);
 	}
 	if (statistics->stat_counters_lst)
 		statistics_save_records(statistics);
