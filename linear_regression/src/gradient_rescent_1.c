@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 18:02:04 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/03 11:38:54 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/04 19:36:56 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	calculate_error(t_matrix *theta, t_variable *input_variable,
 	response_variable = ft_vector_create(sizeof(double), input_variable->size);
 	ft_matrix_dot_vector_double(input_variable->matrix, theta,
 		response_variable);
-	ft_matrix_subtrack_vector_double(response_variable,
+	ft_matrix_subtract_vector_double(response_variable,
 		measured_variable->normalized_values, error_data->error);
 	error_data->error_sum = ft_matrix_sum(error_data->error);
 	ft_vector_remove(&response_variable);

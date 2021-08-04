@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 11:14:46 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/04 12:02:23 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/04 19:47:19 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ static t_arg_parser	*arg_parser_initialize(int argc, char **argv)
 	arg_parser->fn_save_cmd_argument = save_cmd_argument;
 	arg_parser->fn_usage = print_usage;
 	arg_parser->options = ft_strdup("L:f:hF");
-	ft_arg_parser(arg_parser);
 	return (arg_parser);
 }
 
@@ -87,9 +86,28 @@ static void	dependent_variable_calculate(t_lin_reg *linear_regression,
 	price = statistics_price_prediction(input_params->km,
 			(double **)linear_regression->gradient_descent->theta->values,
 			statistics, input_params->is_limited);
-	ft_printf("   KM: %12.4f\n", (double)input_params->km);
-	ft_printf("PRICE: %12.4f\n", price);
+	ft_printf("Estimated price: %12.4f\n", price);
 	return ;
+}
+
+static int	read_mileage_of_the_car(t_input_params *input_params)
+{
+	char	*endptr;
+	char	*line;
+	int		km;
+
+	input_params->order = E_CALCULATE_PRICE;
+	line = NULL;
+	ft_printf("Type mileage (int) of the car: ");
+	ft_get_next_line(0, &line);
+	km = ft_strtoi(line, &endptr, 10);
+	if (*endptr != '\0' || errno != 0)
+	{
+		ft_printf("km param (%s) is not valid\n", line);
+		exit(42);
+	}
+	ft_strdel(&line);
+	return (km);
 }
 
 int	main(int argc, char **argv)
@@ -101,10 +119,13 @@ int	main(int argc, char **argv)
 	t_input_params			*input_params;
 
 	arg_parser = arg_parser_initialize(argc, argv);
+	ft_arg_parser(arg_parser);
 	input_params = (t_input_params *)arg_parser->input_params;
 	event_logging_data = ft_event_logging_init(
 			input_params->event_logging_level);
 	statistics = ft_statistics_initialize();
+	if (!input_params->order)
+		input_params->km = read_mileage_of_the_car(input_params);
 	linear_regression = linear_regression_initialize();
 	if (input_params->order & E_CALCULATE_UNKNOWN_VARIABLES)
 		unknown_variables_calculate(linear_regression,
@@ -112,8 +133,7 @@ int	main(int argc, char **argv)
 	if (input_params->order & E_CALCULATE_PRICE)
 		dependent_variable_calculate(linear_regression, input_params,
 			statistics);
-	if (statistics->stat_counters_lst)
-		statistics_save_records(statistics);
+	statistics_save_records(statistics);
 	linear_regression_release(&linear_regression);
 	main_remove(arg_parser, statistics, event_logging_data);
 	return (0);

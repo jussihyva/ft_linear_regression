@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/04 12:44:06 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/04 19:36:56 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,7 +200,7 @@ void					calculate_new_theta(
 							t_variable *input_variable,
 							t_variable *measured_variable,
 							double **new_theta_values);
-void					ft_matrix_subtrack_vector_double(t_matrix *matrix,
+void					ft_matrix_subtract_vector_double(t_matrix *matrix,
 							t_matrix *vector, t_matrix *new_vector);
 t_matrix				*ft_vector_create(size_t size, size_t vector_size);
 void					ft_vector_remove(t_matrix **vector);
