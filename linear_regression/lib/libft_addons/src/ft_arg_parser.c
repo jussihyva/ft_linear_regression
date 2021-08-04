@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 17:42:28 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/04 08:09:55 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/04 12:40:52 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,31 +49,28 @@ static void	split_cmd_argument(t_arg_parser *arg_parser,
 {
 	t_save_cmd_argument		fn_save_cmd_argument;
 	char					*arg;
-	void					*input_params;
 
-	input_params = arg_parser->input_params;
 	fn_save_cmd_argument = arg_parser->fn_save_cmd_argument;
 	arg = *argc_argv->argv;
 	if (cmd_param_type == E_OPTIONAL_SHORT)
 	{
-		arg++;
-		while (*arg)
+		while (*(++arg))
 		{
 			if (pre_analyse_argument(arg_parser->options, *arg, argc_argv))
-			{
-				fn_save_cmd_argument(input_params, *arg, argc_argv, cmd_param_type);
-				arg++;
-			}
+				fn_save_cmd_argument(arg_parser->input_params, *arg, argc_argv,
+					cmd_param_type);
 			else
 			{
 				cmd_param_type = E_MANDATORY;
-				fn_save_cmd_argument(input_params, *arg, argc_argv, cmd_param_type);
+				fn_save_cmd_argument(arg_parser->input_params, *arg, argc_argv,
+					cmd_param_type);
 				break ;
 			}
 		}
 	}
 	else if (cmd_param_type == E_MANDATORY)
-		fn_save_cmd_argument(input_params, *arg, argc_argv, cmd_param_type);
+		fn_save_cmd_argument(arg_parser->input_params, *arg, argc_argv,
+			cmd_param_type);
 	return ;
 }
 

@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 11:14:46 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/04 07:59:55 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/04 12:02:23 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static t_arg_parser	*arg_parser_initialize(int argc, char **argv)
 	arg_parser->fn_initialize_cmd_args = initialize_cmd_args;
 	arg_parser->fn_save_cmd_argument = save_cmd_argument;
 	arg_parser->fn_usage = print_usage;
-	arg_parser->options = ft_strdup("L:f:h");
+	arg_parser->options = ft_strdup("L:f:hF");
 	ft_arg_parser(arg_parser);
 	return (arg_parser);
 }
@@ -38,8 +38,8 @@ static void	main_remove(t_arg_parser *arg_parser,
 	return ;
 }
 
-static void	statistics_price_prediction(int km, double **theta_values,
-													t_statistics *statistics)
+static double	statistics_price_prediction(int km, double **theta_values,
+									t_statistics *statistics, t_bool is_limited)
 {
 	t_stat_counters		*stat_counters;
 	t_list				*elem;
@@ -50,8 +50,45 @@ static void	statistics_price_prediction(int km, double **theta_values,
 		= calculate_price(km, theta_values);
 	stat_counters->value[E_DEPENDENT]
 		= stat_counters->value[E_PREDICTED_PRICE];
+	if (is_limited)
+	{
+		if (km < 0)
+			FT_LOG_ERROR("km is below 0.");
+		if (stat_counters->value[E_PREDICTED_PRICE] < 0)
+			FT_LOG_ERROR("Predicted price is below 0.");
+	}
 	elem = ft_lstnew(&stat_counters, sizeof(stat_counters));
 	ft_lstadd(&statistics->stat_counters_lst, elem);
+	return (stat_counters->value[E_PREDICTED_PRICE]);
+}
+
+static void	unknown_variables_calculate(t_lin_reg *linear_regression,
+								char *dataset_file, t_statistics *statistics)
+{
+	linear_regression->dataset = read_dataset_file(dataset_file);
+	if (linear_regression->dataset->num_of_records)
+		create_linear_regression_model(linear_regression, statistics);
+	else
+		FT_LOG_ERROR("No records in the input file (%s)", dataset_file);
+	ft_printf("THETA0: %12.4f\n",
+		((double **)linear_regression->gradient_descent->theta->values)[0][0]);
+	ft_printf("THETA1: %12.4f\n",
+		((double **)linear_regression->gradient_descent->theta->values)[1][0]);
+	return ;
+}
+
+static void	dependent_variable_calculate(t_lin_reg *linear_regression,
+						t_input_params *input_params, t_statistics *statistics)
+{
+	double	price;
+
+	linear_regression->gradient_descent = gradient_descent_initialize();
+	linear_regression->gradient_descent->theta = unknown_variables_read();
+	price = statistics_price_prediction(input_params->km,
+			(double **)linear_regression->gradient_descent->theta->values,
+			statistics, input_params->is_limited);
+	ft_printf("   KM: %12.4f\n", (double)input_params->km);
+	ft_printf("PRICE: %12.4f\n", price);
 	return ;
 }
 
@@ -70,29 +107,11 @@ int	main(int argc, char **argv)
 	statistics = ft_statistics_initialize();
 	linear_regression = linear_regression_initialize();
 	if (input_params->order & E_CALCULATE_UNKNOWN_VARIABLES)
-	{
-		linear_regression->dataset
-			= read_dataset_file(input_params->dataset_file);
-		if (linear_regression->dataset->num_of_records)
-		{
-			create_linear_regression_model(linear_regression, statistics);
-			if (input_params->km)
-				statistics_price_prediction(input_params->km,
-					(double **)linear_regression->gradient_descent->theta
-					->values, statistics);
-		}
-		else
-			FT_LOG_ERROR("No record in the input file (%s)",
-				input_params->dataset_file);
-	}
+		unknown_variables_calculate(linear_regression,
+			input_params->dataset_file, statistics);
 	if (input_params->order & E_CALCULATE_PRICE)
-	{
-		linear_regression->gradient_descent = gradient_descent_initialize();
-		linear_regression->gradient_descent->theta = unknown_variables_read();
-		statistics_price_prediction(input_params->km,
-			(double **)linear_regression->gradient_descent->theta->values,
+		dependent_variable_calculate(linear_regression, input_params,
 			statistics);
-	}
 	if (statistics->stat_counters_lst)
 		statistics_save_records(statistics);
 	linear_regression_release(&linear_regression);

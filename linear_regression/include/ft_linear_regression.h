@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/04 07:52:19 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/04 12:44:06 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,6 @@ typedef struct s_statistics
 typedef struct s_file_params
 {
 	int		fd;
-	int		ret;
 	char	*line;
 }				t_file_params;
 
@@ -104,6 +103,7 @@ typedef struct s_input_params
 	char			*dataset_file;
 	int				km;
 	unsigned int	order;
+	t_bool			is_limited;
 	t_loging_level	event_logging_level;
 }				t_input_params;
 

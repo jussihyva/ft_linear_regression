@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 12:56:02 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/04 07:57:57 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/04 12:17:47 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,30 @@ void	*initialize_cmd_args(t_argc_argv *argc_argv)
 	input_params->argc = argc_argv->argc;
 	input_params->argv = argc_argv->argv;
 	input_params->event_logging_level = LOG_WARN;
+	input_params->is_limited = E_TRUE;
 	return ((void *)input_params);
+}
+
+static t_loging_level	logging_level_param_validate(char *next_arg)
+{
+	char				*endptr;
+	t_loging_level		event_logging_level;
+
+	event_logging_level = (t_loging_level)ft_strtoi(next_arg, &endptr, 10);
+	if (event_logging_level >= 5 || event_logging_level < 0
+		|| *endptr != '\0' || errno != 0)
+	{
+		ft_printf("Value of cmd line attribute -L (%s) is not valid\n",
+			next_arg);
+		exit(42);
+	}
+	return (event_logging_level);
 }
 
 void	save_cmd_argument_short(void *input_params, char opt,
 														t_argc_argv *argc_argv)
 {
 	t_input_params		*params;
-	char				*endptr;
 	char				*next_arg;
 
 	next_arg = *argc_argv->argv;
@@ -57,17 +73,9 @@ void	save_cmd_argument_short(void *input_params, char opt,
 		params->order |= E_CALCULATE_UNKNOWN_VARIABLES;
 	}
 	else if (opt == 'L')
-	{
-		params->event_logging_level
-			= (t_loging_level)ft_strtoi(next_arg, &endptr, 10);
-		if (params->event_logging_level >= 6 || params->event_logging_level < 0
-			|| *endptr != '\0' || errno != 0)
-		{
-			ft_printf("Value of cmd line attribute -L (%s) is not valid\n",
-				next_arg);
-			exit(42);
-		}
-	}
+		params->event_logging_level = logging_level_param_validate(next_arg);
+	else if (opt == 'F')
+		params->is_limited = E_FALSE;
 	else if (opt == 'h')
 		print_usage();
 	return ;

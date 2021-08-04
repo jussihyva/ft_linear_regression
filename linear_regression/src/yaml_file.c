@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/02 11:59:02 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/03 21:58:21 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/04 12:23:22 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ t_matrix	*unknown_variables_read(void)
 	int			fd;
 	char		*theta_file_yaml;
 	char		*line;
-	int			ret;
 
 	theta = NULL;
 	theta_file_yaml = ft_strjoin(get_home_dir(), THETA_FILE_NAME);
@@ -70,16 +69,16 @@ t_matrix	*unknown_variables_read(void)
 	if (fd > 0)
 	{
 		theta = ft_vector_create(sizeof(double), 2);
-		ret = ft_get_next_line(fd, &line);
-		if (ret > 0)
+		if (ft_get_next_line(fd, &line) > 0)
 			((double **)theta->values)[0][0] = parse_theta_value(line);
 		FT_LOG_INFO("Theta0: %s", line);
 		ft_strdel(&line);
-		ret = ft_get_next_line(fd, &line);
-		if (ret > 0)
+		if (ft_get_next_line(fd, &line) > 0)
 			((double **)theta->values)[1][0] = parse_theta_value(line);
 		FT_LOG_INFO("Theta1: %s", line);
 		ft_strdel(&line);
 	}
+	else
+		FT_LOG_ERROR("Theta file (%s) is not created!", theta_file_yaml);
 	return (theta);
 }

@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 12:52:29 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/03 18:18:50 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/04 12:45:41 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,15 +71,14 @@ t_dataset	*read_dataset_file(char *dataset_file)
 
 	dataset = (t_dataset *)ft_memalloc(sizeof(*dataset));
 	file_params.fd = ft_open_fd(dataset_file);
-	file_params.ret = ft_get_next_line(file_params.fd, &file_params.line);
+	file_params.line = NULL;
+	ft_get_next_line(file_params.fd, &file_params.line);
 	ft_strdel((char **)&file_params.line);
-	file_params.ret = ft_get_next_line(file_params.fd, &file_params.line);
-	while (file_params.ret > 0)
+	while (ft_get_next_line(file_params.fd, &file_params.line) > 0)
 	{
 		data_record = read_data_line(file_params.line);
 		dataset_add_record(dataset, data_record);
 		ft_strdel((char **)&file_params.line);
-		file_params.ret = ft_get_next_line(file_params.fd, &file_params.line);
 	}
 	ft_strdel((char **)&file_params.line);
 	close(file_params.fd);

@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/02 07:43:32 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/03 20:27:02 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/04 12:32:27 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,18 @@ t_gradient_descent	*gradient_descent_initialize(void)
 	gradient_descent->theta_file = "/tmp/theta.yml";
 	gradient_descent->alpha = 0.1;
 	return (gradient_descent);
+}
+
+static void	theta_values_denormalize(double **theta_values,
+					t_variable *input_variable, t_variable *measured_variable)
+{
+	theta_values[1][0] *= *(int *)measured_variable->min_max_value.range
+		/ (double)*(int *)input_variable->min_max_value.range;
+	theta_values[0][0] *= *(int *)measured_variable->min_max_value.range;
+	theta_values[0][0] += *(int *)measured_variable->min_max_value.min_value;
+	theta_values[0][0] -= theta_values[1][0]
+		* *(int *)input_variable->min_max_value.min_value;
+	return ;
 }
 
 t_gradient_descent	*unknown_variables_iterate_values(
@@ -45,12 +57,7 @@ t_gradient_descent	*unknown_variables_iterate_values(
 		theta_values[0][0] = ((double **)new_theta->values)[0][0];
 		theta_values[1][0] = ((double **)new_theta->values)[1][0];
 	}
-	theta_values[1][0] *= *(int *)measured_variable->min_max_value.range
-		/ (double)*(int *)input_variable->min_max_value.range;
-	theta_values[0][0] *= *(int *)measured_variable->min_max_value.range;
-	theta_values[0][0] += *(int *)measured_variable->min_max_value.min_value;
-	theta_values[0][0] -= theta_values[1][0]
-		* *(int *)input_variable->min_max_value.min_value;
+	theta_values_denormalize(theta_values, input_variable, measured_variable);
 	ft_vector_remove(&new_theta);
 	return (gradient_descent);
 }

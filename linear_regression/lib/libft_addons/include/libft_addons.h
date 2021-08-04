@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 14:53:13 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/03 11:44:45 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/04 10:39:52 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,12 @@
 # define PI							3.141592654
 # define LOGING_LEVELS				6
 # define MAX_NUM_OF_B_TREE_ELEMS	10
+
+typedef enum e_bool
+{
+	E_FALSE,
+	E_TRUE
+}			t_bool;
 
 typedef enum e_loging_level
 {

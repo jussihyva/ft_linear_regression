@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/20 11:16:30 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/03 17:54:20 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/04 11:32:58 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,17 +53,12 @@ static void	initialize_independent_variables(t_variable *variable,
 	*(int *)variable->min_max_value.max_value = INT_MIN;
 	elem = *data_record_lst;
 	i = variable->size;
-	ft_printf("   KM: ");
 	while (elem)
 	{
 		data_record = *(t_data_record **)elem->content;
 		save_int_variable(variable, --i, data_record->km);
-		ft_printf(" %6d", data_record->km);
-		if (i)
-			ft_printf(",");
 		elem = elem->next;
 	}
-	ft_printf("\n");
 	variable_calculate_range_int(&variable->min_max_value);
 	variable->normalized_values = variable_normalize((int *)variable->values,
 			&variable->min_max_value, variable->size);
@@ -82,17 +77,12 @@ static void	initialize_dependent_variables(t_variable *variable,
 	*(int *)variable->min_max_value.max_value = INT_MIN;
 	elem = *data_record_lst;
 	i = variable->size;
-	ft_printf("PRICE: ");
 	while (elem)
 	{
 		data_record = *(t_data_record **)elem->content;
 		save_int_variable(variable, --i, data_record->price);
-		ft_printf(" %6d", data_record->price);
-		if (i)
-			ft_printf(",");
 		elem = elem->next;
 	}
-	ft_printf("\n");
 	variable_calculate_range_int(&variable->min_max_value);
 	variable->normalized_values = variable_normalize(variable->values,
 			&variable->min_max_value, variable->size);
