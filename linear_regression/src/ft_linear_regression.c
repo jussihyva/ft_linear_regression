@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 11:14:46 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/04 19:47:19 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/05 14:08:01 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ static void	unknown_variables_calculate(t_lin_reg *linear_regression,
 		((double **)linear_regression->gradient_descent->theta->values)[0][0]);
 	ft_printf("THETA1: %12.4f\n",
 		((double **)linear_regression->gradient_descent->theta->values)[1][0]);
+	coefficient_of_determination_calculate(linear_regression);
 	return ;
 }
 

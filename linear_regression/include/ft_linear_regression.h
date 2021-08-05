@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/04 19:36:56 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/05 14:07:01 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,5 +242,7 @@ t_stat_counters			*stat_counters_initialize(void);
 t_lin_reg				*linear_regression_initialize(void);
 t_matrix				*unknown_variables_read(void);
 t_gradient_descent		*gradient_descent_initialize(void);
+void					coefficient_of_determination_calculate(
+							t_lin_reg *linear_regression);
 
 #endif
