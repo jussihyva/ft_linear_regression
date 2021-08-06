@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/06 13:26:35 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/06 15:51:30 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,6 +166,18 @@ typedef struct s_dataset
 	size_t		num_of_records;
 }				t_dataset;
 
+typedef struct s_reg_error
+{
+	t_matrix	*error;
+	double		sum_of_error_squared;
+}				t_reg_error;
+
+typedef struct s_reg_residual
+{
+	t_matrix	*residual;
+	double		sum_of_residuals_squared;
+}				t_reg_residual;
+
 typedef struct s_lin_reg
 {
 	t_dataset				*dataset;
@@ -173,6 +185,8 @@ typedef struct s_lin_reg
 	t_measured_variables	measured_variables;
 	t_gradient_descent		*gradient_descent;
 	t_variable				predicted_price;
+	t_reg_error				*reg_error;
+	t_reg_residual			*reg_residual;
 }				t_lin_reg;
 
 typedef struct s_error_data
