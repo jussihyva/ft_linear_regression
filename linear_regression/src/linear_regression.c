@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 13:34:18 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/04 18:43:01 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/06 23:20:52 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,17 +60,23 @@ void	create_linear_regression_model(t_lin_reg *linear_regression,
 {
 	t_variable					*input_variable;
 	t_variable					*measured_variable;
-	t_gradient_descent			**gradient_descent;
+	t_gradient_descent			*gradient_descent;
 
-	gradient_descent = &linear_regression->gradient_descent;
 	input_variable = &linear_regression->input_variables.km;
 	measured_variable = &linear_regression->measured_variables.price;
 	pre_process_input_variables(linear_regression);
-	*gradient_descent = unknown_variables_iterate_values(input_variable,
-			measured_variable);
-	save_unknown_variables((double **)(*gradient_descent)->theta->values);
+	linear_regression->gradient_descent
+		= unknown_variables_iterate_values(input_variable, measured_variable);
+	gradient_descent = linear_regression->gradient_descent;
+	linear_regression->reg_residual.residual
+		= ft_vector_create(sizeof(double), input_variable->size);
+	linear_regression->reg_residual.residual_squares
+		= ft_vector_create(sizeof(double), input_variable->size);
+	residual_calculate(input_variable, gradient_descent->theta_normalized,
+		measured_variable, &linear_regression->reg_residual);
+	save_unknown_variables((double **)gradient_descent->theta->values);
 	estimate_prize(input_variable, measured_variable,
-		(double **)(*gradient_descent)->theta->values,
+		(double **)gradient_descent->theta->values,
 		&linear_regression->predicted_price);
 	statistics_create_records(&statistics->stat_counters_lst,
 		linear_regression);
@@ -96,7 +102,7 @@ void	linear_regression_release(
 	variable_remove(&(*linear_regression)->measured_variables.price);
 	if ((*linear_regression)->gradient_descent)
 	{
-		ft_vector_remove(&(*linear_regression)->gradient_descent->theta);
+		ft_vector_remove(&(*linear_regression)->gradient_descent->theta_normalized);
 		ft_memdel((void **)&(*linear_regression)->gradient_descent);
 	}
 	ft_memdel((void **)linear_regression);

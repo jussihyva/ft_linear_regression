@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 18:02:04 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/04 19:36:56 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/06 23:31:24 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,68 +43,39 @@ t_matrix	*matrix_initialize(t_variable *variable)
 	return (matrix);
 }
 
-void	print_error_result(t_matrix *response_variable,
-							t_error_data *error_data, double new_theta[2][1])
-{
-	size_t			i;
-
-	i = -1;
-	printf("response_variable: ");
-	while (++i < response_variable->size.rows)
-		printf("%6.3f ", ((double **)response_variable->values)[i][0]);
-	printf("\n");
-	i = -1;
-	printf("            Error: ");
-	while (++i < error_data->error->size.rows)
-		printf("%6.3f ", ((double **)error_data->error->values)[i][0]);
-	printf("\n");
-	ft_printf("Error SUM: %f\n", error_data->error_sum);
-	ft_printf("New theta[0]: %f\n", new_theta[0][0]);
-	return ;
-}
-
-void	calculate_error(t_matrix *theta, t_variable *input_variable,
-						t_variable *measured_variable, t_error_data *error_data)
-{
-	t_matrix		*response_variable;
-
-	response_variable = ft_vector_create(sizeof(double), input_variable->size);
-	ft_matrix_dot_vector_double(input_variable->matrix, theta,
-		response_variable);
-	ft_matrix_subtract_vector_double(response_variable,
-		measured_variable->normalized_values, error_data->error);
-	error_data->error_sum = ft_matrix_sum(error_data->error);
-	ft_vector_remove(&response_variable);
-	return ;
-}
-
 void	calculate_new_theta(t_gradient_descent *gradient_descent,
 					t_variable *input_variable, t_variable *measured_variable,
 					double **new_theta_values)
 {
-	t_matrix		*response_variable;
+	t_matrix		*predicted;
 	t_matrix		*normalized_values_transposed;
-	t_error_data	error_data;
 	double			alpha;
 	double			**theta_values;
+	t_reg_residual	reg_residual;
+	double			residual_sum;
+	double			predicted_sum;
 
 	alpha = gradient_descent->alpha;
-	theta_values = (double **)gradient_descent->theta->values;
-	error_data.error = ft_vector_create(sizeof(double), input_variable->size);
-	calculate_error(gradient_descent->theta, input_variable,
-		measured_variable, &error_data);
-	new_theta_values[0][0] = theta_values[0][0] - (alpha * error_data.error_sum)
+	theta_values = (double **)gradient_descent->theta_normalized->values;
+	reg_residual.residual = ft_vector_create(sizeof(double),
+			input_variable->size);
+	reg_residual.residual_squares = ft_vector_create(sizeof(double),
+			input_variable->size);
+	residual_calculate(input_variable, gradient_descent->theta_normalized,
+		measured_variable, &reg_residual);
+	residual_sum = ft_matrix_sum(reg_residual.residual);
+	new_theta_values[0][0] = theta_values[0][0] - (alpha * residual_sum)
 		/ input_variable->size;
 	normalized_values_transposed
 		= ft_matrix_transpose(input_variable->normalized_values);
-	response_variable = ft_vector_create(sizeof(double),
+	predicted = ft_vector_create(sizeof(double),
 			normalized_values_transposed->size.rows);
 	ft_matrix_dot_vector_double(normalized_values_transposed,
-		error_data.error, response_variable);
-	error_data.error_sum = ft_matrix_sum(response_variable);
-	new_theta_values[1][0] = theta_values[1][0] - (alpha * error_data.error_sum)
+		reg_residual.residual, predicted);
+	predicted_sum = ft_matrix_sum(predicted);
+	new_theta_values[1][0] = theta_values[1][0] - (alpha * predicted_sum)
 		/ input_variable->size;
-	ft_vector_remove(&error_data.error);
-	ft_vector_remove(&response_variable);
+	ft_vector_remove(&reg_residual.residual);
+	ft_vector_remove(&predicted);
 	ft_matrix_remove(&normalized_values_transposed);
 }

@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/06 15:51:30 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/06 23:30:29 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,6 +157,7 @@ typedef struct s_gradient_descent
 {
 	double		alpha;
 	t_matrix	*theta;
+	t_matrix	*theta_normalized;
 	char		*theta_file;
 }				t_gradient_descent;
 
@@ -169,13 +170,15 @@ typedef struct s_dataset
 typedef struct s_reg_error
 {
 	t_matrix	*error;
-	double		sum_of_error_squared;
+	t_matrix	*error_squares;
+	double		error_sum_of_squares;
 }				t_reg_error;
 
 typedef struct s_reg_residual
 {
 	t_matrix	*residual;
-	double		sum_of_residuals_squared;
+	t_matrix	*residual_squares;
+	double		residual_sum_of_squares;
 }				t_reg_residual;
 
 typedef struct s_lin_reg
@@ -186,14 +189,8 @@ typedef struct s_lin_reg
 	t_gradient_descent		*gradient_descent;
 	t_variable				predicted_price;
 	t_reg_error				*reg_error;
-	t_reg_residual			*reg_residual;
+	t_reg_residual			reg_residual;
 }				t_lin_reg;
-
-typedef struct s_error_data
-{
-	t_matrix	*error;
-	double		error_sum;
-}				t_error_data;
 
 void					*initialize_cmd_args(t_argc_argv *argc_argv);
 void					save_cmd_argument(void *input_params, char opt,
@@ -268,5 +265,8 @@ void					ft_matrix_print(char *matrix_name, t_matrix *matrix,
 							t_content_type content_type);
 void					ft_matrix_multiply_vector_double(t_matrix *matrix,
 							t_matrix *vector, t_matrix *new_vector);
+void					residual_calculate(t_variable *input_variable,
+							t_matrix *theta, t_variable *measured_variable,
+							t_reg_residual *reg_residual);
 
 #endif
