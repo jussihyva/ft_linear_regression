@@ -1,35 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_matrix_dot_vector_double.c                      :+:      :+:    :+:   */
+/*   ft_matrix_print.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/09 19:31:54 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/06 10:10:49 by jkauppi          ###   ########.fr       */
+/*   Created: 2021/08/06 12:29:36 by jkauppi           #+#    #+#             */
+/*   Updated: 2021/08/06 12:43:53 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_linear_regression.h"
 
-void	ft_matrix_dot_vector_double(t_matrix *matrix, t_matrix *vector,
-	t_matrix *new_vector)
+void	ft_matrix_print(char *matrix_name, t_matrix *matrix,
+													t_content_type content_type)
 {
-	size_t			i;
-	size_t			j;
+	size_t		i;
+	size_t		j;
 
+	ft_printf("%s\n", matrix_name);
 	i = -1;
-	if (matrix->size.columns != vector->size.rows
-		&& vector->size.rows != 1)
-		FT_LOG_FATAL("Invalid matrix vector dot request!");
 	while (++i < matrix->size.rows)
 	{
-		((double **)new_vector->values)[i][0] = (double)0;
 		j = -1;
 		while (++j < matrix->size.columns)
-			((double **)new_vector->values)[i][0]
-				+= ((double **)matrix->values)[i][j]
-				* ((double **)vector->values)[j % vector->size.rows][0];
+		{
+			if (content_type == E_INT)
+				ft_printf("%d ", ((int **)matrix->values)[i][j]);
+			else if (content_type == E_DOUBLE)
+				ft_printf("%f ", ((double **)matrix->values)[i][j]);
+		}
+		ft_printf("\n");
 	}
 	return ;
 }

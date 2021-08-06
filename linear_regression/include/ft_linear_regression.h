@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/05 14:07:01 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/06 13:26:35 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,13 @@ typedef struct s_memory_info
 	long			av_phys_pages;
 	long			tot_phys_pages;
 	int				mem_usage;
-}						t_memory_info;
+}				t_memory_info;
+
+typedef enum e_content_type
+{
+	E_INT,
+	E_DOUBLE
+}				t_content_type;
 
 typedef enum e_order
 {
@@ -55,13 +61,13 @@ typedef enum e_connection_status
 {
 	E_IDLE,
 	E_CONNECTED
-}						t_connection_status;
+}				t_connection_status;
 
 typedef struct s_influxdb
 {
 	void					*connection;
 	t_connection_status		connection_status;
-}						t_influxdb;
+}				t_influxdb;
 
 # define	NUM_OF_STAT_COUNTERS	3
 
@@ -202,7 +208,7 @@ void					calculate_new_theta(
 							double **new_theta_values);
 void					ft_matrix_subtract_vector_double(t_matrix *matrix,
 							t_matrix *vector, t_matrix *new_vector);
-t_matrix				*ft_vector_create(size_t size, size_t vector_size);
+t_matrix				*ft_vector_create(size_t size, size_t number_fo_rows);
 void					ft_vector_remove(t_matrix **vector);
 void					ft_matrix_remove(t_matrix **matrix);
 double					ft_matrix_sum(t_matrix *matrix);
@@ -244,5 +250,9 @@ t_matrix				*unknown_variables_read(void);
 t_gradient_descent		*gradient_descent_initialize(void);
 void					coefficient_of_determination_calculate(
 							t_lin_reg *linear_regression);
+void					ft_matrix_print(char *matrix_name, t_matrix *matrix,
+							t_content_type content_type);
+void					ft_matrix_multiply_vector_double(t_matrix *matrix,
+							t_matrix *vector, t_matrix *new_vector);
 
 #endif

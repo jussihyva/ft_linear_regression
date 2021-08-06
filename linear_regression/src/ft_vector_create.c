@@ -6,24 +6,24 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/21 11:23:37 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/03 21:36:03 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/06 10:27:19 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_linear_regression.h"
 
-t_matrix	*ft_vector_create(size_t size, size_t vector_size)
+t_matrix	*ft_vector_create(size_t size, size_t number_fo_rows)
 {
 	t_matrix	*vector;
 	size_t		i;
 
 	vector = (t_matrix *)ft_memalloc(sizeof(*vector));
 	vector->values
-		= (void **)ft_memalloc(sizeof(*vector->values) * vector_size);
+		= (void **)ft_memalloc(sizeof(*vector->values) * number_fo_rows);
 	i = -1;
-	while (++i < vector_size)
+	while (++i < number_fo_rows)
 		vector->values[i] = (void *)ft_memalloc(size);
-	vector->size.rows = vector_size;
+	vector->size.rows = number_fo_rows;
 	vector->size.columns = 1;
 	return (vector);
 }

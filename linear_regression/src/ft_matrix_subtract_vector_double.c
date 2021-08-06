@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_matrix_subtrack_vector_double.c                 :+:      :+:    :+:   */
+/*   ft_matrix_subtract_vector_double.c                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 19:31:54 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/04 19:36:56 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/06 12:26:24 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@ void	ft_matrix_subtract_vector_double(t_matrix *matrix, t_matrix *vector,
 	size_t			i;
 	size_t			j;
 
+	if (matrix->size.rows != vector->size.rows
+		&& vector->size.rows != 1)
+		FT_LOG_FATAL("Invalid matrix vector subtract request!");
 	i = -1;
 	while (++i < matrix->size.rows)
 	{
@@ -25,7 +28,7 @@ void	ft_matrix_subtract_vector_double(t_matrix *matrix, t_matrix *vector,
 		while (++j < matrix->size.columns)
 			((double **)new_vector->values)[i][j]
 				= ((double **)matrix->values)[i][j]
-				- ((double **)vector->values)[i][0];
+				- ((double **)vector->values)[i % vector->size.rows][0];
 	}
 	return ;
 }
