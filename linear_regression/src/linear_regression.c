@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 13:34:18 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/06 23:20:52 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/07 10:57:40 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,12 +97,16 @@ void	linear_regression_release(
 		}
 		ft_memdel((void **)&(*linear_regression)->dataset);
 	}
+	error_remove(&(*linear_regression)->reg_error);
+	residual_remove(&(*linear_regression)->reg_residual);
 	variable_remove(&(*linear_regression)->predicted_price);
 	variable_remove(&(*linear_regression)->input_variables.km);
 	variable_remove(&(*linear_regression)->measured_variables.price);
 	if ((*linear_regression)->gradient_descent)
 	{
-		ft_vector_remove(&(*linear_regression)->gradient_descent->theta_normalized);
+		ft_vector_remove(&(*linear_regression)->gradient_descent->theta);
+		ft_vector_remove(&(*linear_regression)->gradient_descent
+			->theta_normalized);
 		ft_memdel((void **)&(*linear_regression)->gradient_descent);
 	}
 	ft_memdel((void **)linear_regression);

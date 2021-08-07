@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 18:02:04 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/06 23:31:24 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/07 10:38:37 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ void	calculate_new_theta(t_gradient_descent *gradient_descent,
 	new_theta_values[1][0] = theta_values[1][0] - (alpha * predicted_sum)
 		/ input_variable->size;
 	ft_vector_remove(&reg_residual.residual);
+	ft_vector_remove(&reg_residual.residual_squares);
 	ft_vector_remove(&predicted);
 	ft_matrix_remove(&normalized_values_transposed);
 }

@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/06 23:30:29 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/07 10:55:56 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,5 +268,7 @@ void					ft_matrix_multiply_vector_double(t_matrix *matrix,
 void					residual_calculate(t_variable *input_variable,
 							t_matrix *theta, t_variable *measured_variable,
 							t_reg_residual *reg_residual);
+void					error_remove(t_reg_error **reg_error);
+void					residual_remove(t_reg_residual *reg_residual);
 
 #endif

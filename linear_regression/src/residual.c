@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/06 22:23:46 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/06 22:40:44 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/07 11:06:45 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,15 @@ void	residual_calculate(t_variable *input_variable, t_matrix *theta,
 	reg_residual->residual_sum_of_squares
 		= ft_matrix_sum(reg_residual->residual_squares);
 	ft_vector_remove(&predicted);
+	return ;
+}
+
+void	residual_remove(t_reg_residual *reg_residual)
+{
+	if (reg_residual)
+	{
+		ft_vector_remove(&reg_residual->residual);
+		ft_vector_remove(&reg_residual->residual_squares);
+	}
 	return ;
 }

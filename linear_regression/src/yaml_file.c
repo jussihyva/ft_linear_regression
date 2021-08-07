@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/02 11:59:02 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/04 12:23:22 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/07 12:12:21 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,22 @@ void	save_unknown_variables(double **theta_values)
 	return ;
 }
 
+static void	ft_strarraydel(char ***array)
+{
+	char	*ptr;
+	size_t	i;
+
+	i = 0;
+	while ((*array)[i])
+	{
+		ptr = (*array)[i];
+		ft_strdel(&ptr);
+		i++;
+	}
+	ft_memdel((void **)array);
+	return ;
+}
+
 static double	parse_theta_value(char *line)
 {
 	char		**param_value;
@@ -53,7 +69,30 @@ static double	parse_theta_value(char *line)
 	else
 		FT_LOG_ERROR("Content of the theta input file (%s) is not valid!",
 			THETA_FILE_NAME);
+	ft_strarraydel(&param_value);
 	return (theta_value);
+}
+
+static t_matrix	*read_theta_values(int fd)
+{
+	t_matrix	*theta;
+	char		*line;
+	size_t		i;
+
+	theta = ft_vector_create(sizeof(double), 2);
+	line = NULL;
+	i = 0;
+	while (ft_get_next_line(fd, &line) > 0)
+	{
+		if (i > 1)
+			FT_LOG_ERROR("Theta file includes unexpected number of lines!");
+		((double **)theta->values)[i][0] = parse_theta_value(line);
+		FT_LOG_INFO("Theta0: %s", line);
+		ft_strdel(&line);
+		i++;
+	}
+	ft_strdel(&line);
+	return (theta);
 }
 
 t_matrix	*unknown_variables_read(void)
@@ -61,24 +100,14 @@ t_matrix	*unknown_variables_read(void)
 	t_matrix	*theta;
 	int			fd;
 	char		*theta_file_yaml;
-	char		*line;
 
 	theta = NULL;
 	theta_file_yaml = ft_strjoin(get_home_dir(), THETA_FILE_NAME);
 	fd = open(theta_file_yaml, O_RDONLY);
 	if (fd > 0)
-	{
-		theta = ft_vector_create(sizeof(double), 2);
-		if (ft_get_next_line(fd, &line) > 0)
-			((double **)theta->values)[0][0] = parse_theta_value(line);
-		FT_LOG_INFO("Theta0: %s", line);
-		ft_strdel(&line);
-		if (ft_get_next_line(fd, &line) > 0)
-			((double **)theta->values)[1][0] = parse_theta_value(line);
-		FT_LOG_INFO("Theta1: %s", line);
-		ft_strdel(&line);
-	}
+		theta = read_theta_values(fd);
 	else
 		FT_LOG_ERROR("Theta file (%s) is not created!", theta_file_yaml);
+	ft_strdel(&theta_file_yaml);
 	return (theta);
 }
