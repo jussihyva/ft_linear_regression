@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 12:52:29 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/10 19:05:47 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/10 23:34:53 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,21 @@ static t_data_record	*read_data_line(char *line)
 	return (data_record);
 }
 
-t_lin_reg	*linear_regression_initialize(void)
+t_lin_reg	*linear_regression_initialize(t_input_params *input_params)
 {
 	t_lin_reg	*linear_regression;
+	size_t		num_of_records;
 
 	linear_regression = (t_lin_reg *)ft_memalloc(sizeof(*linear_regression));
+	if (input_params->dataset_file)
+	{
+		linear_regression->dataset
+			= read_dataset_file(input_params->dataset_file);
+		num_of_records = linear_regression->dataset->num_of_records;
+		linear_regression->gradient_descent
+			= gradient_descent_initialize(num_of_records, input_params->alpha,
+				input_params->cost_limit);
+	}
 	return (linear_regression);
 }
 

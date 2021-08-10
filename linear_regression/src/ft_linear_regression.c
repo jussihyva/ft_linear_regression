@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 11:14:46 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/10 19:24:01 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/10 23:12:39 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static t_arg_parser	*arg_parser_initialize(int argc, char **argv)
 	arg_parser->fn_initialize_cmd_args = initialize_cmd_args;
 	arg_parser->fn_save_cmd_argument = save_cmd_argument;
 	arg_parser->fn_usage = print_usage;
-	arg_parser->options = ft_strdup("A:L:f:hF");
+	arg_parser->options = ft_strdup("C:A:L:f:hF");
 	return (arg_parser);
 }
 
@@ -62,11 +62,10 @@ static double	statistics_price_prediction(int km, double **theta_values,
 }
 
 static void	unknown_variables_calculate(t_lin_reg *linear_regression,
-					char *dataset_file, t_statistics *statistics, double alpha)
+					char *dataset_file, t_statistics *statistics)
 {
-	linear_regression->dataset = read_dataset_file(dataset_file);
 	if (linear_regression->dataset->num_of_records)
-		create_linear_regression_model(linear_regression, statistics, alpha);
+		create_linear_regression_model(linear_regression, statistics);
 	else
 		FT_LOG_ERROR("No records in the input file (%s)", dataset_file);
 	ft_printf("THETA0: %12.4f\n",
@@ -128,10 +127,10 @@ int	main(int argc, char **argv)
 	statistics = ft_statistics_initialize();
 	if (!input_params->order)
 		input_params->km = read_mileage_of_the_car(input_params);
-	linear_regression = linear_regression_initialize();
+	linear_regression = linear_regression_initialize(input_params);
 	if (input_params->order & E_CALCULATE_UNKNOWN_VARIABLES)
 		unknown_variables_calculate(linear_regression,
-			input_params->dataset_file, statistics, input_params->alpha);
+			input_params->dataset_file, statistics);
 	if (input_params->order & E_CALCULATE_PRICE)
 		dependent_variable_calculate(input_params, statistics);
 	statistics_save_records(statistics);

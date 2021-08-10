@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/10 19:29:58 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/10 23:11:10 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ typedef struct s_input_params
 	t_bool			is_limited;
 	t_loging_level	event_logging_level;
 	double			alpha;
+	double			cost_limit;
 }				t_input_params;
 
 typedef struct s_data_record
@@ -166,6 +167,7 @@ typedef struct s_reg_residual
 typedef struct s_gradient_descent
 {
 	double			alpha;
+	double			cost_limit;
 	t_matrix		*theta;
 	t_matrix		*theta_normalized;
 	t_reg_residual	reg_residual;
@@ -210,8 +212,7 @@ void					linear_regression_add_data_record(
 							t_data_record *data_record);
 void					create_linear_regression_model(
 							t_lin_reg *linear_regression,
-							t_statistics *statistics,
-							double alpha);
+							t_statistics *statistics);
 void					pre_process_input_variables(
 							t_lin_reg *linear_regression);
 t_matrix				*theta_initialize(void);
@@ -249,10 +250,10 @@ void					initalize_variable(t_variable *variable,
 							size_t num_of_records, size_t size);
 t_matrix				*ft_matrix_transpose(t_matrix *matrix);
 void					statistics_remove(t_statistics **statistics);
-t_gradient_descent		*unknown_variables_iterate_values(
+void					unknown_variables_iterate_values(
+							t_gradient_descent *gradient_descent,
 							t_variable *input_variable,
-							t_variable *measured_variable,
-							double alpha);
+							t_variable *measured_variable);
 void					statistics_create_records(t_list **stat_counters_lst,
 							t_lin_reg *linear_regression);
 void					statistics_save_records(t_statistics *statistics);
@@ -261,7 +262,8 @@ void					save_unknown_variables(double **theta_values);
 const char				*get_home_dir(void);
 double					calculate_price(int km, double **theta_values);
 t_stat_counters			*stat_counters_initialize(void);
-t_lin_reg				*linear_regression_initialize(void);
+t_lin_reg				*linear_regression_initialize(
+							t_input_params *input_params);
 t_matrix				*unknown_variables_read(void);
 void					coefficient_of_determination_calculate(
 							t_lin_reg *linear_regression);
@@ -274,5 +276,7 @@ void					residual_calculate(t_variable *input_variable,
 							t_reg_residual *reg_residual);
 void					error_remove(t_reg_error **reg_error);
 void					residual_remove(t_reg_residual *reg_residual);
+t_gradient_descent		*gradient_descent_initialize(size_t num_of_records,
+											double alpha, double cost_limit);
 
 #endif

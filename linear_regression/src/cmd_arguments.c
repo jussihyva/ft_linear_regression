@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 12:56:02 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/10 19:36:13 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/10 23:44:17 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,9 @@ void	print_usage(void)
 		"Allow calculation of negative inpput values and results");
 	ft_printf("  -A    <learning rate>         %s\n",
 		"Learning rate (alpha) for gradient descent. Default value is 0.1");
+	ft_printf("  -C    <cost limit>            %s%s\n",
+		"Cost limit is a maximum allowed cost change per iteration loop (R2) ",
+		"for gradient descent calculation. Default value is 0.0000001");
 	ft_printf("  -L    <logging level>         %s\n",
 		"Logging details for trouble shoooting. Valid values 0-4");
 	exit(42);
@@ -45,6 +48,7 @@ void	*initialize_cmd_args(t_argc_argv *argc_argv)
 	input_params->event_logging_level = LOG_WARN;
 	input_params->is_limited = E_TRUE;
 	input_params->alpha = 0.1;
+	input_params->cost_limit = COST_LIMIT;
 	return ((void *)input_params);
 }
 
@@ -81,6 +85,22 @@ static double	alpha_param_validate(char *next_arg)
 	return (alpha);
 }
 
+static double	cost_param_validate(char *next_arg)
+{
+	char		*endptr;
+	double		cost_limit;
+
+	errno = 0;
+	cost_limit = strtod(next_arg, &endptr);
+	if (cost_limit >= 50000 || cost_limit < -50000 || *endptr != '\0' || errno != 0)
+	{
+		ft_printf("Value of cmd line attribute -A (%s) is not valid\n",
+			next_arg);
+		exit(42);
+	}
+	return (cost_limit);
+}
+
 void	save_cmd_argument_short(void *input_params, char opt,
 														t_argc_argv *argc_argv)
 {
@@ -98,6 +118,8 @@ void	save_cmd_argument_short(void *input_params, char opt,
 		params->event_logging_level = logging_level_param_validate(next_arg);
 	else if (opt == 'A')
 		params->alpha = alpha_param_validate(next_arg);
+	else if (opt == 'C')
+		params->cost_limit = cost_param_validate(next_arg);
 	else if (opt == 'F')
 		params->is_limited = E_FALSE;
 	else if (opt == 'h')
