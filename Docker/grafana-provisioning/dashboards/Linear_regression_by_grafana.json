@@ -8,6 +8,12 @@
 		  "hide": true,
 		  "iconColor": "rgba(0, 211, 255, 1)",
 		  "name": "Annotations & Alerts",
+		  "target": {
+			"limit": 100,
+			"matchAny": false,
+			"tags": [],
+			"type": "dashboard"
+		  },
 		  "type": "dashboard"
 		}
 	  ]
@@ -15,15 +21,11 @@
 	"editable": true,
 	"gnetId": null,
 	"graphTooltip": 0,
-	"id": 11,
+	"id": 10,
 	"links": [],
 	"panels": [
 	  {
 		"datasource": null,
-		"fieldConfig": {
-		  "defaults": {},
-		  "overrides": []
-		},
 		"gridPos": {
 		  "h": 16,
 		  "w": 21,
@@ -72,13 +74,13 @@
 			"max": null
 		  },
 		  "xAxisTitle": {
-			"text": "km/1000",
+			"text": "mileage/1000",
 			"color": "white",
 			"textSize": 1
 		  },
 		  "yAxisExtents": {
-			"min": 3500,
-			"max": null
+			"min": 3000,
+			"max": 9000
 		  },
 		  "yAxisTitle": {
 			"text": "Price ($)",
@@ -151,10 +153,6 @@
 		"dashLength": 10,
 		"dashes": false,
 		"datasource": null,
-		"fieldConfig": {
-		  "defaults": {},
-		  "overrides": []
-		},
 		"fill": 1,
 		"fillGradient": 0,
 		"gridPos": {
@@ -181,7 +179,7 @@
 		  "alertThreshold": true
 		},
 		"percentage": false,
-		"pluginVersion": "7.5.2",
+		"pluginVersion": "8.1.1",
 		"pointradius": 2,
 		"points": false,
 		"renderer": "flot",
@@ -244,7 +242,7 @@
 		"timeFrom": null,
 		"timeRegions": [],
 		"timeShift": null,
-		"title": "Number of received input records.",
+		"title": "Number of received observed (price) records.",
 		"tooltip": {
 		  "shared": true,
 		  "sort": 0,
@@ -260,6 +258,7 @@
 		},
 		"yaxes": [
 		  {
+			"$$hashKey": "object:53",
 			"format": "short",
 			"label": null,
 			"logBase": 1,
@@ -268,6 +267,7 @@
 			"show": true
 		  },
 		  {
+			"$$hashKey": "object:54",
 			"format": "short",
 			"label": null,
 			"logBase": 1,
@@ -287,10 +287,6 @@
 		"dashLength": 10,
 		"dashes": false,
 		"datasource": null,
-		"fieldConfig": {
-		  "defaults": {},
-		  "overrides": []
-		},
 		"fill": 1,
 		"fillGradient": 0,
 		"gridPos": {
@@ -317,7 +313,7 @@
 		  "alertThreshold": true
 		},
 		"percentage": false,
-		"pluginVersion": "7.5.2",
+		"pluginVersion": "8.1.1",
 		"pointradius": 2,
 		"points": false,
 		"renderer": "flot",
@@ -380,7 +376,7 @@
 		"timeFrom": null,
 		"timeRegions": [],
 		"timeShift": null,
-		"title": "Number of received input records.",
+		"title": "Number of received predicted (price) records.",
 		"tooltip": {
 		  "shared": true,
 		  "sort": 0,
@@ -396,6 +392,7 @@
 		},
 		"yaxes": [
 		  {
+			"$$hashKey": "object:106",
 			"format": "short",
 			"label": null,
 			"logBase": 1,
@@ -404,6 +401,7 @@
 			"show": true
 		  },
 		  {
+			"$$hashKey": "object:107",
 			"format": "short",
 			"label": null,
 			"logBase": 1,
@@ -419,7 +417,7 @@
 	  }
 	],
 	"refresh": "5s",
-	"schemaVersion": 27,
+	"schemaVersion": 30,
 	"style": "dark",
 	"tags": [],
 	"templating": {
@@ -433,5 +431,5 @@
 	"timezone": "",
 	"title": "Linear_regression_by_grafana",
 	"uid": "Linear_regression_by_grafana",
-	"version": 4
+	"version": 1
   }
