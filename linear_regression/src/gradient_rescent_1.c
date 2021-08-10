@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 18:02:04 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/07 10:38:37 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/10 15:29:32 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,36 +47,28 @@ void	calculate_new_theta(t_gradient_descent *gradient_descent,
 					t_variable *input_variable, t_variable *measured_variable,
 					double **new_theta_values)
 {
-	t_matrix		*predicted;
-	t_matrix		*normalized_values_transposed;
-	double			alpha;
-	double			**theta_values;
-	t_reg_residual	reg_residual;
-	double			residual_sum;
-	double			predicted_sum;
+	t_matrix			*predicted;
+	t_matrix			*normalized_values_transposed;
+	double				**theta_values;
+	double				predicted_sum;
+	t_reg_residual		*reg_residual;
 
-	alpha = gradient_descent->alpha;
+	reg_residual = &gradient_descent->reg_residual;
 	theta_values = (double **)gradient_descent->theta_normalized->values;
-	reg_residual.residual = ft_vector_create(sizeof(double),
-			input_variable->size);
-	reg_residual.residual_squares = ft_vector_create(sizeof(double),
-			input_variable->size);
 	residual_calculate(input_variable, gradient_descent->theta_normalized,
-		measured_variable, &reg_residual);
-	residual_sum = ft_matrix_sum(reg_residual.residual);
-	new_theta_values[0][0] = theta_values[0][0] - (alpha * residual_sum)
-		/ input_variable->size;
+		measured_variable, reg_residual);
+	reg_residual->residual_sum = ft_matrix_sum(reg_residual->residual);
+	new_theta_values[0][0] = theta_values[0][0] - (gradient_descent->alpha
+			* reg_residual->residual_sum) / input_variable->size;
 	normalized_values_transposed
 		= ft_matrix_transpose(input_variable->normalized_values);
 	predicted = ft_vector_create(sizeof(double),
 			normalized_values_transposed->size.rows);
 	ft_matrix_dot_vector_double(normalized_values_transposed,
-		reg_residual.residual, predicted);
+		reg_residual->residual, predicted);
 	predicted_sum = ft_matrix_sum(predicted);
-	new_theta_values[1][0] = theta_values[1][0] - (alpha * predicted_sum)
-		/ input_variable->size;
-	ft_vector_remove(&reg_residual.residual);
-	ft_vector_remove(&reg_residual.residual_squares);
+	new_theta_values[1][0] = theta_values[1][0]
+		- (gradient_descent->alpha * predicted_sum) / input_variable->size;
 	ft_vector_remove(&predicted);
 	ft_matrix_remove(&normalized_values_transposed);
 }

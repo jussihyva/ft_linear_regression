@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 11:14:46 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/06 23:09:28 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/10 14:12:43 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,11 @@ static void	unknown_variables_calculate(t_lin_reg *linear_regression,
 	else
 		FT_LOG_ERROR("No records in the input file (%s)", dataset_file);
 	ft_printf("THETA0: %12.4f\n",
-		((double **)linear_regression->gradient_descent->theta_normalized->values)[0][0]);
+		((double **)linear_regression->gradient_descent->theta_normalized
+			->values)[0][0]);
 	ft_printf("THETA1: %12.4f\n",
-		((double **)linear_regression->gradient_descent->theta_normalized->values)[1][0]);
+		((double **)linear_regression->gradient_descent->theta_normalized
+			->values)[1][0]);
 	coefficient_of_determination_calculate(linear_regression);
 	return ;
 }
@@ -82,11 +84,12 @@ static void	dependent_variable_calculate(t_lin_reg *linear_regression,
 {
 	double	price;
 
-	linear_regression->gradient_descent = gradient_descent_initialize();
-	linear_regression->gradient_descent->theta_normalized = unknown_variables_read();
+	linear_regression->gradient_descent = gradient_descent_initialize(0);
+	linear_regression->gradient_descent->theta_normalized
+		= unknown_variables_read();
 	price = statistics_price_prediction(input_params->km,
-			(double **)linear_regression->gradient_descent->theta_normalized->values,
-			statistics, input_params->is_limited);
+			(double **)linear_regression->gradient_descent->theta_normalized
+			->values, statistics, input_params->is_limited);
 	ft_printf("Estimated price: %12.4f\n", price);
 	return ;
 }

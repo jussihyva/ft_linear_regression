@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/07 10:55:56 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/10 15:57:30 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 # define PEM_PRIVTE_KEY_FILE			"/var/tmp/tls-selfsigned.key"
 # define WRITE_BUF_SIZE					1000
 # define THETA_FILE_NAME				"/theta_values.yaml"
+# define COST_LIMIT						0.0000001
 
 typedef struct s_memory_info
 {
@@ -153,12 +154,21 @@ typedef struct s_input_variables
 	t_variable		km;
 }				t_input_variables;
 
+typedef struct s_reg_residual
+{
+	t_matrix	*residual;
+	t_matrix	*residual_squares;
+	double		residual_sum;
+	double		residual_sum_of_squares;
+}				t_reg_residual;
+
 typedef struct s_gradient_descent
 {
-	double		alpha;
-	t_matrix	*theta;
-	t_matrix	*theta_normalized;
-	char		*theta_file;
+	double			alpha;
+	t_matrix		*theta;
+	t_matrix		*theta_normalized;
+	char			*theta_file;
+	t_reg_residual	reg_residual;
 }				t_gradient_descent;
 
 typedef struct s_dataset
@@ -173,13 +183,6 @@ typedef struct s_reg_error
 	t_matrix	*error_squares;
 	double		error_sum_of_squares;
 }				t_reg_error;
-
-typedef struct s_reg_residual
-{
-	t_matrix	*residual;
-	t_matrix	*residual_squares;
-	double		residual_sum_of_squares;
-}				t_reg_residual;
 
 typedef struct s_lin_reg
 {
@@ -258,7 +261,7 @@ double					calculate_price(int km, double **theta_values);
 t_stat_counters			*stat_counters_initialize(void);
 t_lin_reg				*linear_regression_initialize(void);
 t_matrix				*unknown_variables_read(void);
-t_gradient_descent		*gradient_descent_initialize(void);
+t_gradient_descent		*gradient_descent_initialize(size_t num_of_records);
 void					coefficient_of_determination_calculate(
 							t_lin_reg *linear_regression);
 void					ft_matrix_print(char *matrix_name, t_matrix *matrix,
