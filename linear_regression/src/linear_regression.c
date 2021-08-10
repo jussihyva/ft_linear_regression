@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 13:34:18 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/10 16:09:48 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/10 19:25:27 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static void	estimate_prize(t_variable *input_variable,
 }
 
 void	create_linear_regression_model(t_lin_reg *linear_regression,
-													t_statistics *statistics)
+										t_statistics *statistics, double alpha)
 {
 	t_variable					*input_variable;
 	t_variable					*measured_variable;
@@ -66,7 +66,7 @@ void	create_linear_regression_model(t_lin_reg *linear_regression,
 	measured_variable = &linear_regression->measured_variables.price;
 	pre_process_input_variables(linear_regression);
 	linear_regression->gradient_descent
-		= unknown_variables_iterate_values(input_variable, measured_variable);
+		= unknown_variables_iterate_values(input_variable, measured_variable, alpha);
 	gradient_descent = linear_regression->gradient_descent;
 	linear_regression->reg_residual.residual
 		= ft_vector_create(sizeof(double), input_variable->size);

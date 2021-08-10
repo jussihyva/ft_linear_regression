@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/02 11:59:02 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/07 12:12:21 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/10 19:07:37 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ static double	parse_theta_value(char *line)
 	param_value = ft_strsplit(line, ':');
 	if (param_value[0] && param_value[1])
 	{
+		errno = 0;
 		theta_value = strtod(param_value[1], &endptr);
 		if (errno != 0 || *endptr != '\0')
 			FT_LOG_ERROR("Content of the theta input file (%s) is not valid!",
@@ -87,7 +88,7 @@ static t_matrix	*read_theta_values(int fd)
 		if (i > 1)
 			FT_LOG_ERROR("Theta file includes unexpected number of lines!");
 		((double **)theta->values)[i][0] = parse_theta_value(line);
-		FT_LOG_INFO("Theta0: %s", line);
+		FT_LOG_DEBUG("%s", line);
 		ft_strdel(&line);
 		i++;
 	}

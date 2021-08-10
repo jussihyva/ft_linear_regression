@@ -6,7 +6,7 @@
 #    By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/09 10:45:12 by jkauppi           #+#    #+#              #
-#    Updated: 2021/07/30 07:07:54 by jkauppi          ###   ########.fr        #
+#    Updated: 2021/08/10 18:54:00 by jkauppi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -66,6 +66,7 @@ END				=	\033[0m
 
 .PHONY: all
 all: $(FOLDERS) $(H_FILES) $(APP_C_FILES) $(C_FILES) libraries $(APP_FILES)
+	@rm -f ~/theta_values.yaml
 	@echo "$(GREEN)Done!$(END)"
 
 $(APP_FILES): $(BIN)/%: $(SRC)/%.c $(H_FILES) $(O_FILES) Makefile

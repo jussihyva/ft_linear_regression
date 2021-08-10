@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/10 15:57:30 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/10 19:29:58 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ typedef struct s_input_params
 	unsigned int	order;
 	t_bool			is_limited;
 	t_loging_level	event_logging_level;
+	double			alpha;
 }				t_input_params;
 
 typedef struct s_data_record
@@ -167,7 +168,6 @@ typedef struct s_gradient_descent
 	double			alpha;
 	t_matrix		*theta;
 	t_matrix		*theta_normalized;
-	char			*theta_file;
 	t_reg_residual	reg_residual;
 }				t_gradient_descent;
 
@@ -210,7 +210,8 @@ void					linear_regression_add_data_record(
 							t_data_record *data_record);
 void					create_linear_regression_model(
 							t_lin_reg *linear_regression,
-							t_statistics *statistics);
+							t_statistics *statistics,
+							double alpha);
 void					pre_process_input_variables(
 							t_lin_reg *linear_regression);
 t_matrix				*theta_initialize(void);
@@ -250,7 +251,8 @@ t_matrix				*ft_matrix_transpose(t_matrix *matrix);
 void					statistics_remove(t_statistics **statistics);
 t_gradient_descent		*unknown_variables_iterate_values(
 							t_variable *input_variable,
-							t_variable *measured_variable);
+							t_variable *measured_variable,
+							double alpha);
 void					statistics_create_records(t_list **stat_counters_lst,
 							t_lin_reg *linear_regression);
 void					statistics_save_records(t_statistics *statistics);
@@ -261,7 +263,6 @@ double					calculate_price(int km, double **theta_values);
 t_stat_counters			*stat_counters_initialize(void);
 t_lin_reg				*linear_regression_initialize(void);
 t_matrix				*unknown_variables_read(void);
-t_gradient_descent		*gradient_descent_initialize(size_t num_of_records);
 void					coefficient_of_determination_calculate(
 							t_lin_reg *linear_regression);
 void					ft_matrix_print(char *matrix_name, t_matrix *matrix,

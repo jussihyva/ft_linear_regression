@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 12:56:02 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/04 12:17:47 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/10 19:36:13 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,23 @@
 void	print_usage(void)
 {
 	ft_printf("Usage:\n");
-	ft_printf("  ./fractol -F <type_of_fractal>\n");
-	ft_printf("\n\n Example:   ./fractol -F j\n");
+	ft_printf("  ./ft_linear_regression\n");
+	ft_printf("\n\n Example:\n");
+	ft_printf("  ./ft_linear_regression\n");
+	ft_printf("  Type mileage (int) of the car: 10000\n");
+	ft_printf("  Estimated price: $8280\n");
 	ft_printf("\n\nMandatory parameter:\n");
-	ft_printf("  -F <type_of_fractal>\n");
+	ft_printf("  None\n");
 	ft_printf("Optional parameter:\n");
-	ft_printf("  -h    Help printout\n");
-	ft_printf("\n\n   <type_of_fractal>\n");
-	ft_printf("  j     Julia      (z = z^2 + C.");
-	ft_printf(" C = Constant values + mouse locaation on the image.)\n");
-	ft_printf("  m     Mandelbrot (z = z^2 + C.");
-	ft_printf(" C = Mouse Distance from the origin of the image.)\n");
-	ft_printf("  p     Polynomial (z = z^2 - C.");
-	ft_printf(" C = 1 + mouse locaation on the image.)\n");
+	ft_printf("  -h                            Help printout\n");
+	ft_printf("  -f    <data set file>         %s\n",
+		"Calculates unknown variables (Theta values)");
+	ft_printf("  -F                            %s\n",
+		"Allow calculation of negative inpput values and results");
+	ft_printf("  -A    <learning rate>         %s\n",
+		"Learning rate (alpha) for gradient descent. Default value is 0.1");
+	ft_printf("  -L    <logging level>         %s\n",
+		"Logging details for trouble shoooting. Valid values 0-4");
 	exit(42);
 }
 
@@ -40,6 +44,7 @@ void	*initialize_cmd_args(t_argc_argv *argc_argv)
 	input_params->argv = argc_argv->argv;
 	input_params->event_logging_level = LOG_WARN;
 	input_params->is_limited = E_TRUE;
+	input_params->alpha = 0.1;
 	return ((void *)input_params);
 }
 
@@ -48,6 +53,7 @@ static t_loging_level	logging_level_param_validate(char *next_arg)
 	char				*endptr;
 	t_loging_level		event_logging_level;
 
+	errno = 0;
 	event_logging_level = (t_loging_level)ft_strtoi(next_arg, &endptr, 10);
 	if (event_logging_level >= 5 || event_logging_level < 0
 		|| *endptr != '\0' || errno != 0)
@@ -57,6 +63,22 @@ static t_loging_level	logging_level_param_validate(char *next_arg)
 		exit(42);
 	}
 	return (event_logging_level);
+}
+
+static double	alpha_param_validate(char *next_arg)
+{
+	char		*endptr;
+	double		alpha;
+
+	errno = 0;
+	alpha = strtod(next_arg, &endptr);
+	if (alpha >= 50000 || alpha < -50000 || *endptr != '\0' || errno != 0)
+	{
+		ft_printf("Value of cmd line attribute -A (%s) is not valid\n",
+			next_arg);
+		exit(42);
+	}
+	return (alpha);
 }
 
 void	save_cmd_argument_short(void *input_params, char opt,
@@ -74,6 +96,8 @@ void	save_cmd_argument_short(void *input_params, char opt,
 	}
 	else if (opt == 'L')
 		params->event_logging_level = logging_level_param_validate(next_arg);
+	else if (opt == 'A')
+		params->alpha = alpha_param_validate(next_arg);
 	else if (opt == 'F')
 		params->is_limited = E_FALSE;
 	else if (opt == 'h')
@@ -91,6 +115,7 @@ void	save_cmd_argument_mandatory(void *input_params, char opt,
 	params = (t_input_params *)input_params;
 	if (argc_argv->argc == 1)
 	{
+		errno = 0;
 		params->km = ft_strtoi(*argc_argv->argv, &endptr, 10);
 		if (*endptr != '\0' || errno != 0)
 		{

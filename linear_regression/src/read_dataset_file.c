@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 12:52:29 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/04 12:45:41 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/10 19:05:47 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,12 @@ static t_data_record	*read_data_line(char *line)
 	line_counter++;
 	FT_LOG_INFO("LINE %d: %s", line_counter, line);
 	data_record = (t_data_record *)ft_memalloc(sizeof(*data_record));
+	errno = 0;
 	data_record->km = ft_strtoi(line, &endptr, 10);
 	if (errno == EINVAL && *endptr == ',')
 	{
 		line = endptr + 1;
+		errno = 0;
 		data_record->price = ft_strtoi(line, &endptr, 10);
 		if (!((errno == EINVAL && *endptr == ' ')
 				|| (!errno && *endptr == '\0')))
