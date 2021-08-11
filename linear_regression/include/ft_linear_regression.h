@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/10 23:11:10 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/11 10:54:58 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ typedef struct s_input_params
 	t_loging_level	event_logging_level;
 	double			alpha;
 	double			cost_limit;
+	t_bool			is_print_leaks;
 }				t_input_params;
 
 typedef struct s_data_record

@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 12:56:02 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/10 23:44:17 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/11 10:56:25 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ void	print_usage(void)
 		"for gradient descent calculation. Default value is 0.0000001");
 	ft_printf("  -L    <logging level>         %s\n",
 		"Logging details for trouble shoooting. Valid values 0-4");
+	ft_printf("  -l                            %s\n",
+		"Print leaks. Only in MAC-OS");
 	exit(42);
 }
 
@@ -92,7 +94,8 @@ static double	cost_param_validate(char *next_arg)
 
 	errno = 0;
 	cost_limit = strtod(next_arg, &endptr);
-	if (cost_limit >= 50000 || cost_limit < -50000 || *endptr != '\0' || errno != 0)
+	if (cost_limit >= 50000 || cost_limit < -50000 || *endptr != '\0'
+		|| errno != 0)
 	{
 		ft_printf("Value of cmd line attribute -A (%s) is not valid\n",
 			next_arg);
@@ -122,6 +125,8 @@ void	save_cmd_argument_short(void *input_params, char opt,
 		params->cost_limit = cost_param_validate(next_arg);
 	else if (opt == 'F')
 		params->is_limited = E_FALSE;
+	else if (opt == 'l')
+		params->is_print_leaks = E_TRUE;
 	else if (opt == 'h')
 		print_usage();
 	return ;

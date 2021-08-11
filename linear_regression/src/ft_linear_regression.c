@@ -6,11 +6,25 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 11:14:46 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/10 23:12:39 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/11 10:57:28 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_linear_regression.h"
+
+#if DARWIN
+static void	print_leaks(void)
+{
+	system("leaks ft_linear_regression");
+	return ;
+}
+#else
+
+static void	print_leaks(void)
+{
+	return ;
+}
+#endif
 
 static t_arg_parser	*arg_parser_initialize(int argc, char **argv)
 {
@@ -22,18 +36,24 @@ static t_arg_parser	*arg_parser_initialize(int argc, char **argv)
 	arg_parser->fn_initialize_cmd_args = initialize_cmd_args;
 	arg_parser->fn_save_cmd_argument = save_cmd_argument;
 	arg_parser->fn_usage = print_usage;
-	arg_parser->options = ft_strdup("C:A:L:f:hF");
+	arg_parser->options = ft_strdup("C:A:L:f:hFll");
 	return (arg_parser);
 }
 
 static void	main_remove(t_arg_parser *arg_parser,
 			t_statistics *statistics, t_event_logging_data *event_logging_data)
 {
+	t_bool		is_print_leaks;
+
+	is_print_leaks
+		= ((t_input_params *)arg_parser->input_params)->is_print_leaks;
 	statistics_remove(&statistics);
 	release_input_params((t_input_params **)&arg_parser->input_params);
 	ft_event_logging_release(&event_logging_data);
 	ft_memdel((void **)&arg_parser->options);
 	ft_memdel((void **)&arg_parser);
+	if (is_print_leaks)
+		print_leaks();
 	return ;
 }
 
