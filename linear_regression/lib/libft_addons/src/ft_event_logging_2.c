@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_login_event_2.c                                 :+:      :+:    :+:   */
+/*   ft_event_logging_2.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/23 08:21:58 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/06/11 15:33:36 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/11 17:48:30 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,4 +86,21 @@ void	ft_log_error(const char *file, const int line, const char *fmt, ...)
 	execute_login_extensions(&event, fmt);
 	unlock();
 	return ;
+}
+
+t_loging_level	ft_logging_level_param_validate(char *next_arg)
+{
+	char				*endptr;
+	t_loging_level		event_logging_level;
+
+	errno = 0;
+	event_logging_level = (t_loging_level)ft_strtoi(next_arg, &endptr, 10);
+	if (event_logging_level >= 5 || event_logging_level < 0
+		|| *endptr != '\0' || errno != 0)
+	{
+		ft_printf("Value of cmd line attribute -L (%s) is not valid\n",
+			next_arg);
+		exit(42);
+	}
+	return (event_logging_level);
 }

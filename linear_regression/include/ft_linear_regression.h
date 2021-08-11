@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/11 15:23:00 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/11 18:25:38 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,7 +203,6 @@ void					save_cmd_argument(void *input_params, char opt,
 							t_cmd_param_type cmd_param_type);
 void					print_usage(void);
 t_dataset				*read_dataset_file(char *dataset_file);
-void					release_input_params(t_input_params **input_params);
 void					release_data_record_lst(t_list **data_record_lst);
 void					linear_regression_release(
 							t_lin_reg **linear_regression);
@@ -229,9 +228,7 @@ void					ft_matrix_remove(t_matrix **matrix);
 double					ft_matrix_sum(t_matrix *matrix);
 void					ft_matrix_dot_vector_double(t_matrix *matrix,
 							t_matrix *vector, t_matrix *new_vector);
-t_matrix				*variable_normalize(int *values,
-							t_min_max_value *min_max_value,
-							size_t num_of_records);
+t_matrix				*variable_normalize(t_variable *variable);
 void					variable_remove(t_variable *variable);
 time_t					get_execution_time(t_statistics *statistics);
 void					ft_influxdb_write(t_tls_connection *connection,
@@ -278,5 +275,9 @@ void					residual_remove(t_reg_residual *reg_residual);
 t_gradient_descent		*gradient_descent_initialize(size_t num_of_records,
 							double alpha, double cost_limit);
 void					influxdb_remove(t_influxdb *influxdb);
+double					alpha_param_validate(char *next_arg);
+double					cost_param_validate(char *next_arg);
+t_arg_parser			*arg_parser_init(int argc, char **argv);
+int						read_mileage_of_a_car(t_input_params *input_params);
 
 #endif

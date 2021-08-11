@@ -6,39 +6,11 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 11:14:46 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/11 14:16:21 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/11 18:26:22 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_linear_regression.h"
-
-#if DARWIN
-static void	print_leaks(void)
-{
-	system("leaks ft_linear_regression");
-	return ;
-}
-#else
-
-static void	print_leaks(void)
-{
-	return ;
-}
-#endif
-
-static t_arg_parser	*arg_parser_initialize(int argc, char **argv)
-{
-	t_arg_parser	*arg_parser;
-
-	arg_parser = (t_arg_parser *)ft_memalloc(sizeof(*arg_parser));
-	arg_parser->argc_argv.argc = argc;
-	arg_parser->argc_argv.argv = argv;
-	arg_parser->fn_initialize_cmd_args = initialize_cmd_args;
-	arg_parser->fn_save_cmd_argument = save_cmd_argument;
-	arg_parser->fn_usage = print_usage;
-	arg_parser->options = ft_strdup("C:A:L:f:hFl");
-	return (arg_parser);
-}
 
 static void	main_remove(t_arg_parser *arg_parser,
 			t_statistics *statistics, t_event_logging_data *event_logging_data)
@@ -48,12 +20,12 @@ static void	main_remove(t_arg_parser *arg_parser,
 	is_print_leaks
 		= ((t_input_params *)arg_parser->input_params)->is_print_leaks;
 	statistics_remove(&statistics);
-	release_input_params((t_input_params **)&arg_parser->input_params);
+	ft_memdel((void **)&arg_parser->input_params);
 	ft_event_logging_release(&event_logging_data);
 	ft_memdel((void **)&arg_parser->options);
 	ft_memdel((void **)&arg_parser);
 	if (is_print_leaks)
-		print_leaks();
+		ft_print_leaks();
 	return ;
 }
 
@@ -110,27 +82,6 @@ static void	dependent_variable_calculate(t_input_params *input_params,
 	return ;
 }
 
-static int	read_mileage_of_the_car(t_input_params *input_params)
-{
-	char	*endptr;
-	char	*line;
-	int		km;
-
-	input_params->order = E_CALCULATE_PRICE;
-	line = NULL;
-	ft_printf("Type mileage (int) of the car: ");
-	ft_get_next_line(0, &line);
-	errno = 0;
-	km = ft_strtoi(line, &endptr, 10);
-	if (*endptr != '\0' || errno != 0)
-	{
-		ft_printf("km param (%s) is not valid\n", line);
-		exit(42);
-	}
-	ft_strdel(&line);
-	return (km);
-}
-
 int	main(int argc, char **argv)
 {
 	t_arg_parser			*arg_parser;
@@ -139,14 +90,14 @@ int	main(int argc, char **argv)
 	t_statistics			*statistics;
 	t_input_params			*input_params;
 
-	arg_parser = arg_parser_initialize(argc, argv);
+	arg_parser = arg_parser_init(argc, argv);
 	ft_arg_parser(arg_parser);
 	input_params = (t_input_params *)arg_parser->input_params;
 	event_logging_data = ft_event_logging_init(
 			input_params->event_logging_level);
 	statistics = ft_statistics_initialize();
 	if (!input_params->order)
-		input_params->km = read_mileage_of_the_car(input_params);
+		input_params->km = read_mileage_of_a_car(input_params);
 	linear_regression = linear_regression_initialize(input_params);
 	if (input_params->order & E_CALCULATE_UNKNOWN_VARIABLES)
 		unknown_variables_calculate(linear_regression,

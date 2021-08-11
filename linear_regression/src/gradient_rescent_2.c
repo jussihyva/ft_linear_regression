@@ -6,11 +6,44 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/02 07:43:32 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/11 14:29:11 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/11 17:41:43 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_linear_regression.h"
+
+double	alpha_param_validate(char *next_arg)
+{
+	char		*endptr;
+	double		alpha;
+
+	errno = 0;
+	alpha = strtod(next_arg, &endptr);
+	if (alpha >= 50000 || alpha < -50000 || *endptr != '\0' || errno != 0)
+	{
+		ft_printf("Value of cmd line attribute -A (%s) is not valid\n",
+			next_arg);
+		exit(42);
+	}
+	return (alpha);
+}
+
+double	cost_param_validate(char *next_arg)
+{
+	char		*endptr;
+	double		cost_limit;
+
+	errno = 0;
+	cost_limit = strtod(next_arg, &endptr);
+	if (cost_limit >= 50000 || cost_limit < -50000 || *endptr != '\0'
+		|| errno != 0)
+	{
+		ft_printf("Value of cmd line attribute -A (%s) is not valid\n",
+			next_arg);
+		exit(42);
+	}
+	return (cost_limit);
+}
 
 t_gradient_descent	*gradient_descent_initialize(size_t num_of_records,
 												double alpha, double cost_limit)
