@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 18:02:04 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/10 15:29:32 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/11 14:30:59 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,32 +43,49 @@ t_matrix	*matrix_initialize(t_variable *variable)
 	return (matrix);
 }
 
-void	calculate_new_theta(t_gradient_descent *gradient_descent,
-					t_variable *input_variable, t_variable *measured_variable,
-					double **new_theta_values)
+static double	calculate_theta_1_delta(t_variable *input_variable,
+											t_matrix *residual, double alpha)
 {
-	t_matrix			*predicted;
-	t_matrix			*normalized_values_transposed;
-	double				**theta_values;
-	double				predicted_sum;
-	t_reg_residual		*reg_residual;
+	t_matrix		*normalized_values_transposed;
+	t_matrix		*predicted;
+	double			predicted_sum;
+	double			theta1_delta;
 
-	reg_residual = &gradient_descent->reg_residual;
-	theta_values = (double **)gradient_descent->theta_normalized->values;
-	residual_calculate(input_variable, gradient_descent->theta_normalized,
-		measured_variable, reg_residual);
-	reg_residual->residual_sum = ft_matrix_sum(reg_residual->residual);
-	new_theta_values[0][0] = theta_values[0][0] - (gradient_descent->alpha
-			* reg_residual->residual_sum) / input_variable->size;
 	normalized_values_transposed
 		= ft_matrix_transpose(input_variable->normalized_values);
 	predicted = ft_vector_create(sizeof(double),
 			normalized_values_transposed->size.rows);
-	ft_matrix_dot_vector_double(normalized_values_transposed,
-		reg_residual->residual, predicted);
+	ft_matrix_dot_vector_double(normalized_values_transposed, residual,
+		predicted);
 	predicted_sum = ft_matrix_sum(predicted);
-	new_theta_values[1][0] = theta_values[1][0]
-		- (gradient_descent->alpha * predicted_sum) / input_variable->size;
+	theta1_delta = (alpha * predicted_sum) / input_variable->size;
 	ft_vector_remove(&predicted);
 	ft_matrix_remove(&normalized_values_transposed);
+	return (theta1_delta);
+}
+
+double	calculate_new_theta(t_gradient_descent *gradient_descent,
+					t_variable *input_variable, t_variable *measured_variable)
+{
+	double				**theta_values;
+	t_reg_residual		*reg_residual;
+	double				prev_residual_sum_of_squares;
+	double				cost_change;
+
+	reg_residual = &gradient_descent->reg_residual;
+	prev_residual_sum_of_squares = reg_residual->residual_sum_of_squares;
+	theta_values = (double **)gradient_descent->theta_normalized->values;
+	residual_calculate(input_variable, gradient_descent->theta_normalized,
+		measured_variable, reg_residual);
+	reg_residual->residual_sum = ft_matrix_sum(reg_residual->residual);
+	theta_values[0][0] -= (gradient_descent->alpha
+			* reg_residual->residual_sum) / input_variable->size;
+	theta_values[1][0] -= calculate_theta_1_delta(input_variable,
+			reg_residual->residual, gradient_descent->alpha);
+	cost_change = prev_residual_sum_of_squares
+		- reg_residual->residual_sum_of_squares;
+	FT_LOG_TRACE("DIFF: %.10f", cost_change);
+	FT_LOG_TRACE("Sum of residual: %f(%f)",
+		reg_residual->residual_sum_of_squares, reg_residual->residual_sum);
+	return (cost_change);
 }

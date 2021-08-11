@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 11:14:46 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/11 10:57:28 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/11 14:16:21 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static t_arg_parser	*arg_parser_initialize(int argc, char **argv)
 	arg_parser->fn_initialize_cmd_args = initialize_cmd_args;
 	arg_parser->fn_save_cmd_argument = save_cmd_argument;
 	arg_parser->fn_usage = print_usage;
-	arg_parser->options = ft_strdup("C:A:L:f:hFll");
+	arg_parser->options = ft_strdup("C:A:L:f:hFl");
 	return (arg_parser);
 }
 
@@ -153,7 +153,8 @@ int	main(int argc, char **argv)
 			input_params->dataset_file, statistics);
 	if (input_params->order & E_CALCULATE_PRICE)
 		dependent_variable_calculate(input_params, statistics);
-	statistics_save_records(statistics);
+	if (statistics->influxdb)
+		statistics_save_records(statistics);
 	linear_regression_release(&linear_regression);
 	main_remove(arg_parser, statistics, event_logging_data);
 	return (0);

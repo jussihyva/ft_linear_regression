@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 13:34:18 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/10 22:57:51 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/11 12:06:34 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,26 +20,13 @@ double	calculate_price(int km, double **theta_values)
 	return (price);
 }
 
-static void	calculate_prices(t_variable *input_variable,
-							t_variable *predicted_price, double **theta_values)
-{
-	size_t		i;
-
-	i = -1;
-	while (++i < input_variable->size)
-	{
-		((double *)predicted_price->values)[i]
-			= calculate_price(((int *)input_variable->values)[i], theta_values);
-	}
-	return ;
-}
-
 static void	estimate_prize(t_variable *input_variable,
 							t_variable *measured_variable,
 							double **theta_values,
 							t_variable *predicted_price)
 {
 	t_min_max_value		*min_max_value;
+	size_t				i;
 
 	min_max_value = &predicted_price->min_max_value;
 	initalize_variable(predicted_price, input_variable->size, sizeof(double));
@@ -51,7 +38,12 @@ static void	estimate_prize(t_variable *input_variable,
 		= *(int *)measured_variable->min_max_value.range;
 	predicted_price->normalized_values = ft_vector_create(sizeof(double),
 			input_variable->size);
-	calculate_prices(input_variable, predicted_price, theta_values);
+	i = -1;
+	while (++i < input_variable->size)
+	{
+		((double *)predicted_price->values)[i]
+			= calculate_price(((int *)input_variable->values)[i], theta_values);
+	}
 	return ;
 }
 
@@ -66,7 +58,8 @@ void	create_linear_regression_model(t_lin_reg *linear_regression,
 	measured_variable = &linear_regression->measured_variables.price;
 	pre_process_input_variables(linear_regression);
 	gradient_descent = linear_regression->gradient_descent;
-	unknown_variables_iterate_values(gradient_descent, input_variable, measured_variable);
+	unknown_variables_iterate_values(gradient_descent, input_variable,
+		measured_variable);
 	linear_regression->reg_residual.residual
 		= ft_vector_create(sizeof(double), input_variable->size);
 	linear_regression->reg_residual.residual_squares
@@ -82,20 +75,21 @@ void	create_linear_regression_model(t_lin_reg *linear_regression,
 	return ;
 }
 
-void	linear_regression_release(
-							t_lin_reg **linear_regression)
+static void	dataset_remove(t_dataset *dataset)
+{
+	if (dataset->data_record_lst)
+	{
+		ft_lstdel(&dataset->data_record_lst, statistics_release_record);
+		ft_memdel((void **)&dataset->data_record_lst);
+	}
+	ft_memdel((void **)&dataset);
+	return ;
+}
+
+void	linear_regression_release(t_lin_reg **linear_regression)
 {
 	if ((*linear_regression)->dataset)
-	{
-		if ((*linear_regression)->dataset->data_record_lst)
-		{
-			ft_lstdel(&(*linear_regression)->dataset->data_record_lst,
-				statistics_release_record);
-			ft_memdel((void **)&(*linear_regression)->dataset
-				->data_record_lst);
-		}
-		ft_memdel((void **)&(*linear_regression)->dataset);
-	}
+		dataset_remove((*linear_regression)->dataset);
 	error_remove(&(*linear_regression)->reg_error);
 	residual_remove(&(*linear_regression)->reg_residual);
 	variable_remove(&(*linear_regression)->predicted_price);

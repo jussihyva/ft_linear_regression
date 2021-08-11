@@ -6,7 +6,7 @@
 #    By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/09 12:38:32 by jkauppi           #+#    #+#              #
-#    Updated: 2021/08/07 10:46:18 by jkauppi          ###   ########.fr        #
+#    Updated: 2021/08/11 11:57:32 by jkauppi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ SRC_C_FILES		=	read_dataset_file.c cmd_arguments.c linear_regression.c \
 					statistics_1.c statistics_2.c statistics_3.c \
 					statistics_4.c statistics_remove.c statistics_record.c \
 					yaml_file.c system.c coefficient_of_determination.c \
-					residual.c error.c
+					residual.c error.c influxdb_remove.c
 SRC_H_FILES		=	ft_linear_regression.h
 LOCAL_LIBS		=	libft_addons.a libftprintf.a libft.a
 GLOBAL_LIBS		=	libm.a libssl.a libcrypto.a libm.a

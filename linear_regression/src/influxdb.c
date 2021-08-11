@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/01 13:14:25 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/29 23:42:19 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/11 12:11:53 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,7 @@ static t_influxdb	*init_influx_session(t_tls_connection *tls_connection)
 	return (influxdb);
 }
 
-t_influxdb	*ft_influxdb_connect(char *host_name, char *port_number,
-													t_statistics *statistics)
+t_influxdb	*ft_influxdb_connect(char *host_name, char *port_number)
 {
 	t_tls_connection	*tls_connection;
 	SSL_CTX				*ctx;
@@ -45,22 +44,22 @@ t_influxdb	*ft_influxdb_connect(char *host_name, char *port_number,
 	t_influxdb			*influxdb;
 
 	ft_openssl_init();
-	tls_connection = NULL;
 	influxdb = NULL;
 	ctx = ft_openssl_init_client(PEM_CERT_FILE, PEM_PRIVTE_KEY_FILE,
 			&socket_fd);
-	tls_connection = ft_openssl_connect(host_name, port_number,
-			socket_fd, ctx);
+	tls_connection = ft_openssl_connect(host_name, port_number, socket_fd, ctx);
 	if (tls_connection)
 	{
 		set_client_socket_params(socket_fd);
 		influxdb = init_influx_session(tls_connection);
 		influxdb->connection = (void *)tls_connection;
 		influxdb->connection_status = E_CONNECTED;
-		statistics->connection = (t_tls_connection *)influxdb->connection;
 	}
 	else
+	{
+		SSL_CTX_free(ctx);
 		FT_LOG_WARN("Connection setup to Influxdb failed!");
+	}
 	return (influxdb);
 }
 

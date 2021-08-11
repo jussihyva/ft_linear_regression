@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/11 10:54:58 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/11 15:23:00 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,6 @@ typedef struct s_statistics
 	int					id;
 	struct timespec		end_time;
 	time_t				end_time_ms;
-	t_tls_connection	*connection;
 	t_list				*stat_counters_lst;
 }				t_statistics;
 
@@ -218,11 +217,10 @@ void					pre_process_input_variables(
 							t_lin_reg *linear_regression);
 t_matrix				*theta_initialize(void);
 t_matrix				*matrix_initialize(t_variable *km);
-void					calculate_new_theta(
+double					calculate_new_theta(
 							t_gradient_descent *gradient_descent,
 							t_variable *input_variable,
-							t_variable *measured_variable,
-							double **new_theta_values);
+							t_variable *measured_variable);
 void					ft_matrix_subtract_vector_double(t_matrix *matrix,
 							t_matrix *vector, t_matrix *new_vector);
 t_matrix				*ft_vector_create(size_t size, size_t number_fo_rows);
@@ -238,8 +236,8 @@ void					variable_remove(t_variable *variable);
 time_t					get_execution_time(t_statistics *statistics);
 void					ft_influxdb_write(t_tls_connection *connection,
 							char *body, char *database);
-t_influxdb				*ft_influxdb_connect(char *host_name, char *port_number,
-							t_statistics *statistics);
+t_influxdb				*ft_influxdb_connect(char *host_name,
+							char *port_number);
 t_statistics			*ft_statistics_initialize(void);
 void					ft_influxdb_write(t_tls_connection *connection,
 							char *body, char *database);
@@ -278,6 +276,7 @@ void					residual_calculate(t_variable *input_variable,
 void					error_remove(t_reg_error **reg_error);
 void					residual_remove(t_reg_residual *reg_residual);
 t_gradient_descent		*gradient_descent_initialize(size_t num_of_records,
-											double alpha, double cost_limit);
+							double alpha, double cost_limit);
+void					influxdb_remove(t_influxdb *influxdb);
 
 #endif

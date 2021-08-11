@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/01 10:00:07 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/07/31 19:05:09 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/11 12:09:38 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ t_statistics	*ft_statistics_initialize(void)
 	t_statistics	*statistics;
 
 	statistics = (t_statistics *)ft_memalloc(sizeof(*statistics));
-	statistics->influxdb = ft_influxdb_connect("127.0.0.1", "8086", statistics);
+	statistics->influxdb = ft_influxdb_connect("127.0.0.1", "8086");
 	return (statistics);
 }
 

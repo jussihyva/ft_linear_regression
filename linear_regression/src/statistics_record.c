@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/02 08:01:07 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/03 22:19:56 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/11 12:14:37 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	statistics_save_records(t_statistics *statistics)
 		stat_counters = *(t_stat_counters **)elem->content;
 		body = create_influxdb_query_string(stat_counters,
 				statistics->end_time, statistics->data_type, statistics->id);
-		ft_influxdb_write(statistics->connection, body, "Hive");
+		ft_influxdb_write(statistics->influxdb->connection, body, "Hive");
 		ft_strdel(&body);
 		elem = elem->next;
 		statistics->id++;

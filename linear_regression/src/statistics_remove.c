@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/29 19:38:27 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/07 10:21:05 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/11 11:14:38 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,20 +29,14 @@ static void	stat_counters_remove(void *content, size_t size)
 
 void	statistics_remove(t_statistics **statistics)
 {
+	t_influxdb		*influxdb;
+
+	influxdb = (*statistics)->influxdb;
 	if (statistics && *statistics)
 	{
 		ft_lstdel(&(*statistics)->stat_counters_lst, stat_counters_remove);
-		if ((*statistics)->influxdb)
-		{
-			SSL_shutdown(((t_tls_connection *)(*statistics)
-					->influxdb->connection)->ssl_bio);
-			SSL_free(((t_tls_connection *)(*statistics)
-					->influxdb->connection)->ssl_bio);
-			SSL_CTX_free(((t_tls_connection *)(*statistics)
-					->influxdb->connection)->ctx);
-			ft_memdel((void **)&(*statistics)->influxdb->connection);
-			ft_memdel((void **)&(*statistics)->influxdb);
-		}
+		if (influxdb)
+			influxdb_remove(influxdb);
 		ft_memdel((void **)statistics);
 	}
 	return ;
