@@ -6,11 +6,24 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/02 11:59:02 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/10 19:07:37 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/12 14:11:22 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_linear_regression.h"
+
+char	*file_path_create(char *file_name)
+{
+	char			*file_path;
+	size_t			str_len;
+
+	str_len = ft_strlen(get_home_dir()) + 1 + ft_strlen(file_name);
+	file_path = ft_memalloc(sizeof(*file_path) * (str_len + 1));
+	ft_strcat(file_path, get_home_dir());
+	ft_strcat(file_path, "/");
+	ft_strcat(file_path, file_name);
+	return (file_path);
+}
 
 void	save_unknown_variables(double **theta_values)
 {
@@ -20,7 +33,7 @@ void	save_unknown_variables(double **theta_values)
 	ssize_t			ret;
 	size_t			i;
 
-	theta_file_yaml = ft_strjoin(get_home_dir(), THETA_FILE_NAME);
+	theta_file_yaml = file_path_create(THETA_FILE_NAME);
 	remove(theta_file_yaml);
 	fd = open(theta_file_yaml, O_CREAT | O_RDWR, S_IWUSR | S_IRUSR);
 	i = -1;
@@ -32,22 +45,6 @@ void	save_unknown_variables(double **theta_values)
 	}
 	ret = close(fd);
 	ft_strdel(&theta_file_yaml);
-	return ;
-}
-
-static void	ft_strarraydel(char ***array)
-{
-	char	*ptr;
-	size_t	i;
-
-	i = 0;
-	while ((*array)[i])
-	{
-		ptr = (*array)[i];
-		ft_strdel(&ptr);
-		i++;
-	}
-	ft_memdel((void **)array);
 	return ;
 }
 
@@ -103,7 +100,7 @@ t_matrix	*unknown_variables_read(void)
 	char		*theta_file_yaml;
 
 	theta = NULL;
-	theta_file_yaml = ft_strjoin(get_home_dir(), THETA_FILE_NAME);
+	theta_file_yaml = file_path_create(THETA_FILE_NAME);
 	fd = open(theta_file_yaml, O_RDONLY);
 	if (fd > 0)
 		theta = read_theta_values(fd);

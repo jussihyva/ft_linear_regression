@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 15:19:17 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/11 18:25:38 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/12 14:07:28 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@
 # define MINUTE							60
 # define EXECUTION_TIME_LIMIT_MIN		5
 # define SEND_REC_BUF_MAX_SIZE			4096
-# define PEM_CERT_FILE					"/var/tmp/tls-selfsigned.crt"
-# define PEM_PRIVTE_KEY_FILE			"/var/tmp/tls-selfsigned.key"
+# define PEM_CERT_FILE					"tls-selfsigned.crt"
+# define PEM_PRIVTE_KEY_FILE			"tls-selfsigned.key"
 # define WRITE_BUF_SIZE					1000
-# define THETA_FILE_NAME				"/theta_values.yaml"
+# define THETA_FILE_NAME				"theta_values.yaml"
 # define COST_LIMIT						0.0000001
 
 typedef struct s_memory_info
@@ -279,5 +279,6 @@ double					alpha_param_validate(char *next_arg);
 double					cost_param_validate(char *next_arg);
 t_arg_parser			*arg_parser_init(int argc, char **argv);
 int						read_mileage_of_a_car(t_input_params *input_params);
+char					*file_path_create(char *file_name);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/01 16:42:37 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/06/18 14:14:23 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/12 14:19:48 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ t_tls_connection	*ft_openssl_connect(char *hostname, char *port,
 	struct sockaddr_in	addr;
 	t_tls_connection	*tls_connection;
 
+	tls_connection = NULL;
 	bzero(&addr, sizeof(addr));
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(atoi(port));
@@ -36,7 +37,5 @@ t_tls_connection	*ft_openssl_connect(char *hostname, char *port,
 		if (error == -1)
 			ft_openssl_rel_conn(&tls_connection);
 	}
-	else
-		tls_connection = NULL;
 	return (tls_connection);
 }

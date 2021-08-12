@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 14:53:13 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/11 18:08:27 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/12 13:46:09 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,5 +260,6 @@ int						ft_open_fd(char *file_path);
 void					ft_arg_parser(t_arg_parser *arg_parser);
 t_loging_level			ft_logging_level_param_validate(char *next_arg);
 void					ft_print_leaks(void);
+void					ft_strarraydel(char ***array);
 
 #endif

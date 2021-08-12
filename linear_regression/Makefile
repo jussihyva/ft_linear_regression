@@ -6,15 +6,16 @@
 #    By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/09 10:45:12 by jkauppi           #+#    #+#              #
-#    Updated: 2021/08/10 18:54:00 by jkauppi          ###   ########.fr        #
+#    Updated: 2021/08/12 14:23:37 by jkauppi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Input parameters
 
 include		mk_system.mk
-include		mk_input_params.mk
+include		mk_cmd_variables.mk
 include		mk_source_files.mk
+include		mk_cert_variables.mk
 
 # Application specific parameters
 NAME			=	ft_linear_regression
@@ -65,7 +66,7 @@ YELLOW			=	\033[0;33m
 END				=	\033[0m
 
 .PHONY: all
-all: $(FOLDERS) $(H_FILES) $(APP_C_FILES) $(C_FILES) libraries $(APP_FILES)
+all: $(SELF_SIGNED_CRT) $(FOLDERS) $(H_FILES) $(APP_C_FILES) $(C_FILES) libraries $(APP_FILES)
 	@rm -f ~/theta_values.yaml
 	@echo "$(GREEN)Done!$(END)"
 
@@ -137,3 +138,5 @@ ifeq ($(OS), Darwin)
 else
 	norminette $(SRC)/* $(INCLUDE)/*
 endif
+
+include		mk_cert_actions.mk

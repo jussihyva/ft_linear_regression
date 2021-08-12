@@ -6,7 +6,7 @@
 #    By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/20 10:35:04 by ubuntu            #+#    #+#              #
-#    Updated: 2021/08/12 11:24:54 by jkauppi          ###   ########.fr        #
+#    Updated: 2021/08/12 11:57:57 by jkauppi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,8 +55,8 @@ build: check_openssl check_docker folders check_jupyter
 	@echo "DONE"
 
 .PHONY: run
-run: build
-	make -C n-puzzle run
+run:
+	make -C linear_regression run
 
 .PHONY: folders
 folders:
