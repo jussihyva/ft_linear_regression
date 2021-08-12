@@ -6,7 +6,7 @@
 #    By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/20 10:35:04 by ubuntu            #+#    #+#              #
-#    Updated: 2021/07/24 09:56:16 by jkauppi          ###   ########.fr        #
+#    Updated: 2021/08/12 11:02:52 by jkauppi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -88,7 +88,10 @@ norm:
 
 .PHONY: check_docker
 check_docker:
-ifeq (, $(shell docker-compose -h))
+ifneq ("docker not found", $(shell which docker))
+	$(error $(DOCKER_NOT_INSTALLED_ERROR))
+endif
+ifeq ("docker-compose not found", $(shell which docker-compose))
 	$(error $(DOCKER_NOT_INSTALLED_ERROR))
 endif
 
