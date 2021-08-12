@@ -6,12 +6,14 @@
 #    By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/20 10:35:04 by ubuntu            #+#    #+#              #
-#    Updated: 2021/08/12 11:02:52 by jkauppi          ###   ########.fr        #
+#    Updated: 2021/08/12 11:24:54 by jkauppi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-PROJECT_FOLDERS		=	Docker linear_regression
-CUR_DIR				=	$(abspath .)
+PROJECT_FOLDERS			=	Docker linear_regression
+CUR_DIR					=	$(abspath .)
+DOCKER_NAME				=	$(shell which docker)
+DOCKER-COMPOSE_NAME		=	$(shell which docker-compose)
 
 define DOCKER_NOT_INSTALLED_ERROR
 
@@ -88,10 +90,9 @@ norm:
 
 .PHONY: check_docker
 check_docker:
-ifneq ("docker not found", $(shell which docker))
+ifeq (, $(DOCKER_NAME))
 	$(error $(DOCKER_NOT_INSTALLED_ERROR))
-endif
-ifeq ("docker-compose not found", $(shell which docker-compose))
+else ifeq (, $(DOCKER-COMPOSE_NAME))
 	$(error $(DOCKER_NOT_INSTALLED_ERROR))
 endif
 
