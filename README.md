@@ -29,11 +29,7 @@ Linear regression is a linear approach for modelling the relationship between a 
 
 ### 3.1 Demo with calcualtion of linear regresssion (Gradient descent)
 
-<figure class="video_container">
-  <video controls="true" allowfullscreen="true" poster="./ft_linear_regression.png">
-    <source src="./ft_linear_regression.mp4" type="video/mp4">
-  </video>
-</figure>
+[![(Video](./ft_linear_regression.png)](https://youtu.be/JNJki4RG8-U)
 
 ## 4 Solution
 
