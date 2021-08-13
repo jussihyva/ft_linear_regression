@@ -27,7 +27,9 @@ I started to learn these three subjects to get overall understanding about the a
 
 Linear regression is a linear approach for modelling the relationship between a scalar response and one or more explanatory variables (also known as dependent and independent variables). The case of one explanatory variable (which is valid in the project) is called [simple linear regression](https://en.wikipedia.org/wiki/Simple_linear_regression).
 
-### 3.1 Demo with calcualtion of linear regresssion (Gradient descent)
+### 3.1 Visualization how linear regression line is iterated by using gradient descent algorithm.
+
+**NOTE**: Click the picture to start video
 
 [![(Video](./ft_linear_regression.png)](https://youtu.be/JNJki4RG8-U)
 
@@ -57,7 +59,7 @@ Linear regression is a linear approach for modelling the relationship between a 
 | -F | Allow calculation of negative input mileages and negative price results |
 | -A \<learningRate\> | Learning rate (alpha) for calculating of unknown variables |
 | -C \<cost limit\> | A cost limit. The limit is used for controlling number of iteration during calculating of unknown variables |
-| -L \<logging level\>| A logging level is used for troubleshooting. Levels are from 0 to 4. TRACE, DEBUG, INFO and WARN |
-| -l | Print leaks if any. Only in MAC-OS |
+| -L \<logging level\>| A logging level is used for troubleshooting. Levels are from 0 to 4. TRACE, DEBUG, INFO, WARN and ERROR |
+| -l | Print leaks, if any. Only in MAC-OS |
 
 ### 3.6 Lesson learned

@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/02 07:43:32 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/11 17:41:43 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/13 11:16:23 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	unknown_variables_iterate_values(t_gradient_descent *gradient_descent,
 	gradient_descent->theta_normalized = theta_initialize();
 	theta_values = (double **)gradient_descent->theta_normalized->values;
 	FT_LOG_INFO("ALPHA: %f", gradient_descent->alpha);
-	FT_LOG_INFO("COST_LIMIT: %f", gradient_descent->cost_limit);
+	FT_LOG_INFO("COST_LIMIT: %.8f", gradient_descent->cost_limit);
 	cost_change = (double)INT_MAX;
 	reg_residual->residual_sum_of_squares = (double)INT_MAX;
 	i = 1;
