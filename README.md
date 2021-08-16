@@ -31,7 +31,7 @@ I started to learn these three subjects to get overall understanding about the a
 
 Linear regression is a linear approach for modelling the relationship between a scalar response and one or more explanatory variables (also known as dependent and independent variables). The case of one explanatory variable (which is valid in the project) is called [simple linear regression](https://en.wikipedia.org/wiki/Simple_linear_regression).
 
-### 3.1 Visualization how linear regression line is iterated by using gradient descent algorithm.
+### 3.1 Visualization how linear regression line is iterated by using gradient descent algorithm
 
 **NOTE**: Click the picture to start video
 
@@ -64,7 +64,7 @@ Coefficient of determination is used for calculation of a precision of the algor
 ### 3.5 Implemented command line arguments
 
 | Argument | Description |
-| :-: | - |
+| :- | - |
 | -h | Help printout |
 | -f \<dataset file\> | Calculates unknown variables (Theta0 and Theta1) |
 | -F | Allow calculation of negative input mileages and negative price results |
