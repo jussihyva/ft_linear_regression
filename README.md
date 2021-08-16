@@ -47,6 +47,7 @@ Linear regression is a linear approach for modelling the relationship between a 
 | ft_matrix_multiply_vector_double | numpy.multiply | |
 | ft_matrix_transpose | nympy.transpose | |
 | ft_matrix_subtract_vector_double | nympy.subtract | |
+| ft_matrix_sum | numpy.sum | |
 
 ### 4.2 Calculation of unknown variables
 
@@ -72,4 +73,12 @@ Coefficient of determination is used for calculation of a precision of the algor
 | -L \<logging level\>| A logging level is used for troubleshooting. Levels are from 0 to 4. TRACE, DEBUG, INFO, WARN and ERROR |
 | -l | Print leaks, if any. Only in MAC-OS |
 
-### 3.6 Lesson learned
+## 4 Lessons learned
+
+### 4.1 Linear regression
+
+### 4.2 Gradient descent
+
+### 4.3 Coefficient of determination (r<sup>2</sup>)
+
+### 4.4 Matrix clculation
