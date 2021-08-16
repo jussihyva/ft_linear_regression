@@ -1,6 +1,6 @@
 # ft_linear_regression
 
-## 1. Project descriptionn
+## 1. Project description
 
 ### 1.1 Objective
 
@@ -8,12 +8,16 @@ Aim of the project is to introduce you to the basic concept behind machine learn
 
 ### 1.2 Linear regression model for predict a price
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;estimatePrice = Theta0 + (Theta1 * mileage)
+estimatePrice = Theta0 + (Theta1 * mileage)
 
 ### 1.3 Train model for solving unknown variables (Theta0 and Theta1)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tmpTheta0 = learningRate \* 1/m \* Σ(estimatePrice(mileage[i] - price[i]))
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tmpTheta1 = learningRate \* 1/m \* Σ(estimatePrice(mileage[i] - price[i])) * mileage[i]
+tmpTheta0 = learningRate \* 1/m \* Σ(estimatePrice(mileage[i] - price[i]))
+tmpTheta1 = learningRate \* 1/m \* Σ(estimatePrice(mileage[i] - price[i])) * mileage[i]
+
+### 1.4 Input for training model
+
+Content of a dataset file is used for calculating unknown variables. The file includes 24 Mileage/Price pairs.
 
 ## 2. Prestudy
 
@@ -37,18 +41,24 @@ Linear regression is a linear approach for modelling the relationship between a 
 
 ### 4.1 Utilities
 
-| Function name | similar in python numpy | Comments |
-| :-: | :-: | :-: |
-|  | nympy.dot() | |
-|  | numpy.multiply | |
-|  | nympy.transpose | |
-|  | nympy.subtract | |
+| Function name | similar function in python | Comments |
+| :- | :- | :- |
+| ft_matrix_dot_vector_double | nympy.dot() | |
+| ft_matrix_multiply_vector_double | numpy.multiply | |
+| ft_matrix_transpose | nympy.transpose | |
+| ft_matrix_subtract_vector_double | nympy.subtract | |
 
 ### 4.2 Calculation of unknown variables
 
-### 4.3 Prediction 
+In this project gradient descent algorithm is used for calculating unknow variables (Theta0 and Theta1). Used formulas are described in chapeter 1.3. Value pairs (Mileage, Price) from the dataset file are used for calculation. Number of iteration loops is controlled by cost_limit parameter. Which means that iteration continues as long as calculatted cost (refer chapter 4.4) value differs more thatn given cost limit value.
+
+### 4.3 Prediction
+
+Theta0 and Theta1 values are used for price clculation (prediction). Mileage must be positive integer and predicted price is printed out if it is positive integer value. These limitations can be override by using cmd line argument -F.
 
 ### 4.4 Precision of an algorithm ([Coefficient of determination](https://en.wikipedia.org/wiki/Coefficient_of_determination))
+
+Coefficient of determination is used for calculation of a precision of the algorithmm (r<sup>2</sup>).
 
 ### 3.5 Implemented command line arguments
 
