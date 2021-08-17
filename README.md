@@ -2,7 +2,7 @@
 
 ## 1 Project overview
 
-The project is part of my studuing at Hive (Helsinki) Coding School. Programs are written by C-code. For visualization (Bonus part of the project) I used Docker conatiner where Influxdb and Grafana. For learing and testing purpose I used Jupyter notebook (Python based). The picture below visualize overview of projects at Hive (Helsinki) Coding Schoool.
+The project is part of my studuing at Hive (Helsinki) Coding School. Programs are written by C-code. For visualization (Bonus part of the project) I used Influxdb and Grafana which are running inside docker container. For learing and testing purpose I used Jupyter notebook (Refer chapter 5.1). The picture below visualize general overview of projects at Hive (Helsinki) Coding Schoool.
 
 ![](./Hive_Holy_Graph.png)
 
