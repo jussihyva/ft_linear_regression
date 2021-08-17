@@ -1,25 +1,31 @@
 # ft_linear_regression
 
-## 1. Project description
+## 1 Project overview
 
-### 1.1 Objective
+The project is part of my studuing at Hive (Helsinki) Coding School. Programs are written by C-code. For visualization (Bonus part of the project) I used Docker conatiner where Influxdb and Grafana. For learing and testing purpose I used Jupyter notebook (Python based). The picture below visualize overview of projects at Hive (Helsinki) Coding Schoool.
+
+![](./Hive_Holy_Graph.png)
+
+## 2 Project description
+
+### 2.1 Objective
 
 Aim of the project is to introduce you to the basic concept behind machine learning. For this project, you will have to create a program that predicts the price of a car by using a [linear function](https://en.wikipedia.org/wiki/Linear_function) train with a [gradient descent algorithm](https://en.wikipedia.org/wiki/Gradient_descent)
 
-### 1.2 Linear regression model for predict a price
+### 2.2 Linear regression model for predict a price
 
 estimatePrice = Theta0 + (Theta1 * mileage)
 
-### 1.3 Train model for solving unknown variables (Theta0 and Theta1)
+### 2.3 Train model for solving unknown variables (Theta0 and Theta1)
 
 tmpTheta0 = learningRate \* 1/m \* Σ(estimatePrice(mileage[i] - price[i]))
 tmpTheta1 = learningRate \* 1/m \* Σ(estimatePrice(mileage[i] - price[i])) * mileage[i]
 
-### 1.4 Input for training model
+### 2.4 Input for training model
 
 Content of a dataset file is used for calculating unknown variables. The file includes 24 Mileage/Price pairs.
 
-## 2. Prestudy
+## 3 Prestudy
 
 I started to learn these three subjects to get overall understanding about the algorithms which are required to execute the project successfully:
 
@@ -27,19 +33,21 @@ I started to learn these three subjects to get overall understanding about the a
 - [linear function](https://en.wikipedia.org/wiki/Linear_function)
 - [gradient descent algorithm](https://en.wikipedia.org/wiki/Gradient_descent)
 
-## 3. What is [linear regression](https://en.wikipedia.org/wiki/Linear_regression#:~:text=In_statistics,_linear_regression_is,as_dependent_and_independent_variables\).&text=Such_models_are_called_linear_models.)
+## 4 What is [linear regression](https://en.wikipedia.org/wiki/Linear_regression#:~:text=In_statistics,_linear_regression_is,as_dependent_and_independent_variables\).&text=Such_models_are_called_linear_models.)
 
 Linear regression is a linear approach for modelling the relationship between a scalar response and one or more explanatory variables (also known as dependent and independent variables). The case of one explanatory variable (which is valid in the project) is called [simple linear regression](https://en.wikipedia.org/wiki/Simple_linear_regression).
 
-### 3.1 Visualization how linear regression line is iterated by using gradient descent algorithm
+### 4.1 Visualization how linear regression line is iterated by using gradient descent algorithm
 
 **NOTE**: Click the picture to start video
 
 [![(Video](./ft_linear_regression.png)](https://youtu.be/JNJki4RG8-U)
 
-## 4 Solution
+## 5 Solution
 
-### 4.1 Utilities
+### 5.1 Solution overview
+
+### 5.1 Utilities
 
 | Function name | similar function in python | Comments |
 | :- | :- | :- |
@@ -49,19 +57,19 @@ Linear regression is a linear approach for modelling the relationship between a 
 | ft_matrix_subtract_vector_double | nympy.subtract | |
 | ft_matrix_sum | numpy.sum | |
 
-### 4.2 Calculation of unknown variables
+### 5.2 Calculation of unknown variables
 
-In this project gradient descent algorithm is used for calculating unknow variables (Theta0 and Theta1). Used formulas are described in chapeter 1.3. Value pairs (Mileage, Price) from the dataset file are used for calculation. Number of iteration loops is controlled by cost_limit parameter. Which means that iteration continues as long as calculatted cost (refer chapter 4.4) value differs more thatn given cost limit value.
+In this project gradient descent algorithm is used for calculating unknow variables (Theta0 and Theta1). Used formulas are described in chapeter 2.3. Value pairs (Mileage, Price) from the dataset file are used for calculation. Number of iteration loops is controlled by cost_limit parameter. Which means that iteration continues as long as calculatted cost (refer chapter 5.4) value differs more thatn given cost limit value.
 
-### 4.3 Prediction
+### 5.3 Prediction
 
 Theta0 and Theta1 values are used for price clculation (prediction). Mileage must be positive integer and predicted price is printed out if it is positive integer value. These limitations can be override by using cmd line argument -F.
 
-### 4.4 Precision of an algorithm ([Coefficient of determination](https://en.wikipedia.org/wiki/Coefficient_of_determination))
+### 5.4 Precision of an algorithm ([Coefficient of determination](https://en.wikipedia.org/wiki/Coefficient_of_determination))
 
 Coefficient of determination is used for calculation of a precision of the algorithmm (r<sup>2</sup>).
 
-### 3.5 Implemented command line arguments
+### 5.5 Implemented command line arguments
 
 | Argument | Description |
 | :- | - |
