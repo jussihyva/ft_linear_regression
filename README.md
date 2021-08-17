@@ -47,7 +47,9 @@ Linear regression is a linear approach for modelling the relationship between a 
 
 ### 5.1 Solution overview
 
-### 5.1 Utilities
+![Solution overview](Solution_ft_linear_regression.jpg)
+
+### 5.2 Utilities
 
 | Function name | similar function in python | Comments |
 | :- | :- | :- |
@@ -57,19 +59,19 @@ Linear regression is a linear approach for modelling the relationship between a 
 | ft_matrix_subtract_vector_double | nympy.subtract | |
 | ft_matrix_sum | numpy.sum | |
 
-### 5.2 Calculation of unknown variables
+### 5.3 Calculation of unknown variables
 
 In this project gradient descent algorithm is used for calculating unknow variables (Theta0 and Theta1). Used formulas are described in chapeter 2.3. Value pairs (Mileage, Price) from the dataset file are used for calculation. Number of iteration loops is controlled by cost_limit parameter. Which means that iteration continues as long as calculatted cost (refer chapter 5.4) value differs more thatn given cost limit value.
 
-### 5.3 Prediction
+### 5.4 Prediction
 
 Theta0 and Theta1 values are used for price clculation (prediction). Mileage must be positive integer and predicted price is printed out if it is positive integer value. These limitations can be override by using cmd line argument -F.
 
-### 5.4 Precision of an algorithm ([Coefficient of determination](https://en.wikipedia.org/wiki/Coefficient_of_determination))
+### 5.5 Precision of an algorithm ([Coefficient of determination](https://en.wikipedia.org/wiki/Coefficient_of_determination))
 
 Coefficient of determination is used for calculation of a precision of the algorithmm (r<sup>2</sup>).
 
-### 5.5 Implemented command line arguments
+### 5.6 Implemented command line arguments
 
 | Argument | Description |
 | :- | - |
