@@ -47,11 +47,13 @@ Linear regression is a linear approach for modelling the relationship between a 
 
 ### 5.1 Solution overview
 
+The core part of the solution is implemented by C-code. Visualization (Bounus part of the project) is implemented with Influxdb and Grafana. Those two applictions are running inside docker container. Training and additional visualization is implemented in jupyter notebook.
+
 ![Solution overview](Solution_ft_linear_regression.jpg)
 
-### 5.2 Utilities
+### 5.2 Impemented utilities
 
-| Function name | similar function in python
+| Name of the function | similar functionality in python
 | :- | :- |
 | ft_matrix_dot_vector_double | [nympy.dot](https://numpy.org/doc/stable/reference/generated/numpy.dot.html) |
 | ft_matrix_multiply_vector_double | [numpy.multiply](https://numpy.org/doc/stable/reference/generated/numpy.multiply.html?highlight=multiply#numpy.multiply) |

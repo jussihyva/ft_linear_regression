@@ -47,6 +47,7 @@
 			"args": ["-f", "${workspaceFolder}/linear_regression/data/data.csv"],
 			// "args": ["-f", "${workspaceFolder}/linear_regression/data/data.csv", "260000"],
 			// "args": ["260000"],
+			// "args": ["-h"],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
 			"environment": [],

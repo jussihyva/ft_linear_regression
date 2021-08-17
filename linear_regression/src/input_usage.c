@@ -6,7 +6,7 @@
 /*   By: jkauppi <jkauppi@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/11 18:38:32 by jkauppi           #+#    #+#             */
-/*   Updated: 2021/08/11 18:39:53 by jkauppi          ###   ########.fr       */
+/*   Updated: 2021/08/17 16:17:09 by jkauppi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,6 @@ static void	print_examples(void)
 	ft_printf("    Type mileage (int) of the car: 10000\n");
 	ft_printf("    Estimated price: $8280\n");
 	ft_printf("\n   2:\n");
-	ft_printf("    ./ft_linear_regression 220000\n");
-	ft_printf("    Estimated price: $3788\n");
-	ft_printf("\n   3:\n");
 	ft_printf("    ./ft_linear_regression -f data/data.csv\n");
 	ft_printf("    THETA0:    8493.5558\n");
 	ft_printf("    THETA1:      -0.0214\n");
