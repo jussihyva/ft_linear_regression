@@ -51,13 +51,13 @@ Linear regression is a linear approach for modelling the relationship between a 
 
 ### 5.2 Utilities
 
-| Function name | similar function in python | Comments |
-| :- | :- | :- |
-| ft_matrix_dot_vector_double | nympy.dot() | |
-| ft_matrix_multiply_vector_double | numpy.multiply | |
-| ft_matrix_transpose | nympy.transpose | |
-| ft_matrix_subtract_vector_double | nympy.subtract | |
-| ft_matrix_sum | numpy.sum | |
+| Function name | similar function in python
+| :- | :- |
+| ft_matrix_dot_vector_double | [nympy.dot](https://numpy.org/doc/stable/reference/generated/numpy.dot.html) |
+| ft_matrix_multiply_vector_double | [numpy.multiply](https://numpy.org/doc/stable/reference/generated/numpy.multiply.html?highlight=multiply#numpy.multiply) |
+| ft_matrix_transpose | [nympy.transpose](https://numpy.org/doc/stable/reference/generated/numpy.transpose.html?highlight=transpose) |
+| ft_matrix_subtract_vector_double | [nympy.subtract](https://numpy.org/doc/stable/reference/generated/numpy.subtract.html?highlight=subtract#numpy.subtract) |
+| ft_matrix_sum | [numpy.sum](https://numpy.org/doc/stable/reference/generated/numpy.sum.html?highlight=sum#numpy.sum) |
 
 ### 5.3 Calculation of unknown variables
 
